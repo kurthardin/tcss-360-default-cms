@@ -94,7 +94,7 @@ public class Paper {
 			return Role.AUTHOR;
 		
 		if(my_subprogram_chair_id == a_user_id)
-			return Role.SUBPROGRAMCHAIR;
+			return Role.SUBPROGRAM_CHAIR;
 		
 		for(Review r : my_reviews) {
 			if(r.getReviewerID() == a_user_id)

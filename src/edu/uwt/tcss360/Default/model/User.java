@@ -13,7 +13,7 @@ public class User {
 	private String my_email;
 	
 	public enum Role{
-		PROGRAMCHAIR, SUBPROGRAMCHAIR, REVIEWER, AUTHOR, USER
+		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER
 	}
 	
 	/////////////
