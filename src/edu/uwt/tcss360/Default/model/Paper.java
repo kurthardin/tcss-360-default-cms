@@ -167,7 +167,8 @@ public class Paper {
 	 * @return <code>true</code> if successfully saved.
 	 */
 	public boolean savePaper() {
-		// this is where the info.dat gets created and all the stuff gets
+		// TODO: this is where the info.dat gets created and all the stuff gets
 		// saved to disk.
+		return false;
 	}
 }
