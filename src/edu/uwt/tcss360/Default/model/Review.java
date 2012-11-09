@@ -1,3 +1,9 @@
+/**
+ * Review.java
+ * Author: Travis Lewis
+ * Date: 8 November 2012
+ */
+
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
@@ -6,6 +12,8 @@ public class Review {
 	//////////////
 	// FIELDS
 	//////////////
+	/** If the review has not been assigned a summary rating yet. */
+	public static int NO_RATING = -1;
 	
 	/** The location and name of the review document. (.pdf, .docx, etc). */
 	public File my_review_doc;
@@ -27,7 +35,8 @@ public class Review {
 	 * info.dat file and the review document file.
 	 */
 	Review(final File the_review_directory) {
-		//TODO: load/parse the info in the directory
+		//TODO: load/parse the info.dat file in the directory
+		
 	}
 	
 	/**
@@ -43,9 +52,9 @@ public class Review {
 			final File the_review_doc) {
 		my_reviewer_id = the_reviewer_id;
 		my_review_doc = the_review_doc;
-		my_summary_rating = -1;
+		my_summary_rating = NO_RATING;
 		
-		//TODO: copy the_review_doc to the appropriate place
+		copyReviewDoc(the_review_directory, the_review_doc);
 	}
 	
 	/**
@@ -64,7 +73,7 @@ public class Review {
 		my_review_doc = the_review_doc;
 		my_summary_rating = the_summary_rating;
 		
-		//TODO: copy the_review_doc to the appropriate place
+		copyReviewDoc(the_review_directory, the_review_doc);
 	}
 	
 	
@@ -79,6 +88,10 @@ public class Review {
 	
 	private void copyReviewDoc(final File the_review_directory, 
 			final File the_review_doc) {
-		
+		String docname = FileHelper.getLeafString(the_review_doc);
+		File copied_file = new File(the_review_directory.getAbsolutePath() 
+				+ "/" + docname);
+		FileHelper.copyFile(the_review_doc, copied_file);
+		my_review_doc = copied_file;
 	}
 }

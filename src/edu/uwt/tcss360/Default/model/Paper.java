@@ -72,7 +72,7 @@ public class Paper {
 			final File the_paper_directory) {
 		my_author_id = the_author_id;
 		
-		//TODO: copy the manuscript to the_paper_directory
+		//TODO: create the_paper_directory and copy the manuscript to it
 	}
 	
 	
@@ -84,12 +84,32 @@ public class Paper {
 		return new ArrayList<Review>(my_reviews);
 	}
 	
+	/**
+	 * Gets the role that the given user id has with this paper.
+	 * @param a_user_id The user to find the role of.
+	 * @return Role.USER if the given user isn't involved with the paper.
+	 */
 	public Role getRole(final String a_user_id) {
+		if(a_user_id == my_author_id)
+			return Role.AUTHOR;
 		
+		if(my_subprogram_chair_id == a_user_id)
+			return Role.SUBPROGRAMCHAIR;
+		
+		for(Review r : my_reviews) {
+			if(r.getReviewerID() == a_user_id)
+				return Role.REVIEWER;
+		}
+		
+		return Role.USER;
 	}
 	
 	public List<String> getUserIDs(final Role a_user_role) {
+		List<String> ids = new ArrayList<String>();
 		
+		//TODO: actually get the IDs.
+		
+		return new ArrayList<String>(ids);
 	}
 	
 	public String getAuthorID() {
@@ -112,9 +132,15 @@ public class Paper {
 	 * reason (ex: if the given user is the author).
 	 */
 	public boolean assignSubprogramChair(final String the_user_id) {
-		//this is going to require more logic than just
-		//typing "my_subprogram_chair_id = the_user_id;"
-		//unless of course we decide to put that logic in the GUI...
+		Role r = getRole(the_user_id);
+		
+		//business rule 9
+		if(r != Role.AUTHOR) {
+			my_subprogram_chair_id = the_user_id;
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -122,12 +148,24 @@ public class Paper {
 	 * @param userid The user ID to add.
 	 * @return <code>true</code> if the user was added, <code>false</code>
 	 * if they weren't added for some reason (ex: if the given user is the 
-	 * author).
+	 * author, or they're already a reviewer).
 	 */
 	public boolean assignReviewer(final String a_user_id) {
-		my_reviewer_ids.add(a_user_id);
+		Role r = getRole(a_user_id);
+		
+		//business rules 8 and 10 (they're pretty much the same thing...)
+		if(r != Role.AUTHOR && r != Role.REVIEWER) {
+			my_reviewer_ids.add(a_user_id);
+			return true;
+		}
+		
+		return false;
 	}
 	
+	/**
+	 * This method will save the Paper (and any changes) to disk.
+	 * @return <code>true</code> if successfully saved.
+	 */
 	public boolean savePaper() {
 		// this is where the info.dat gets created and all the stuff gets
 		// saved to disk.
