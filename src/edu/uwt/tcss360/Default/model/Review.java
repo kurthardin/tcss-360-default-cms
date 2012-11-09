@@ -6,9 +6,21 @@
 
 package edu.uwt.tcss360.Default.model;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 
 public class Review {
+	/*
+	 * the info.dat file for a review will likely contain only three lines:
+	 * 
+	 * [reviewer id]
+	 * [summary rating]
+	 * [name of the review doc, relative to info.dat]
+	 */
+	
+	
 	//////////////
 	// FIELDS
 	//////////////
@@ -21,8 +33,13 @@ public class Review {
 	/** 1 to 5 rating. */
 	public int my_summary_rating;
 	
+	
+	private static final String DATA_FILE_NAME = "info.dat";
+	
 	/** User ID of the reviewer. */
 	private String my_reviewer_id;
+	
+	private File my_directory;
 	
 	
 	//////////////
@@ -35,8 +52,27 @@ public class Review {
 	 * info.dat file and the review document file.
 	 */
 	Review(final File the_review_directory) {
-		//TODO: load/parse the info.dat file in the directory
+		//TODO: test this
+		my_directory = the_review_directory;
 		
+		BufferedReader info = FileHelper.getFileReader(my_directory,
+				DATA_FILE_NAME);
+		
+		if(info != null)
+		{
+			String str;
+			try {
+				str = info.readLine();
+				my_reviewer_id = str;
+				str = info.readLine();
+				my_summary_rating = Integer.parseInt(str);
+				str = info.readLine();
+				my_review_doc = new File(my_directory + "/" + str);
+			} catch (IOException e) {
+				//auto generated, don't know what to replace it with
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -84,7 +120,34 @@ public class Review {
 		return my_reviewer_id;
 	}
 	
-	
+	/**
+	 * Saves data about the review by deleting and creating a new info.dat
+	 * @return <code>true</code> if the operation succeeded.
+	 */
+	public boolean saveReview() {
+		File info = new File(my_directory.getAbsolutePath() + "/" + 
+				DATA_FILE_NAME);
+		
+		if(info.exists()) {
+			info.delete();
+		}
+		
+		try {
+			info.createNewFile();
+			BufferedWriter bw = FileHelper.getFileWriter(info);
+			if(bw == null)
+				return false;
+			bw.write(my_reviewer_id + '\n');
+			bw.write(String.valueOf(my_summary_rating) + '\n');
+			bw.write(FileHelper.getLeafString(my_review_doc) + '\n');
+		} catch (IOException e) {
+			// Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
 	
 	private void copyReviewDoc(final File the_review_directory, 
 			final File the_review_doc) {

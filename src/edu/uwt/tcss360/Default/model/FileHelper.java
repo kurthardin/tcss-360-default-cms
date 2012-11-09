@@ -7,10 +7,12 @@
 package edu.uwt.tcss360.Default.model;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,7 +28,8 @@ import java.io.OutputStream;
  */
 public class FileHelper {
 	/**
-	 * Gets a BufferedReader for the given file.
+	 * Gets a BufferedReader for the given file. Don't forget to close the
+	 * reader when done using it!
 	 * @param the_file The file to get a BufferedReader for
 	 * @return <code>null</code> if the_file is a directory or if the_file
 	 * does not exist or if there was an exception. Returns a BufferedReader
@@ -47,7 +50,8 @@ public class FileHelper {
 	}
 	
 	/**
-	 * Gets a BufferedReader for the given file in the given directory.
+	 * Gets a BufferedReader for the given file in the given directory. Don't
+	 * forget to close the reader when done using it!
 	 * @param the_directory The directory containing the file.
 	 * @param the_file_name The name of the file, do not include a preceding
 	 * "/" in the name.
@@ -58,6 +62,45 @@ public class FileHelper {
 	public static BufferedReader getFileReader(File the_directory, 
 			String the_file_name){
 		return getFileReader(new File(the_directory.getAbsolutePath() + "/" 
+			+ the_file_name));
+	}
+	
+	/**
+	 * Gets a BufferedWriter for the given file. Don't forget to close the
+	 * writer when you're done using it!
+	 * @param the_file The file to get a BufferedWriter for.
+	 * @return <code>null</code> if the_file is a directory, the_file doesn't
+	 * exist, or there was an exception. Returns a BufferedWriter for the file
+	 * if it was created successfully.
+	 */
+	public static BufferedWriter getFileWriter(File the_file) {
+		if(the_file.isDirectory() || !the_file.exists())
+			return null;
+		
+		BufferedWriter bw = null;
+		
+		try {
+			bw = new BufferedWriter(new FileWriter(the_file.getPath()));
+		} catch (IOException e) {
+			return null;
+		}
+		return bw;
+	}
+	
+	/**
+	 * Gets a BufferedWriter for the given file. Don't forget to close the
+	 * writer when you're done using it!
+	 * @param the_directory The directory containing the file to create a
+	 * BufferedReader for.
+	 * @param the_file The name of the file to write to, do not include a
+	 * preceeding /.
+	 * @return <code>null</code> if the_file is a directory, the_file doesn't
+	 * exist, or there was an exception. Returns a BufferedWriter for the file
+	 * if it was created successfully.
+	 */
+	public static BufferedWriter getFileWriter(File the_directory, 
+			final String the_file_name) {
+		return getFileWriter(new File(the_directory.getAbsolutePath() + "/"
 			+ the_file_name));
 	}
 	
@@ -142,6 +185,40 @@ public class FileHelper {
 		
 		if(newdir.exists() || newdir.isDirectory())
 			return newdir;
+		else
+			return null;
+	}
+	
+	/**
+	 * Attempts to create a new File in the given directory with the given
+	 * name.
+	 * @param the_directory The directory to create the file in.
+	 * @param the_name The name of the file to be created. Do not include
+	 * a preceeding /
+	 * @return <code>null</code> if the directory doesn't exist, the directory
+	 * is a file, the file already exists, or an exception occured. Returns
+	 * a new File object if the file was created successfully.
+	 */
+	public static File createFile(File the_directory, String the_name) {
+		//if the containing directory doesn't exist, you can't make
+		//a file in it
+		if(!the_directory.exists() || !the_directory.isDirectory())
+			return null;
+		
+		File newfile = new File(the_directory.getPath() + "/" + the_name);
+		
+		if(newfile.exists())
+			return null;
+		else {
+			try {
+				newfile.createNewFile();
+			} catch (IOException e) {
+				return null;
+			}
+		}
+		
+		if(newfile.exists() && newfile.isFile())
+			return newfile;
 		else
 			return null;
 	}
