@@ -328,4 +328,16 @@ public final class Conference {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getConferenceID()
+	{
+		StringBuilder sb = new StringBuilder(my_name);
+		sb.append(my_start_date);
+		sb.append(my_end_date);
+		return sb.toString();
+	}
+	
 }

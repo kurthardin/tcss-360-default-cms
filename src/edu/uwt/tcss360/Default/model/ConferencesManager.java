@@ -1,3 +1,5 @@
+package edu.uwt.tcss360.Default.model;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,12 +45,12 @@ public class ConferencesManager
 	 * 
 	 * @return True if the conference was removed, false otherwise.
 	 */
-	public boolean removeConference(final int the_conference_id) 
+	public boolean removeConference(final String the_conference_id) 
 	{
 		boolean was_conferenced_removed = false;
 		for (Conference a_conference : my_conferences) 
 		{
-			if (a_conference.getConferenceID == the_conference_id)
+			if (a_conference.getConferenceID().equals(the_conference_id))
 			{
 				my_conferences.remove(a_conference);
 				was_conferenced_removed = true;
@@ -65,12 +67,12 @@ public class ConferencesManager
 	 * 
 	 * @return The conference with the given ID, or null if it was not found.
 	 */
-	public Conference getConference(final int the_conference_id)
+	public Conference getConference(final String the_conference_id)
 	{
-		Conference sought_conference;
+		Conference sought_conference = null;
 		for (Conference a_conference : my_conferences) 
 		{
-			if (a_conference.getConferenceID == the_conference_id)
+			if (a_conference.getConferenceID().equals(the_conference_id))
 			{
 				sought_conference = a_conference;
 				break;
@@ -86,7 +88,7 @@ public class ConferencesManager
 	 */
 	public Set<Conference> getAllConferences() 
 	{
-		Collections.unmodifiableSet(my_conferences);
+		return Collections.unmodifiableSet(my_conferences);
 	}
 	
 	/**
@@ -114,7 +116,7 @@ public class ConferencesManager
 		boolean was_user_removed = false;
 		for (User a_user : my_users)
 		{
-			if (a_user.getId().equals(the_user_id))
+			if (a_user.getID().equals(the_user_id))
 			{
 				was_user_removed = my_users.remove(a_user);
 				break;
@@ -132,10 +134,10 @@ public class ConferencesManager
 	 */
 	public User getUser(final String the_user_id)
 	{
-		User sought_user;
+		User sought_user = null;
 		for (User a_user : my_users)
 		{
-			if(a_user.getId.equals(the_user_id))
+			if(a_user.getID().equals(the_user_id))
 			{
 				sought_user = a_user;
 			}

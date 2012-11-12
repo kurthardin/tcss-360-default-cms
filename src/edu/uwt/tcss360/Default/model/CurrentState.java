@@ -110,7 +110,7 @@ public class CurrentState
 	 * Sets the current conference to the_conference
 	 * @param the_conference the if of the conference sent in
 	 */
-	public void setCurrentConference(int the_conf_id)
+	public void setCurrentConference(final String the_conf_id)
 	{
 		my_current_conference = my_conf_mgr.getConference(the_conf_id);
 	}
@@ -120,7 +120,7 @@ public class CurrentState
 	 * string identifier passed in.
 	 * @param the_user_id the login ID of the user.
 	 */
-	public void setCurrentUser(String the_user_id)
+	public void setCurrentUser(final String the_user_id)
 	{
 		my_current_user = my_conf_mgr.getUser(the_user_id);
 	}
@@ -129,7 +129,7 @@ public class CurrentState
 	 * sets the current role for the current user.
 	 * @param the_role the role being passed in
 	 */
-	public void setCurrentRole(Role the_role)
+	public void setCurrentRole(final Role the_role)
 	{
 		my_current_role = the_role;
 	}
@@ -138,7 +138,7 @@ public class CurrentState
 	 * sets the current paper to the passed in paper.
 	 * @param the_paper the paper passed in.
 	 */
-	public void setCurrentPaper(Paper the_paper)
+	public void setCurrentPaper(final Paper the_paper)
 	{
 		my_current_paper = the_paper;
 	}
