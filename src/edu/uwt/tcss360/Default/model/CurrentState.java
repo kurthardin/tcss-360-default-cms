@@ -54,10 +54,13 @@ public class CurrentState
 	/**
 	 * Constructor for the CurrentState class. It is passed in a
 	 * ConferencesManager object to use.
-	 * @param the_conf_mgr
+	 * @param the_conf_mgr the conference manager
+	 * @throws IllegalArgumentException if the_conf_mgr is null.
 	 */
 	public CurrentState(ConferencesManager the_conf_mgr)
 	{
+		if (the_conf_mgr == null)
+			throw new IllegalArgumentException();
 		my_conf_mgr = the_conf_mgr;
 	}
 	
@@ -109,9 +112,12 @@ public class CurrentState
 	/**
 	 * Sets the current conference to the_conference
 	 * @param the_conference the if of the conference sent in
+	 * @throws IllegalArgumentException if the_conf_id is null
 	 */
 	public void setCurrentConference(final String the_conf_id)
 	{
+		if (the_conf_id == null)
+			throw new IllegalArgumentException();
 		my_current_conference = my_conf_mgr.getConference(the_conf_id);
 	}
 	
@@ -122,6 +128,8 @@ public class CurrentState
 	 */
 	public void setCurrentUser(final String the_user_id)
 	{
+		if (the_user_id == null)
+			throw new IllegalArgumentException();
 		my_current_user = my_conf_mgr.getUser(the_user_id);
 	}
 	
@@ -131,6 +139,8 @@ public class CurrentState
 	 */
 	public void setCurrentRole(final Role the_role)
 	{
+		if (the_role == null)
+			throw new IllegalArgumentException();
 		my_current_role = the_role;
 	}
 	
@@ -140,6 +150,8 @@ public class CurrentState
 	 */
 	public void setCurrentPaper(final Paper the_paper)
 	{
+		if (the_paper == null)
+			throw new IllegalArgumentException();
 		my_current_paper = the_paper;
 	}
 }
