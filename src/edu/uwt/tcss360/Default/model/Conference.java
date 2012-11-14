@@ -80,7 +80,8 @@ public final class Conference {
 	 * data from the specified File.
 	 * @param a_data_file the data file to initialize this Conference from.
 	 */
-	public Conference(final File a_data_file) {
+	public Conference(final File a_data_file) 
+	{
 		// TODO: Implement data file constructor
 		my_name = null;
 		my_start_date = null;
@@ -94,8 +95,9 @@ public final class Conference {
 	 * @param the_name the name of this conference.
 	 * @param the_date the date on which this conference will occur.
 	 */
-	public Conference(final String the_pc_user_id, final String the_name, 
-			final Date the_date) {
+	public Conference(final String the_pc_user_id, 
+			final String the_name, final Date the_date) 
+	{
 		this(the_pc_user_id, the_name, the_date, the_date);
 	}
 	
@@ -108,7 +110,26 @@ public final class Conference {
 	 * @param the_end the ending date for this conference.
 	 */
 	public Conference(final String the_pc_user_id, final String the_name, 
-			final Date the_start, final Date the_end) {
+			final Date the_start, final Date the_end) 
+	{
+		if (the_name == null) 
+		{
+			throw new IllegalArgumentException(
+					"The conference name cannot be null");
+		}
+		
+		if (the_start == null) 
+		{
+			throw new IllegalArgumentException(
+					"The conference start date cannot be null");
+		}
+		
+		if (the_end == null) 
+		{
+			throw new IllegalArgumentException(
+					"The conference end date cannot be null");
+		}
+		
 		my_name = the_name;
 		my_start_date = the_start;
 		my_end_date = the_end;
@@ -119,7 +140,8 @@ public final class Conference {
 	 * Gets the name of this Conference.
 	 * @return the name of this conference.
 	 */
-	public String getname() {
+	public String getname() 
+	{
 		return my_name;
 	}
 	
@@ -127,7 +149,8 @@ public final class Conference {
 	 * Gets the starting date for this Conference.
 	 * @return the starting date.
 	 */
-	public Date getStartDate() {
+	public Date getStartDate() 
+	{
 		return (Date) my_start_date.clone();
 	}
 	
@@ -135,7 +158,8 @@ public final class Conference {
 	 * Gets the ending date for this Conference.
 	 * @return the ending date.
 	 */
-	public Date getEndDate() {
+	public Date getEndDate() 
+	{
 		return (Date) my_end_date.clone();
 	}
 	
@@ -143,7 +167,8 @@ public final class Conference {
 	 * Gets the paper submission deadline for this Conference.
 	 * @return the paper submission deadline.
 	 */
-	public Date getSubmissionDeadline() {
+	public Date getSubmissionDeadline() 
+	{
 		return (Date) my_submission_deadline.clone();
 	}
 	
@@ -151,7 +176,13 @@ public final class Conference {
 	 * Sets the paper submission deadline for this Conference.
 	 * @param the_deadline the new paper submission deadline.
 	 */
-	public void setSubmissionDeadline(final Date the_deadline) {
+	public void setSubmissionDeadline(final Date the_deadline) 
+	{
+		if (the_deadline == null) 
+		{
+			throw new IllegalArgumentException(
+					"The submission deadline cannot be null");
+		}
 		my_submission_deadline = (Date) the_deadline.clone();
 	}
 	
@@ -159,7 +190,8 @@ public final class Conference {
 	 * Gets the review deadline for this Conference.
 	 * @return the review deadline.
 	 */
-	public Date getReviewDeadline() {
+	public Date getReviewDeadline() 
+	{
 		return (Date) my_review_deadline.clone();
 	}
 	
@@ -167,7 +199,13 @@ public final class Conference {
 	 * Sets the review deadline for this Conference.
 	 * @param the_deadline the new review deadline.
 	 */
-	public void setReviewDeadline(final Date the_deadline) {
+	public void setReviewDeadline(final Date the_deadline) 
+	{
+		if (the_deadline == null) 
+		{
+			throw new IllegalArgumentException(
+					"The review deadline cannot be null");
+		}
 		my_review_deadline = (Date) the_deadline.clone();
 	}
 	
@@ -175,7 +213,8 @@ public final class Conference {
 	 * Gets the recommendation deadline for this Conference.
 	 * @return the recommendation deadline.
 	 */
-	public Date getRecommendationDeadline() {
+	public Date getRecommendationDeadline() 
+	{
 		return (Date) my_recommendation_deadline.clone();
 	}
 	
@@ -183,7 +222,13 @@ public final class Conference {
 	 * Sets the recommendation deadline for this Conference.
 	 * @param the_deadline the new recommendation deadline.
 	 */
-	public void setRecommendationDeadline(final Date the_deadline) {
+	public void setRecommendationDeadline(final Date the_deadline) 
+	{
+		if (the_deadline == null) 
+		{
+			throw new IllegalArgumentException(
+					"The recommendation deadline cannot be null");
+		}
 		my_recommendation_deadline = (Date) the_deadline.clone();
 	}
 	
@@ -191,7 +236,8 @@ public final class Conference {
 	 * Gets the final paper revision submission deadline for this Conference.
 	 * @return the final paper revision submission deadline.
 	 */
-	public Date getFinalRevisionDeadline() {
+	public Date getFinalRevisionDeadline() 
+	{
 		return (Date) my_final_revision_deadline.clone();
 	}
 	
@@ -199,7 +245,13 @@ public final class Conference {
 	 * Sets the final paper revision submission deadline for this Conference.
 	 * @param the_deadline the new final paper revision submission deadline.
 	 */
-	public void setFinalRevisionDeadline(final Date the_deadline) {
+	public void setFinalRevisionDeadline(final Date the_deadline) 
+	{
+		if (the_deadline == null) 
+		{
+			throw new IllegalArgumentException(
+					"The final revision deadline cannot be null");
+		}
 		my_final_revision_deadline = (Date) the_deadline.clone();
 	}
 	
@@ -213,11 +265,26 @@ public final class Conference {
 	 * @return true if the User could be assigned the specified Role, 
 	 * 			otherwise false. 
 	 */
-	public boolean authorizeUser(final String the_user_id, 
-			final Role the_role) {
+	public boolean authorizeUser(
+			final String the_user_id, 
+			final Role the_role) 
+	{
+		
+		if (the_user_id == null) 
+		{
+			throw new IllegalArgumentException(
+					"The user to authorize cannot be null");
+		}
+		
+		if (the_role == null) 
+		{
+			throw new IllegalArgumentException(
+					"The role to authorize cannot be null");
+		}
 		
 		Set<Role> user_roles = my_users_roles.get(the_user_id);
-		if (user_roles == null) {
+		if (user_roles == null) 
+		{
 			user_roles = new HashSet<Role>();
 			my_users_roles.put(the_user_id, user_roles);
 		}
@@ -238,12 +305,27 @@ public final class Conference {
 	 * @return true if the Role is unassigned from the User, or false 
 	 * 			if the Role cannot be unassigned.
 	 */
-	public boolean deauthorizeUser(final String the_user_id, 
-			final Role the_role) {
+	public boolean deauthorizeUser(
+			final String the_user_id, 
+			final Role the_role) 
+	{
+		
+		if (the_user_id == null) 
+		{
+			throw new IllegalArgumentException(
+					"The user to deauthorize cannot be null");
+		}
+		
+		if (the_role == null) 
+		{
+			throw new IllegalArgumentException(
+					"The role to deauthorize cannot be null");
+		}
 		
 		boolean canDeauthorize;
 		
-		switch (the_role) {
+		switch (the_role) 
+		{
 		case AUTHOR:
 		case REVIEWER:
 		case SUBPROGRAM_CHAIR:
@@ -254,9 +336,11 @@ public final class Conference {
 			break;
 		}
 		
-		if (canDeauthorize) {
+		if (canDeauthorize) 
+		{
 			Set<Role> user_roles = my_users_roles.get(the_user_id);
-			if (user_roles != null) {
+			if (user_roles != null) 
+			{
 				user_roles.remove(the_role);
 			}
 		}
@@ -270,14 +354,23 @@ public final class Conference {
 	 * @param a_role the Role for which to retrieve {@link User} IDs.
 	 * @return the list of {@link User} IDs assigned the specified Role.
 	 */
-	public List<String> getUserIds(final Role a_role) {
+	public List<String> getUserIds(final Role a_role) 
+	{
+		if (a_role == null) 
+		{
+			throw new IllegalArgumentException(
+					"The role of users to retrieve cannot be null");
+		}
+		
 		final Set<String> all_user_ids = my_users_roles.keySet();
 		final List<String> user_ids_with_role = 
 				new ArrayList<String>(all_user_ids.size());
 		
-		for (String user_id : all_user_ids) {
+		for (String user_id : all_user_ids) 
+		{
 			Set<Role> user_roles = my_users_roles.get(user_id);
-			if (user_roles.contains(a_role)) {
+			if (user_roles.contains(a_role)) 
+			{
 				user_ids_with_role.add(user_id);
 			}
 		}
@@ -292,10 +385,25 @@ public final class Conference {
 	 * @param a_role the Role of the User for which to retrieve Papers.
 	 * @return the list of Papers assigned to the User with the specified Role.
 	 */
-	public List<Paper> getPapers(final String the_user_id, final Role a_role) {
+	public List<Paper> getPapers(final String the_user_id, final Role a_role) 
+	{
+		if (the_user_id == null) 
+		{
+			throw new IllegalArgumentException(
+					"The user id for which to retrieve papers cannot be null");
+		}
+		
+		if (a_role == null) 
+		{
+			throw new IllegalArgumentException(
+					"The role for which to retrieve papers cannot be null");
+		}
+		
 		List<Paper> users_papers = new ArrayList<Paper>(my_papers.size());
-		for (Paper current_paper : my_papers) {
-			if (a_role.equals(current_paper.getRole(the_user_id))) {
+		for (Paper current_paper : my_papers) 
+		{
+			if (a_role.equals(current_paper.getRole(the_user_id))) 
+			{
 				users_papers.add(current_paper);
 			}
 		}
@@ -308,8 +416,22 @@ public final class Conference {
 	 * 						of this Paper.
 	 * @param a_paper the Paper to add.
 	 */
-	public void addPaper(String the_author_id, Paper a_paper) {
-		if (my_papers.add(a_paper)) {
+	public void addPaper(String the_author_id, Paper a_paper) 
+	{
+		if (the_author_id == null) 
+		{
+			throw new IllegalArgumentException(
+					"The author of the paper cannot be null");
+		}
+		
+		if (a_paper == null) 
+		{
+			throw new IllegalArgumentException(
+					"The paper to add cannot be null");
+		}
+		
+		if (my_papers.add(a_paper)) 
+		{
 			authorizeUser(the_author_id, Role.AUTHOR);
 		}
 	}
@@ -322,15 +444,23 @@ public final class Conference {
 	 * for this Conference.
 	 * @param a_paper the Paper to remove.
 	 */
-	public void removePaper(Paper a_paper) {
-		if (my_papers.remove(a_paper)) {
+	public void removePaper(Paper a_paper) 
+	{
+		if (a_paper == null) 
+		{
+			throw new IllegalArgumentException(
+					"The paper to remove cannot be null");
+		}
+		
+		if (my_papers.remove(a_paper)) 
+		{
 			deauthorizeUser(a_paper.getAuthorID(), Role.AUTHOR);
 		}
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Returns the unique ID associated with the conference.
+	 * @return the unique ID for this conference.
 	 */
 	public String getConferenceID()
 	{
