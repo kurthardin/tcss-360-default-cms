@@ -2,7 +2,8 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
-public class User {
+public class User 
+{
 	/////////////
 	// FIELDS
 	/////////////
@@ -11,7 +12,8 @@ public class User {
 	private String my_id;
 	private String my_email;
 	
-	public enum Role{
+	public enum Role
+	{
 		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER
 	}
 	
@@ -21,17 +23,20 @@ public class User {
 	
 	//TODO: we probably won't use this, since user information is going to
 	//be stored all in one file...
-	public User(File the_user_file) {
+	public User(File the_user_file) 
+	{
 		
 	}
 	
-	public User(final String the_email) {
+	public User(final String the_email) 
+	{
 		my_email = the_email;
 		
 		my_id = my_email; //weren't we going to make that the case?
 	}
 	
-	public User(final String the_email, final String the_name) {
+	public User(final String the_email, final String the_name) 
+	{
 		my_email = the_email;
 		my_name = the_name;
 		

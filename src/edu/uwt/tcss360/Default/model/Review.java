@@ -11,7 +11,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 
-public class Review {
+import edu.uwt.tcss360.Default.util.FileHelper;
+
+public class Review 
+{
 	/*
 	 * the info.dat file for a review will likely contain only three lines:
 	 * 
@@ -51,7 +54,8 @@ public class Review {
 	 * @param the_review_directory The review's directory, which contains the
 	 * info.dat file and the review document file.
 	 */
-	Review(final File the_review_directory) {
+	Review(final File the_review_directory) 
+	{
 		//TODO: test this constructor
 		my_directory = the_review_directory;
 		my_reviewer_id = "";
@@ -64,7 +68,8 @@ public class Review {
 		if(info != null)
 		{
 			String str;
-			try {
+			try 
+			{
 				str = info.readLine();
 				my_reviewer_id = str;
 				str = info.readLine();
@@ -72,7 +77,9 @@ public class Review {
 				str = info.readLine();
 				my_review_doc = new File(my_directory + "/" + str);
 				info.close();
-			} catch (IOException e) {
+			} 
+			catch (IOException e) 
+			{
 				//auto generated, don't know what to replace it with
 				e.printStackTrace();
 			}
@@ -90,7 +97,8 @@ public class Review {
 	 * the review.
 	 */
 	Review(final File the_review_directory, final String the_reviewer_id, 
-			final File the_review_doc) {
+			final File the_review_doc) 
+	{
 		my_reviewer_id = the_reviewer_id;
 		my_review_doc = null;
 		my_summary_rating = NO_RATING;
@@ -111,7 +119,8 @@ public class Review {
 	 * @param the_summary_rating The 1 to 5 summary rating.
 	 */
 	Review(final File the_review_directory, final String the_reviewer_id, 
-			final File the_review_doc, final int the_summary_rating) {
+			final File the_review_doc, final int the_summary_rating) 
+	{
 		my_reviewer_id = the_reviewer_id;
 		my_review_doc = null;
 		my_summary_rating = the_summary_rating;
@@ -125,11 +134,13 @@ public class Review {
 	// METHODS
 	//////////////
 	
-	public File getDirectory() {
+	public File getDirectory() 
+	{
 		return new File(my_directory.getAbsolutePath());
 	}
 	
-	public String getReviewerID() {
+	public String getReviewerID() 
+	{
 		return my_reviewer_id;
 	}
 	
@@ -139,7 +150,8 @@ public class Review {
 	 * @return The review document if one exists, <code>null</code> if the
 	 * Review hasn't been given a review document yet.
 	 */
-	public File getReviewDoc() {
+	public File getReviewDoc() 
+	{
 		if(my_review_doc.exists())
 			return new File(my_review_doc.getPath());
 		else
@@ -150,7 +162,8 @@ public class Review {
 	 * Deletes the old review document and replaces it with the one given.
 	 * @param the_doc The new review document.
 	 */
-	public void setReviewDoc(File the_doc) {
+	public void setReviewDoc(File the_doc) 
+	{
 		//delete old doc
 		if(my_review_doc.exists())
 			my_review_doc.delete();
@@ -163,15 +176,16 @@ public class Review {
 	 * Saves data about the review by deleting and creating a new info.dat
 	 * @return <code>true</code> if the operation succeeded.
 	 */
-	public boolean saveReview() {
+	public boolean saveReview() 
+	{
 		File info = new File(my_directory.getAbsolutePath() + "/" + 
 				DATA_FILE_NAME);
 		
-		if(info.exists()) {
+		if(info.exists())
 			info.delete();
-		}
 		
-		try {
+		try 
+		{
 			info.createNewFile();
 			BufferedWriter bw = FileHelper.getFileWriter(info);
 			if(bw == null)
@@ -180,12 +194,13 @@ public class Review {
 			bw.write(String.valueOf(my_summary_rating) + '\n');
 			bw.write(FileHelper.getLeafString(my_review_doc) + '\n');
 			bw.close();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			// Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
-		
 		return true;
 	}
 	
@@ -195,10 +210,12 @@ public class Review {
 	 * @param the_review_doc The document to copy.
 	 */
 	private void copyReviewDoc(final File the_review_directory, 
-			final File the_review_doc) {
+			final File the_review_doc) 
+	{
 		String docname = FileHelper.getLeafString(the_review_doc);
 		File copied_file = new File(the_review_directory.getAbsolutePath() 
 				+ "/" + docname);
+		
 		FileHelper.copyFile(the_review_doc, copied_file);
 		my_review_doc = copied_file;
 	}
