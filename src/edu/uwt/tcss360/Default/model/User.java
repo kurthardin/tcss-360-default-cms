@@ -7,6 +7,8 @@ public class User
 	/////////////
 	// FIELDS
 	/////////////
+    
+    //how is this going to be formatted?
 	private String my_name;
 	
 	private String my_id;
@@ -25,11 +27,15 @@ public class User
 	//be stored all in one file...
 	public User(File the_user_file) 
 	{
-		
+		if(the_user_file == null)
+		    throw new IllegalArgumentException("User File cannot be null");
 	}
 	
 	public User(final String the_email) 
 	{
+	    if(the_email == null)
+	        throw new IllegalArgumentException("Email cannot be null");
+	        
 		my_email = the_email;
 		
 		my_id = my_email; //weren't we going to make that the case?
@@ -37,6 +43,11 @@ public class User
 	
 	public User(final String the_email, final String the_name) 
 	{
+	    if(the_email == null)
+	        throw new IllegalArgumentException("Email cannot be null");
+	    if(the_name == null)
+	        throw new IllegalArgumentException("Name cannot be null");
+	        
 		my_email = the_email;
 		my_name = the_name;
 		

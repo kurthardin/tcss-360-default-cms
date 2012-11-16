@@ -87,6 +87,10 @@ public class Paper
 	 */
 	public Paper(final File the_paper_directory) 
 	{
+	    if(the_paper_directory == null)
+	        throw new IllegalArgumentException("The conference directory " +
+	                "cannot be null");
+	    
 		my_directory = the_paper_directory;
 		initFields();
 		
@@ -143,6 +147,21 @@ public class Paper
 	public Paper(final String the_author_id, final File the_manuscript_doc,
 			final File the_paper_directory) 
 	{
+	    if(the_author_id == null)
+	        throw new IllegalArgumentException("Author ID cannot be null");
+	    if(the_manuscript_doc == null)
+	        throw new IllegalArgumentException("Manuscript doc cannot " +
+	        		"be null");
+	    if(!the_manuscript_doc.exists())
+	        throw new IllegalArgumentException("Manuscript doc must exist");
+	    if(the_paper_directory == null)
+	        throw new IllegalArgumentException("The Paper directory cannot " +
+	        		"be null");
+	    if(!the_paper_directory.exists())
+	        throw new IllegalArgumentException("The Paper directory " +
+	        		"must exist");
+	    
+	    
 		my_directory = the_paper_directory;
 		
 		initFields();
@@ -167,6 +186,9 @@ public class Paper
 	 */
 	public Role getRole(final String a_user_id) 
 	{
+	    if(a_user_id == null)
+	        throw new IllegalArgumentException("User ID cannot be null");
+	    
 		if(a_user_id == my_author_id)
 			return Role.AUTHOR;
 		
@@ -182,6 +204,9 @@ public class Paper
 	
 	public List<String> getUserIDs(final Role a_user_role) 
 	{
+	    if(a_user_role == null)
+	        throw new IllegalArgumentException("Role cannot be null");
+	    
 		List<String> ids = new ArrayList<String>();
 		
 		//TODO: actually get the IDs.
@@ -214,6 +239,11 @@ public class Paper
 	public boolean setAcceptanceStatus(final int the_status, 
 			final Role a_role) 
 	{
+	    if(the_status > 5 || the_status < -1 || the_status == 0)
+	        throw new IllegalArgumentException("Status is an invalid value");
+	    if(a_role == null)
+	        throw new IllegalArgumentException("Role cannot be null");
+	    
 		if(a_role.equals(Role.PROGRAM_CHAIR)) 
 		{
 		    if(the_status >= 0 && the_status <= 5)
@@ -240,6 +270,11 @@ public class Paper
 	 */
 	public boolean setTitle(final String a_title, final Role a_role) 
 	{
+	    if(a_title == null)
+	        throw new IllegalArgumentException("Title cannot be null");
+	    if(a_role == null)
+	        throw new IllegalArgumentException("Role cannot be null");
+	    
 		if(a_role.equals(Role.PROGRAM_CHAIR) || 
 				a_role.equals(Role.SUBPROGRAM_CHAIR) ||
 				a_role.equals(Role.AUTHOR)) 
@@ -274,6 +309,16 @@ public class Paper
 	public boolean setManuscript(final File the_manuscript, 
 	        final Role the_role)
 	{
+	    if(the_manuscript == null)
+	        throw new IllegalArgumentException("Manuscript cannot be null");
+	    if(!the_manuscript.exists())
+	        throw new IllegalArgumentException("Manuscript must exist");
+	    if(the_manuscript.isDirectory())
+	        throw new IllegalArgumentException("Manuscript cannot be " +
+	        		"a directory");
+	    if(the_role == null)
+	        throw new IllegalArgumentException("Role cannot be null");
+	    
 	    if(the_role != Role.AUTHOR)
 	        return false;
 	    
@@ -286,6 +331,9 @@ public class Paper
 	
 	public void addReview(final Review a_review) 
 	{
+	    if(a_review == null)
+	        throw new IllegalArgumentException("Review cannot be null");
+	    
 		my_reviews.add(a_review);
 	}
 	
@@ -298,6 +346,10 @@ public class Paper
 	 */
 	public boolean assignSubprogramChair(final String the_user_id) 
 	{
+	    if(the_user_id == null)
+	        throw new IllegalArgumentException("Subprogram Chair user " +
+	        		"ID cannot be null");
+	    
 		Role r = getRole(the_user_id);
 		
 		//business rule 9
@@ -319,6 +371,10 @@ public class Paper
 	 */
 	public boolean assignReviewer(final String a_user_id) 
 	{
+	    if(a_user_id == null)
+	        throw new IllegalArgumentException("Reviewer user ID cannot " +
+	        		"be null");
+	    
 		Role r = getRole(a_user_id);
 		
 		//business rules 8 and 10 (they're pretty much the same thing...)

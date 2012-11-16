@@ -56,7 +56,13 @@ public class Review
 	 */
 	Review(final File the_review_directory) 
 	{
-		//TODO: test this constructor
+		if(the_review_directory == null)
+		    throw new IllegalArgumentException("Review directory cannot" +
+		    		"be null");
+		
+		if(!the_review_directory.exists())
+		    throw new IllegalArgumentException("Review directory must exist");
+	    
 		my_directory = the_review_directory;
 		my_reviewer_id = "";
 		my_summary_rating = NO_RATING;
@@ -64,6 +70,9 @@ public class Review
 		
 		BufferedReader info = FileHelper.getFileReader(my_directory,
 				DATA_FILE_NAME);
+		
+		if(info == null)
+		    throw new IllegalArgumentException("info.dat could not be found");
 		
 		if(info != null)
 		{
@@ -99,12 +108,8 @@ public class Review
 	Review(final File the_review_directory, final String the_reviewer_id, 
 			final File the_review_doc) 
 	{
-		my_reviewer_id = the_reviewer_id;
-		my_review_doc = null;
-		my_summary_rating = NO_RATING;
-		my_directory = the_review_directory;
-		
-		copyReviewDoc(the_review_directory, the_review_doc);
+		this(the_review_directory, the_reviewer_id, the_review_doc, 
+		        NO_RATING);
 	}
 	
 	/**
@@ -121,6 +126,22 @@ public class Review
 	Review(final File the_review_directory, final String the_reviewer_id, 
 			final File the_review_doc, final int the_summary_rating) 
 	{
+	    if(the_review_directory == null)
+	        throw new IllegalArgumentException("Review directory cannot " +
+	        		"be null");
+	    
+	    if(!the_review_directory.exists())
+	        throw new IllegalArgumentException("Review directory must exist");
+	    
+	    if(the_reviewer_id == null)
+	        throw new IllegalArgumentException("Reviewer ID cannot be null");
+	    
+	    if(the_review_doc == null)
+	        throw new IllegalArgumentException("Review doc cannot be null");
+	    
+	    if(!the_review_doc.exists())
+	        throw new IllegalArgumentException("Review doc must exist");
+	    
 		my_reviewer_id = the_reviewer_id;
 		my_review_doc = null;
 		my_summary_rating = the_summary_rating;
@@ -164,6 +185,16 @@ public class Review
 	 */
 	public void setReviewDoc(File the_doc) 
 	{
+	    if(the_doc == null)
+	        throw new IllegalArgumentException("Review doc cannot be null");
+	    
+	    if(!the_doc.exists())
+	        throw new IllegalArgumentException("Review doc must exist");
+	    
+	    if(the_doc.isDirectory())
+	        throw new IllegalArgumentException("Review doc cannot be " +
+	        		"a directory");
+	    
 		//delete old doc
 		if(my_review_doc.exists())
 			my_review_doc.delete();
