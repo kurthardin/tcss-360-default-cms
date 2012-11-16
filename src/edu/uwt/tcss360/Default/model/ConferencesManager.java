@@ -50,7 +50,7 @@ public class ConferencesManager
 		boolean was_conferenced_removed = false;
 		for (Conference a_conference : my_conferences) 
 		{
-			if (a_conference.getConferenceID().equals(the_conference_id))
+			if (a_conference.getID().equals(the_conference_id))
 			{
 				my_conferences.remove(a_conference);
 				was_conferenced_removed = true;
@@ -72,7 +72,7 @@ public class ConferencesManager
 		Conference sought_conference = null;
 		for (Conference a_conference : my_conferences) 
 		{
-			if (a_conference.getConferenceID().equals(the_conference_id))
+			if (a_conference.getID().equals(the_conference_id))
 			{
 				sought_conference = a_conference;
 				break;

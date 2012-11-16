@@ -54,8 +54,8 @@ public class ConferencesManagerTest
         
         Conference got = set.iterator().next();
         
-        assertEquals("addConference: same conference", got.getConferenceID(),
-                c.getConferenceID());
+        assertEquals("addConference: same conference", got.getID(),
+                c.getID());
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -74,18 +74,18 @@ public class ConferencesManagerTest
                 date);
         man.addConference(c);
         
-        Conference got = man.getConference(c.getConferenceID());
+        Conference got = man.getConference(c.getID());
         
         assertEquals("getConference: name", got.getname(), c.getname());
         assertEquals("getConference: end date", got.getEndDate(), 
                 c.getEndDate());
-        assertEquals("getConference: id", got.getConferenceID(),
-                c.getConferenceID());
+        assertEquals("getConference: id", got.getID(),
+                c.getID());
         
         Conference cc = new Conference("someid", "conferenceblah", date);
         
         assertNull("getConference: doesn't exist", 
-                man.getConference(cc.getConferenceID()));
+                man.getConference(cc.getID()));
     }
     
     @Test 
@@ -100,10 +100,10 @@ public class ConferencesManagerTest
         
         //try to remove a conference that doesn't exist
         assertFalse("removeConference: doesn't exist", 
-                man.removeConference(cc.getConferenceID()));
+                man.removeConference(cc.getID()));
         
         assertTrue("removeConference: remove", 
-                man.removeConference(c.getConferenceID()));
+                man.removeConference(c.getID()));
         Set<Conference> set = man.getAllConferences();
         assertFalse("removeConference", set.contains(c));
     }

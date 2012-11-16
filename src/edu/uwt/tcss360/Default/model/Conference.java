@@ -462,7 +462,7 @@ public final class Conference {
 	 * Returns the unique ID associated with the conference.
 	 * @return the unique ID for this conference.
 	 */
-	public String getConferenceID()
+	public String getID()
 	{
 		StringBuilder sb = new StringBuilder(my_name);
 		sb.append(my_start_date);
