@@ -1,3 +1,4 @@
+package edu.uwt.tcss360.Default;
 import edu.uwt.tcss360.Default.gui.ConferencesFrame;
 
 
