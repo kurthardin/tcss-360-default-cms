@@ -81,7 +81,7 @@ public class CurrentStateTests
 	 * Test method for {@link edu.uwt.tcss360.Default.model.CurrentState#CurrentState(edu.uwt.tcss360.Default.model.ConferencesManager)}.
 	 */
 	@Test
-	public final void testCurrentState() 
+	public final void testCurrentStateForValidConferencesManager() 
 	{
 		my_curr_state = new CurrentState(my_confs_mgr);
 		assertEquals("ConferencesManager not set correctly", 
@@ -94,6 +94,15 @@ public class CurrentStateTests
 				my_curr_state.getCurrentRole());
 		assertNull("Current User not null", 
 				my_curr_state.getCurrentUser());
+	}
+
+	/**
+	 * Test method for {@link edu.uwt.tcss360.Default.model.CurrentState#CurrentState(edu.uwt.tcss360.Default.model.ConferencesManager)}.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public final void testCurrentStateForNullConferencesManager() 
+	{
+		new CurrentState(null);
 	}
 
 	/**
