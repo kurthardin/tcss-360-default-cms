@@ -54,7 +54,7 @@ public class Review
 	 * @param the_review_directory The review's directory, which contains the
 	 * info.dat file and the review document file.
 	 */
-	Review(final File the_review_directory) 
+	public Review(final File the_review_directory) 
 	{
 		if(the_review_directory == null)
 		    throw new IllegalArgumentException("Review directory cannot" +
@@ -105,7 +105,7 @@ public class Review
 	 * @param the_review_doc The actual document file (.pdf, .docx, etc) for
 	 * the review.
 	 */
-	Review(final File the_review_directory, final String the_reviewer_id, 
+	public Review(final File the_review_directory, final String the_reviewer_id, 
 			final File the_review_doc) 
 	{
 		this(the_review_directory, the_reviewer_id, the_review_doc, 
@@ -123,7 +123,7 @@ public class Review
 	 * the review.
 	 * @param the_summary_rating The 1 to 5 summary rating.
 	 */
-	Review(final File the_review_directory, final String the_reviewer_id, 
+	public Review(final File the_review_directory, final String the_reviewer_id, 
 			final File the_review_doc, final int the_summary_rating) 
 	{
 	    if(the_review_directory == null)
@@ -177,6 +177,28 @@ public class Review
 			return new File(my_review_doc.getPath());
 		else
 			return null;
+	}
+	
+	/**
+	 * returns the summary rating for the review.
+	 * @return summary rating.
+	 * @author Scott Sanderson
+	 */
+	public int getSummaryRating()
+	{
+		return my_summary_rating;
+	}
+	
+	/**
+	 * sets the rating to the appropriate value.
+	 * @param the_rating
+	 * @author Scott Sanderson
+	 */
+	public void setSummaryRating(int the_rating)
+	{
+		if (the_rating < 1 || the_rating > 5)
+			throw new IllegalArgumentException();
+		my_summary_rating = the_rating;
 	}
 	
 	/**
