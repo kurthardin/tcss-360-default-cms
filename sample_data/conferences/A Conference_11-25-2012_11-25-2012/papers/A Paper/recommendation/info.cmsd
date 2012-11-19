@@ -1,0 +1,4 @@
+<!-- This will contain the data for the recommendation -->
+
+<fields my_reviewer_id='spc@sample.com'
+		my_summary_rating=0/>

@@ -1,0 +1,6 @@
+<!-- This will contain the data for Some Other Paper -->
+
+<fields my_acceptance_status=0
+		my_author_id='author@sample.com'
+		my_subprogram_chair_id='spc@sample.com'
+		my_manuscript_title='Some Other Paper'/>

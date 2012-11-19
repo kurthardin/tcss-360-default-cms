@@ -1,0 +1,18 @@
+<!-- This will contain the data for Some Other Conference_10-14-2012_10-15-2012 -->
+
+<fields my_name='Some Other Conference'
+		my_start_date='10-14-2012'
+		my_end_date='10-15-2012'
+		my_submission_deadline=''
+		my_review_deadline=''
+		my_recommendation_deadline=''
+		my_final_revision_deadline=''>
+			
+	<my_users_roles>
+		<user id='user@sample.com'>
+			<role name='AUTHOR'/>
+			<role name='REVIEWER'/>
+		</user>
+	</my_users_roles>
+
+</fields>
