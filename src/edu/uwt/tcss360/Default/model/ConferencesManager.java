@@ -1,8 +1,21 @@
 package edu.uwt.tcss360.Default.model;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.InfoHandler;
 
 
 public class ConferencesManager 
@@ -18,9 +31,95 @@ public class ConferencesManager
 	 * Constructs a ConferencesManager object.
 	 */
 	public ConferencesManager() 
-	{
-		my_conferences = new HashSet<Conference>();
-		my_users = new HashSet<User>();
+	{	
+		initUsers();
+		initConfs();
+	}
+		
+	private void initUsers() {
+		
+		File data_dir = FileHelper.getDataDirectory();
+		if (data_dir != null) {
+			
+			FileHelper.createFile(data_dir, FileHelper.USERS_DATA_FILE_NAME);
+			
+			InputSource info = FileHelper.getInputSource(data_dir,
+					FileHelper.USERS_DATA_FILE_NAME);
+			
+			if(info == null) 
+			{
+			    throw new IllegalArgumentException(FileHelper.USERS_DATA_FILE_NAME +
+			    		" could not be found");
+			}
+			else
+			{
+				try 
+				{
+					SAXParserFactory factory = SAXParserFactory.newInstance();
+					SAXParser saxParser = factory.newSAXParser();
+
+					DefaultHandler handler = new DefaultHandler() {
+						
+						public final void startElement(
+								String uri, 
+								String localName, 
+								String qName, 
+								Attributes attr) throws SAXException 
+					    {
+					 
+							System.out.println("Start Element: " + qName);
+					 
+							if (qName.equalsIgnoreCase("user")) 
+							{
+								User user = new User(attr.getValue("my_id"),
+										attr.getValue("my_name"));
+								my_users.add(user);
+							} 
+							else 
+							{
+								System.out.println("Encountered unexpected element: " + qName);
+							}
+					 
+						}
+
+					};
+					
+					my_users = new HashSet<User>();
+					saxParser.parse(info, handler);
+
+				} 
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void initConfs() {
+		File confs_dir = FileHelper.getConferencesDirectory();
+		if (confs_dir != null) 
+		{
+			String[] conf_dir_names = confs_dir.list(
+					new FilenameFilter() 
+					{
+						@Override
+						public boolean accept(File dir, String name) 
+						{
+							return (new File(dir, name).isDirectory());
+						}
+					});
+
+			my_conferences = new HashSet<Conference>(conf_dir_names.length);
+
+			for (String conf_dir_name : conf_dir_names) 
+			{
+				File conf_dir = new File(confs_dir, conf_dir_name);
+				
+				Conference conference = new Conference(conf_dir);
+				my_conferences.add(conference);
+			}
+		}
 	}
 	
 	/**

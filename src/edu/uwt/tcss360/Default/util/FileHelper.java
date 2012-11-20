@@ -31,11 +31,20 @@ import org.xml.sax.InputSource;
 public class FileHelper {
 	
 	public static final String DATA_FILE_NAME = "info.cmsd";
+	public static final String USERS_DATA_FILE_NAME = "users.cmsd";
+	
+	public static final File getDataDirectory() {
+		File dir = new File(".", "data");
+		if (!dir.exists()) {
+			dir = createDirectory(new File("."), "data");
+		}
+		return dir;
+	}
 	
 	public static final File getConferencesDirectory() {
-		File dir = new File("./conferences");
+		File dir = new File(getDataDirectory(), "conferences");
 		if (!dir.exists()) {
-			dir.mkdir();
+			dir = createDirectory(getDataDirectory(), "conferences");
 		}
 		return dir;
 	}

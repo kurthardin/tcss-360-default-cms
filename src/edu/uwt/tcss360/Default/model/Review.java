@@ -69,10 +69,11 @@ public class Review
 				FileHelper.DATA_FILE_NAME);
 		
 		if(info == null)
+		{
 		    throw new IllegalArgumentException(FileHelper.DATA_FILE_NAME +
 		    		" could not be found");
-		
-		if(info != null)
+		}
+		else
 		{
 			try 
 			{
