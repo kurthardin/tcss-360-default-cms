@@ -21,20 +21,6 @@ import edu.uwt.tcss360.Default.util.FileHelper;
 
 public class Paper 
 {
-	/*
-	 * info.dat for a Paper should contain these lines:
-	 * 
-	 * [author id]
-	 * [paper title]
-	 * [subprogram chair id]
-	 * [recommendation folder]
-	 * [review folder] (as many as needed)
-	 * "n/a"
-	 * 
-	 * [subprogram chair], [recommendation folder], and [review folder] can
-	 * be "n/a" to denote that those things don't currently exist.
-	 */
-
 	/////////////
 	// FIELDS
 	/////////////
@@ -44,8 +30,6 @@ public class Paper
 	/** The value of a field that hasn't been set yet. */
 	private static final String NOT_AVAILIBLE = "n/a";
 	
-	/** The name of the file that contains information about the paper. */
-	private static final String DATA_FILE_NAME = "info.dat";
 	
 	/** The location on disk of the directory belonging to the paper. */
 	private File my_directory;
@@ -81,8 +65,8 @@ public class Paper
 	/////////////
 	/**
 	 * Constructs a Paper object from a previously created and saved Paper
-	 * object's info.dat file.
-	 * @param the_paper_directory The directory containing the info.dat for 
+	 * object's data file.
+	 * @param the_paper_directory The directory containing the data file for 
 	 * the paper and the review/recommendation folders.
 	 */
 	public Paper(final File the_paper_directory) 
@@ -95,7 +79,7 @@ public class Paper
 		initFields();
 		
 		BufferedReader info = FileHelper.getFileReader(my_directory, 
-				DATA_FILE_NAME);
+				FileHelper.DATA_FILE_NAME);
 		
 		if(info != null)
 		{
@@ -393,48 +377,52 @@ public class Paper
 	 */
 	public boolean savePaper() 
 	{	
-		File info = new File(my_directory.getAbsolutePath() + "/" +
-				DATA_FILE_NAME);
+		// TODO Implement save to XML
 		
-		if(info.exists())
-			info.delete();
-		
-		try 
-		{
-			info.createNewFile();
-			BufferedWriter bw = FileHelper.getFileWriter(info);
-			if(bw == null)
-				return false;
-			
-			//author id
-			bw.write(my_author_id + '\n');
-			//paper title
-			bw.write(my_manuscript_title + '\n');
-			//subprogram chair id
-			bw.write(my_subprogram_chair_id + '\n');
-			//recommendation folder
-			if(my_recommendation != null)
-				bw.write(FileHelper.getLeafString(
-						my_recommendation.getDirectory()));
-			else
-				bw.write(NOT_AVAILIBLE + '\n');
-			//review folders
-			if(my_reviews.size() > 0) 
-			{
-				for(Review r : my_reviews)
-					bw.write(FileHelper.getLeafString(r.getDirectory()));
-			} 
-			bw.write(NOT_AVAILIBLE);
-			bw.close();	
-		} 
-		catch (IOException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
+		return false;
+// TODO Remove old code
+//		File info = new File(my_directory.getAbsolutePath() + "/" +
+//				FileHelper.DATA_FILE_NAME);
+//		
+//		if(info.exists())
+//			info.delete();
+//		
+//		try 
+//		{
+//			info.createNewFile();
+//			BufferedWriter bw = FileHelper.getFileWriter(info);
+//			if(bw == null)
+//				return false;
+//			
+//			//author id
+//			bw.write(my_author_id + '\n');
+//			//paper title
+//			bw.write(my_manuscript_title + '\n');
+//			//subprogram chair id
+//			bw.write(my_subprogram_chair_id + '\n');
+//			//recommendation folder
+//			if(my_recommendation != null)
+//				bw.write(FileHelper.getLeafString(
+//						my_recommendation.getDirectory()));
+//			else
+//				bw.write(NOT_AVAILIBLE + '\n');
+//			//review folders
+//			if(my_reviews.size() > 0) 
+//			{
+//				for(Review r : my_reviews)
+//					bw.write(FileHelper.getLeafString(r.getDirectory()));
+//			} 
+//			bw.write(NOT_AVAILIBLE);
+//			bw.close();	
+//		} 
+//		catch (IOException e) 
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return false;
+//		}
+//		
+//		return true;
 	}
 	
 	private void copyPaperDoc(final File the_paper_directory,

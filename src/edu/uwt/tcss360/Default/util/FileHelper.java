@@ -27,6 +27,9 @@ import java.io.OutputStream;
  * @version 8 November 2012
  */
 public class FileHelper {
+	
+	public static final String DATA_FILE_NAME = "info.cmsd";
+	
 	/**
 	 * Gets a BufferedReader for the given file. Don't forget to close the
 	 * reader when done using it!

@@ -15,13 +15,6 @@ import edu.uwt.tcss360.Default.util.FileHelper;
 
 public class Review 
 {
-	/*
-	 * the info.dat file for a review will likely contain only three lines:
-	 * 
-	 * [reviewer id]
-	 * [summary rating (an int)]
-	 * [name of the review doc, relative to info.dat]
-	 */
 	
 	
 	//////////////
@@ -33,8 +26,6 @@ public class Review
 	/** 1 to 5 rating. */
 	public int my_summary_rating;
 	
-	
-	private static final String DATA_FILE_NAME = "info.dat";
 	
 	/** The location and name of the review document. (.pdf, .docx, etc). */
 	private File my_review_doc;
@@ -50,9 +41,9 @@ public class Review
 	//////////////
 	/**
 	 * Constructs a Review object using previously saved information located
-	 * in the info.dat file in the given directory.
+	 * in the data file in the given directory.
 	 * @param the_review_directory The review's directory, which contains the
-	 * info.dat file and the review document file.
+	 * data file and the review document file.
 	 */
 	public Review(final File the_review_directory) 
 	{
@@ -69,10 +60,11 @@ public class Review
 		my_review_doc = null;
 		
 		BufferedReader info = FileHelper.getFileReader(my_directory,
-				DATA_FILE_NAME);
+				FileHelper.DATA_FILE_NAME);
 		
 		if(info == null)
-		    throw new IllegalArgumentException("info.dat could not be found");
+		    throw new IllegalArgumentException(FileHelper.DATA_FILE_NAME +
+		    		" could not be found");
 		
 		if(info != null)
 		{
@@ -98,8 +90,8 @@ public class Review
 	/**
 	 * Constructs a new Review object in the location given, with the
 	 * information given.
-	 * @param the_review_directory The review's directory, which will contain
-	 * the info.dat file and the review document file. The directory should
+	 * @param the_paper_directory The review's directory, which will contain
+	 * the data file and the review document file. The directory should
 	 * already exist before passed to this method.
 	 * @param the_reviewer_id The user ID of the Review owner/creator.
 	 * @param the_review_doc The actual document file (.pdf, .docx, etc) for
@@ -115,8 +107,8 @@ public class Review
 	/**
 	 * Constructs a new Review object in the location given, with the
 	 * information given.
-	 * @param the_review_directory The review's directory, which will contain
-	 * the info.dat file and the review document file. The directory should
+	 * @param the_paper_directory The review's directory, which will contain
+	 * the data file and the review document file. The directory should
 	 * already exist before passed to this method.
 	 * @param the_reviewer_id The user ID of the Review owner/creator.
 	 * @param the_review_doc The actual document file (.pdf, .docx, etc) for
@@ -226,35 +218,40 @@ public class Review
 	}
 	
 	/**
-	 * Saves data about the review by deleting and creating a new info.dat
+	 * Saves data about the review by deleting and creating a new data file
 	 * @return <code>true</code> if the operation succeeded.
 	 */
 	public boolean saveReview() 
 	{
-		File info = new File(my_directory.getAbsolutePath() + "/" + 
-				DATA_FILE_NAME);
+		// TODO Implement save to XML
 		
-		if(info.exists())
-			info.delete();
+		return false;
 		
-		try 
-		{
-			info.createNewFile();
-			BufferedWriter bw = FileHelper.getFileWriter(info);
-			if(bw == null)
-				return false;
-			bw.write(my_reviewer_id + '\n');
-			bw.write(String.valueOf(my_summary_rating) + '\n');
-			bw.write(FileHelper.getLeafString(my_review_doc) + '\n');
-			bw.close();
-		} 
-		catch (IOException e) 
-		{
-			// Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+// TODO Remove old code
+//		File info = new File(my_directory.getAbsolutePath() + "/" + 
+//				FileHelper.DATA_FILE_NAME);
+//		
+//		if(info.exists())
+//			info.delete();
+//		
+//		try 
+//		{
+//			info.createNewFile();
+//			BufferedWriter bw = FileHelper.getFileWriter(info);
+//			if(bw == null)
+//				return false;
+//			bw.write(my_reviewer_id + '\n');
+//			bw.write(String.valueOf(my_summary_rating) + '\n');
+//			bw.write(FileHelper.getLeafString(my_review_doc) + '\n');
+//			bw.close();
+//		} 
+//		catch (IOException e) 
+//		{
+//			// Auto-generated catch block
+//			e.printStackTrace();
+//			return false;
+//		}
+//		return true;
 	}
 	
 	/**
