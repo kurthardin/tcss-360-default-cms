@@ -6,16 +6,26 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
-import edu.uwt.tcss360.Default.util.InfoHandler;
 
 
 public class ConferencesManager 
@@ -36,8 +46,8 @@ public class ConferencesManager
 		initConfs();
 	}
 		
-	private void initUsers() {
-		
+	private void initUsers() 
+	{	
 		File data_dir = FileHelper.getDataDirectory();
 		if (data_dir != null) {
 			
@@ -96,7 +106,8 @@ public class ConferencesManager
 		}
 	}
 	
-	private void initConfs() {
+	private void initConfs() 
+	{
 		File confs_dir = FileHelper.getConferencesDirectory();
 		if (confs_dir != null) 
 		{
@@ -119,6 +130,63 @@ public class ConferencesManager
 				Conference conference = new Conference(conf_dir);
 				my_conferences.add(conference);
 			}
+		}
+	}
+	
+	public void writeData() 
+	{
+		writeUsers();
+		writeConferences();
+	}
+	
+	private void writeUsers() 
+	{
+		try {
+			
+			// Build the XML document
+			DocumentBuilderFactory doc_factory = 
+					DocumentBuilderFactory.newInstance();
+			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
+			Document doc = doc_builder.newDocument();
+			Element user_element;
+			for (User user : my_users) 
+			{
+				user_element = doc.createElement("user");
+				user_element.setAttribute("my_id", user.getID());
+				user_element.setAttribute("my_email", user.getEmail());
+				user_element.setAttribute("my_name", user.getName());
+				doc.appendChild(user_element);
+			}
+			
+			// write the content into xml file
+			TransformerFactory transformerFactory = 
+					TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			File users_file = new File(FileHelper.getDataDirectory(), 
+					FileHelper.USERS_DATA_FILE_NAME);
+			if (!users_file.exists()) {
+				users_file = FileHelper.createFile(
+						FileHelper.getDataDirectory(), 
+						FileHelper.USERS_DATA_FILE_NAME);
+			}
+			StreamResult result = new StreamResult(users_file);
+			transformer.transform(source, result);
+	 
+			System.out.println("Users file saved");
+	 
+		  } catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		  } catch (TransformerException tfe) {
+			tfe.printStackTrace();
+		  }
+	}
+	
+	private void writeConferences() 
+	{
+		for (Conference conf : my_conferences) 
+		{
+			conf.writeData();
 		}
 	}
 	
@@ -251,7 +319,6 @@ public class ConferencesManager
 	 */
 	public Set<User> getAllUsers()
 	{
-		
 		return Collections.unmodifiableSet(my_users);
 	}
 }

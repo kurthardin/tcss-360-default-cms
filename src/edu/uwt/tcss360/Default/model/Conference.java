@@ -190,6 +190,10 @@ public final class Conference {
 		my_directory = directory;
 	}
 	
+	public void writeData() {
+		// TODO Implement Conference.writeData()
+	}
+	
 	/**
 	 * Gets the name of this Conference.
 	 * @return the name of this conference.
