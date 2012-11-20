@@ -31,11 +31,20 @@ public class ConferencesFrame extends JFrame implements PanelManager
 	 * fields
 	 */
 	
+	/**
+	 * title of the window
+	 */
 	private static final String WINDOW_TITLE = "Conference Management System";
 	
-	private static final int WIDTH = 750;
+	/**
+	 * width of the window
+	 */
+	public static final int WIDTH = 750;
 	
-	private static final int HEIGHT = 500;
+	/**
+	 * height of the window
+	 */
+	public static final int HEIGHT = 500;
 	
 	/**
 	 * the current state object
@@ -63,6 +72,9 @@ public class ConferencesFrame extends JFrame implements PanelManager
 	 * methods
 	 */
 	
+	/**
+	 * default constructor.
+	 */
 	public ConferencesFrame()
 	{
 		super(WINDOW_TITLE);
@@ -70,11 +82,13 @@ public class ConferencesFrame extends JFrame implements PanelManager
 		my_current_state = new CurrentState(new ConferencesManager());
 		my_panel = new JPanel(new BorderLayout());
 		my_top_panel = new AbstractConferencesPanel(my_current_state);
-		//TODO push a login panel onto the stack instead of AbstractConferencesPanel.
 		my_panels_stack.push(new LoginPanel(my_current_state));
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
 	}
 	
+	/**
+	 * starts the application
+	 */
 	public void start()
 	{
 		//TODO implement any other startup stuff.

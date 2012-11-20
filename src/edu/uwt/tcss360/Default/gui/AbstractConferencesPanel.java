@@ -43,6 +43,10 @@ public class AbstractConferencesPanel extends JPanel
 		my_current_state = the_state;
 	}
 	
+	/**
+	 * adds a PanelManager object to be used by this class.
+	 * @param the_panel_mgr
+	 */
 	public void addPanelManager(PanelManager the_panel_mgr)
 	{
 		my_panel_mgr = the_panel_mgr;

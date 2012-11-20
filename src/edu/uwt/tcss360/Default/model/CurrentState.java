@@ -116,8 +116,6 @@ public class CurrentState
 	 */
 	public void setCurrentConference(final String the_conf_id)
 	{
-		if (the_conf_id == null)
-			throw new IllegalArgumentException();
 		my_current_conference = my_conf_mgr.getConference(the_conf_id);
 	}
 	
@@ -128,8 +126,6 @@ public class CurrentState
 	 */
 	public void setCurrentUser(final String the_user_id)
 	{
-		if (the_user_id == null)
-			throw new IllegalArgumentException();
 		my_current_user = my_conf_mgr.getUser(the_user_id);
 	}
 	
@@ -139,8 +135,6 @@ public class CurrentState
 	 */
 	public void setCurrentRole(final Role the_role)
 	{
-		if (the_role == null)
-			throw new IllegalArgumentException();
 		my_current_role = the_role;
 	}
 	
@@ -150,8 +144,6 @@ public class CurrentState
 	 */
 	public void setCurrentPaper(final Paper the_paper)
 	{
-		if (the_paper == null)
-			throw new IllegalArgumentException();
 		my_current_paper = the_paper;
 	}
 }
