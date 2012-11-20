@@ -6,34 +6,40 @@
 
 package edu.uwt.tcss360.Default.model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.InfoHandler;
 
 public class Review 
-{
+{	
+	//////////////
+	// CONSTANTS
+	//////////////
+	/** If the review has not been assigned a summary rating yet. */
+	public static final int NO_RATING = -1;
 	
 	
 	//////////////
 	// FIELDS
 	//////////////
-	/** If the review has not been assigned a summary rating yet. */
-	public static final int NO_RATING = -1;
+	/** User ID of the reviewer. */
+	private String my_reviewer_id;
 	
 	/** 1 to 5 rating. */
 	public int my_summary_rating;
 	
+	private final File my_directory;
 	
+	// TODO Remove my_review_doc or include in XML data file
 	/** The location and name of the review document. (.pdf, .docx, etc). */
 	private File my_review_doc;
-	
-	/** User ID of the reviewer. */
-	private String my_reviewer_id;
-	
-	private File my_directory;
 	
 	
 	//////////////
@@ -59,7 +65,7 @@ public class Review
 		my_summary_rating = NO_RATING;
 		my_review_doc = null;
 		
-		BufferedReader info = FileHelper.getFileReader(my_directory,
+		InputSource info = FileHelper.getInputSource(my_directory,
 				FileHelper.DATA_FILE_NAME);
 		
 		if(info == null)
@@ -68,22 +74,49 @@ public class Review
 		
 		if(info != null)
 		{
-			String str;
 			try 
 			{
-				str = info.readLine();
-				my_reviewer_id = str;
-				str = info.readLine();
-				my_summary_rating = Integer.parseInt(str);
-				str = info.readLine();
-				my_review_doc = new File(my_directory + "/" + str);
-				info.close();
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser saxParser = factory.newSAXParser();
+
+				InfoHandler handler = new InfoHandler() 
+				{
+					@Override
+					public void handleFieldsAttributes(Attributes attr) 
+					{
+						my_reviewer_id = attr.getValue("my_reviewer_id");
+						
+						String ratingStr = attr.getValue("my_summary_rating");
+						my_summary_rating = (ratingStr == null) ? 
+								NO_RATING : Integer.valueOf(ratingStr);
+					}
+				};
+
+				saxParser.parse(info, handler);
+
 			} 
-			catch (IOException e) 
+			catch (Exception e) 
 			{
-				//auto generated, don't know what to replace it with
 				e.printStackTrace();
 			}
+			
+//			String str;
+//			try 
+//			{
+//				str = info.readLine();
+//				my_reviewer_id = str;
+//				str = info.readLine();
+//				my_summary_rating = Integer.parseInt(str);
+//				str = info.readLine();
+//				my_review_doc = new File(my_directory + "/" + str);
+//				info.close();
+//			} 
+//			catch (IOException e) 
+//			{
+//				//auto generated, don't know what to replace it with
+//				e.printStackTrace();
+//			}
+			
 		}
 	}
 	
@@ -97,10 +130,10 @@ public class Review
 	 * @param the_review_doc The actual document file (.pdf, .docx, etc) for
 	 * the review.
 	 */
-	public Review(final File the_review_directory, final String the_reviewer_id, 
+	public Review(final File the_paper_directory, final String the_reviewer_id, 
 			final File the_review_doc) 
 	{
-		this(the_review_directory, the_reviewer_id, the_review_doc, 
+		this(the_paper_directory, the_reviewer_id, the_review_doc, 
 		        NO_RATING);
 	}
 	
@@ -115,15 +148,15 @@ public class Review
 	 * the review.
 	 * @param the_summary_rating The 1 to 5 summary rating.
 	 */
-	public Review(final File the_review_directory, final String the_reviewer_id, 
+	public Review(final File the_paper_directory, final String the_reviewer_id, 
 			final File the_review_doc, final int the_summary_rating) 
 	{
-	    if(the_review_directory == null)
-	        throw new IllegalArgumentException("Review directory cannot " +
+	    if(the_paper_directory == null)
+	        throw new IllegalArgumentException("Paper directory cannot " +
 	        		"be null");
 	    
-	    if(!the_review_directory.exists())
-	        throw new IllegalArgumentException("Review directory must exist");
+	    if(!the_paper_directory.exists())
+	        throw new IllegalArgumentException("Paper directory must exist");
 	    
 	    if(the_reviewer_id == null)
 	        throw new IllegalArgumentException("Reviewer ID cannot be null");
@@ -137,7 +170,14 @@ public class Review
 		my_reviewer_id = the_reviewer_id;
 		my_review_doc = null;
 		my_summary_rating = the_summary_rating;
-		my_directory = the_review_directory;
+		
+		String directory_name = "review_" + my_reviewer_id;
+		File directory = new File(the_paper_directory, directory_name);
+		if (!directory.exists()) {
+			directory = FileHelper.createDirectory(the_paper_directory, 
+					directory_name);
+		}
+		my_directory = directory;
 		
 		copyReviewDoc(my_directory, the_review_doc);
 	}

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.User.Role;
+import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
  * Class representing a single conference in the 
@@ -75,17 +76,20 @@ public final class Conference {
 	 */
 	private final Set<Paper> my_papers = new HashSet<Paper>();
 	
+	private final File my_directory;
+	
 	/**
 	 * Creates a new Conference initialized with 
 	 * data from the specified File.
 	 * @param a_data_file the data file to initialize this Conference from.
 	 */
-	public Conference(final File a_data_file) 
+	public Conference(final File the_conference_dir) 
 	{
 		// TODO: Implement data file constructor
 		my_name = null;
 		my_start_date = null;
 		my_end_date = null;
+		my_directory = the_conference_dir;
 	}
 	
 	/**
@@ -134,6 +138,14 @@ public final class Conference {
 		my_start_date = the_start;
 		my_end_date = the_end;
 		authorizeUser(the_pc_user_id, Role.PROGRAM_CHAIR);
+		
+		File confs_dir = FileHelper.getConferencesDirectory();
+		String conf_dir_name = getID();
+		File directory = new File(confs_dir, conf_dir_name);
+		if (!directory.exists()) {
+			directory = FileHelper.createDirectory(confs_dir, conf_dir_name);
+		}
+		my_directory = directory;
 	}
 	
 	/**
@@ -253,6 +265,21 @@ public final class Conference {
 					"The final revision deadline cannot be null");
 		}
 		my_final_revision_deadline = (Date) the_deadline.clone();
+	}
+	
+	public File getDirectory() 
+	{
+		return new File(my_directory.getAbsolutePath());
+	}
+	
+	public File getPapersDirectory() 
+	{
+		File papers_dir = new File(my_directory, "papers");
+		if (!papers_dir.exists()) {
+			papers_dir = FileHelper.createDirectory(my_directory, 
+					"papers");
+		}
+		return new File(papers_dir.getAbsolutePath());
 	}
 	
 	/**

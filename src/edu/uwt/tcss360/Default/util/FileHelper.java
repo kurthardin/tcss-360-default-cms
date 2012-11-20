@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.xml.sax.InputSource;
+
 /**
  * FileHelper contains a set of static methods aimed at aiding the usage
  * of files.
@@ -29,6 +31,14 @@ import java.io.OutputStream;
 public class FileHelper {
 	
 	public static final String DATA_FILE_NAME = "info.cmsd";
+	
+	public static final File getConferencesDirectory() {
+		File dir = new File("./conferences");
+		if (!dir.exists()) {
+			dir.mkdir();
+		}
+		return dir;
+	}
 	
 	/**
 	 * Gets a BufferedReader for the given file. Don't forget to close the
@@ -65,6 +75,43 @@ public class FileHelper {
 	public static BufferedReader getFileReader(File the_directory, 
 			String the_file_name){
 		return getFileReader(new File(the_directory.getAbsolutePath() + "/" 
+			+ the_file_name));
+	}
+
+	/**
+	 * Gets an InputSource for the given file for use with a SAXParser.
+	 * @param the_file The file to get an InputSource for
+	 * @return <code>null</code> if the_file is a directory or if the_file
+	 * does not exist or if there was an exception. Returns an InputSource
+	 * for the file if it was opened successfully.
+	 */
+	public static InputSource getInputSource(File the_file) {
+		if(the_file.isDirectory() || !the_file.exists())
+			return null;
+		
+		InputSource br = null;
+		
+		try {
+			br = new InputSource(new FileReader(the_file.getPath()));
+		} catch (IOException e) {
+			return null;
+		}
+		return br;
+	}
+	
+	/**
+	 * Gets an InputSource for the given file in the given directory for 
+	 * use with a SAXParser.
+	 * @param the_directory The directory containing the file.
+	 * @param the_file_name The name of the file, do not include a preceding
+	 * "/" in the name.
+	 * @return <code>null</code> if the_file is a directory or if the_file
+	 * does not exist or if there was an exception. Returns an InputSource
+	 * for the file if it was opened successfully.
+	 */
+	public static InputSource getInputSource(File the_directory, 
+			String the_file_name){
+		return getInputSource(new File(the_directory.getAbsolutePath() + "/" 
 			+ the_file_name));
 	}
 	

@@ -6,23 +6,27 @@
 
 package edu.uwt.tcss360.Default.model;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import edu.uwt.tcss360.Default.model.Review;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.InfoHandler;
 
 public class Paper 
 {
 	/////////////
-	// FIELDS
+	// CONSTANTS
 	/////////////
     /** The value of my_acceptance_status until one is set. */
 	public static final int NO_ACCEPTANCE_STATUS = -1;
@@ -31,9 +35,13 @@ public class Paper
 	private static final String NOT_AVAILIBLE = "n/a";
 	
 	
+	/////////////
+	// FIELDS
+	/////////////
 	/** The location on disk of the directory belonging to the paper. */
-	private File my_directory;
+	private final File my_directory;
 	
+	// TODO Remove my_manuscript_doc or include in XML data file.
 	/** The actual document (docx, pdf, etc), of the manuscript. */
 	private File my_manuscript_doc;
 	
@@ -77,44 +85,106 @@ public class Paper
 	    
 		my_directory = the_paper_directory;
 		initFields();
-		
-		BufferedReader info = FileHelper.getFileReader(my_directory, 
+		 
+		InputSource info = FileHelper.getInputSource(my_directory, 
 				FileHelper.DATA_FILE_NAME);
 		
 		if(info != null)
 		{
-			String str;
 			try 
 			{
-				str = info.readLine();
-				my_author_id = str;
-				
-				str = info.readLine();
-				my_manuscript_title = str;
-				
-				str = info.readLine();
-				my_subprogram_chair_id = str;
-				
-				str = info.readLine();
-				if(str != NOT_AVAILIBLE)
-					my_recommendation = new Review(new 
-							File(my_directory.getAbsolutePath() +
-							"/" + str));
-				
-				while((str = info.readLine()) != NOT_AVAILIBLE) 
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser saxParser = factory.newSAXParser();
+
+				InfoHandler handler = new InfoHandler() 
 				{
-					File review_folder = new File(
-							my_directory.getAbsolutePath() + "/" + str);
+					@Override
+					public void handleFieldsAttributes(Attributes attr) 
+					{
+						String acceptStatusStr = attr.getValue(
+								"my_acceptance_status");
+						my_acceptance_status = (acceptStatusStr == null) ? 
+								NO_ACCEPTANCE_STATUS : 
+								Integer.valueOf(acceptStatusStr);
+						
+						my_author_id = attr.getValue("my_author_id");
+						my_subprogram_chair_id = attr.getValue(
+								"my_subprogram_chair_id");
+						my_manuscript_title = attr.getValue(
+								"my_manuscript_title");
+					}
+				};
+
+				saxParser.parse(info, handler);
+				
+				File recommendation_dir = new File(
+						my_directory.getAbsolutePath() + "/recommendation");
+				my_recommendation = new Review(recommendation_dir);
+				
+				String[] review_dir_names = my_directory.list(
+						new FilenameFilter() 
+						{
+							@Override
+							public boolean accept(File dir, String name) 
+							{
+								return name.startsWith("review_") &&
+										(new File(dir, name).isDirectory());
+							}
+						});
+				
+				my_reviewer_ids = new HashSet<String>(review_dir_names.length);
+				
+				for (String review_dir_name : review_dir_names) 
+				{
+					File review_dir = new File(
+							my_directory.getAbsolutePath() + "/" + 
+							review_dir_name);
 					
-					Review r = new Review(review_folder);
-					my_reviews.add(r);
+					Review review = new Review(review_dir);
+					my_reviews.add(review);
+					my_reviewer_ids.add(review.getReviewerID());
 				}
+
 			} 
-			catch (IOException e) 
+			catch (Exception e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+// TODO Remove old code...
+//			String str;
+//			try 
+//			{
+//				str = info.readLine();
+//				my_author_id = str;
+//				
+//				str = info.readLine();
+//				my_manuscript_title = str;
+//				
+//				str = info.readLine();
+//				my_subprogram_chair_id = str;
+//				
+//				str = info.readLine();
+//				if(str != NOT_AVAILIBLE)
+//					my_recommendation = new Review(new 
+//							File(my_directory.getAbsolutePath() +
+//							"/" + str));
+//				
+//				while((str = info.readLine()) != NOT_AVAILIBLE) 
+//				{
+//					File review_folder = new File(
+//							my_directory.getAbsolutePath() + "/" + str);
+//					
+//					Review r = new Review(review_folder);
+//					my_reviews.add(r);
+//				}
+//			} 
+//			catch (IOException e) 
+//			{
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+			
 		}
 	}
 	
@@ -123,33 +193,49 @@ public class Paper
 	 * @param the_author_id The user ID of the author.
 	 * @param the_manuscript_doc The document file (.pdf, .docx, etc) of the
 	 * manuscript.
-	 * @param the_paper_directory The directory that is going to contain
-	 * the info.dat for the paper and the review/recommendation folders. The
-	 * directory needs to be created or has to exist before calling this
-	 * constructor.
+	 * @param the_papers_directory The directory that contains all the papers
+	 * for the conference. The directory needs to be created or has to exist 
+	 * before calling this constructor.
 	 */
-	public Paper(final String the_author_id, final File the_manuscript_doc,
-			final File the_paper_directory) 
+	public Paper(final String the_author_id, String the_title, 
+			final File the_manuscript_doc,
+			final File the_papers_directory) 
 	{
-	    if(the_author_id == null)
+	    if(the_author_id == null) {
 	        throw new IllegalArgumentException("Author ID cannot be null");
-	    if(the_manuscript_doc == null)
+	    }
+	    if (the_title == null) {
+	    	throw new IllegalArgumentException("Title cannot be null");
+	    }
+	    if(the_manuscript_doc == null) {
 	        throw new IllegalArgumentException("Manuscript doc cannot " +
 	        		"be null");
-	    if(!the_manuscript_doc.exists())
+	    }
+	    if(!the_manuscript_doc.exists()) {
 	        throw new IllegalArgumentException("Manuscript doc must exist");
-	    if(the_paper_directory == null)
+	    }
+	    if(the_papers_directory == null) {
 	        throw new IllegalArgumentException("The Paper directory cannot " +
 	        		"be null");
-	    if(!the_paper_directory.exists())
+	    }
+	    if(!the_papers_directory.exists()) {
 	        throw new IllegalArgumentException("The Paper directory " +
 	        		"must exist");
-	    
-	    
-		my_directory = the_paper_directory;
+	    }
 		
 		initFields();
 		my_author_id = the_author_id;
+	    
+	    my_manuscript_title = the_title;
+	    
+	    String directory_name = my_manuscript_title + my_author_id;
+		File directory = new File(the_papers_directory, directory_name);
+		if (!directory.exists()) {
+			directory = FileHelper.createDirectory(the_papers_directory, 
+					directory_name);
+		}
+		my_directory = directory;
+		
 		copyPaperDoc(my_directory, the_manuscript_doc);		
 	}
 	
@@ -157,6 +243,11 @@ public class Paper
 	/////////////
 	// METHODS
 	/////////////
+	
+	public File getDirectory() 
+	{
+		return new File(my_directory.getAbsolutePath());
+	}
 	
 	public List<Review> getReviews() 
 	{
