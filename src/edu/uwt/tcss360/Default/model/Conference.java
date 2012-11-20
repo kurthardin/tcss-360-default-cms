@@ -6,6 +6,8 @@
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,9 +16,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.uwt.tcss360.Default.model.Paper;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.InfoHandler;
 
 /**
  * Class representing a single conference in the 
@@ -30,18 +39,18 @@ public final class Conference {
 	/**
 	 * The name of this conference.
 	 */
-	private final String my_name;
+	private String my_name;
 	
 	
 	/**
 	 * The date on which this conference starts.
 	 */
-	private final Date my_start_date;
+	private Date my_start_date;
 	
 	/**
 	 * The date on which this conference ends.
 	 */
-	private final Date my_end_date;
+	private Date my_end_date;
 	
 	
 	/**
@@ -85,11 +94,44 @@ public final class Conference {
 	 */
 	public Conference(final File the_conference_dir) 
 	{
-		// TODO: Implement data file constructor
-		my_name = null;
+		if(the_conference_dir == null)
+		    throw new IllegalArgumentException(
+		    		"Conference directory cannot be null");
+		
+		if(!the_conference_dir.exists())
+		    throw new IllegalArgumentException(
+		    		"Conference directory must exist");
+	    
+		my_directory = the_conference_dir;
+		my_name = "Null";
 		my_start_date = null;
 		my_end_date = null;
-		my_directory = the_conference_dir;
+		
+		InputSource info = FileHelper.getInputSource(my_directory,
+				FileHelper.DATA_FILE_NAME);
+		
+		if(info == null) 
+		{
+		    throw new IllegalArgumentException(FileHelper.DATA_FILE_NAME +
+		    		" could not be found in " + my_directory);
+		} 
+		else 
+		{
+			try 
+			{
+				SAXParserFactory factory = SAXParserFactory.newInstance();
+				SAXParser saxParser = factory.newSAXParser();
+
+				InfoHandler handler = new ConferenceInfoHandler();
+
+				saxParser.parse(info, handler);
+
+			} 
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -495,6 +537,137 @@ public final class Conference {
 		sb.append(my_start_date);
 		sb.append(my_end_date);
 		return sb.toString();
+	}
+	
+	private class ConferenceInfoHandler extends InfoHandler {
+		
+		private boolean my_inside_users_roles;
+		private String my_current_user_id;
+		
+		@Override
+		public void handleFieldsAttributes(Attributes attr) 
+		{
+			my_name = attr.getValue("my_name");
+			try 
+			{
+				my_start_date = DateFormat.getInstance().parse(
+						attr.getValue("my_start_date"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try 
+			{
+				my_end_date = DateFormat.getInstance().parse(
+						attr.getValue("my_end_date"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				my_submission_deadline = 
+						DateFormat.getInstance().parse(
+								attr.getValue(
+										"my_submission_deadline"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try 
+			{
+				my_review_deadline = DateFormat.getInstance().parse(
+						attr.getValue("my_review_deadline"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				my_recommendation_deadline = 
+						DateFormat.getInstance().parse(
+								attr.getValue(
+										"my_recommendation_deadline"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try 
+			{
+				my_final_revision_deadline = 
+						DateFormat.getInstance().parse(
+								attr.getValue(
+										"my_final_revision_deadline"));
+			} 
+			catch (ParseException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		@Override
+		public void startUnknownFieldsElement(String uri, 
+				String localName, String qName, Attributes attr) 
+		{
+			if (qName.equalsIgnoreCase("my_users_roles")) 
+			{
+				my_inside_users_roles = true;
+			}
+			else if (my_inside_users_roles) 
+			{
+				if (qName.equalsIgnoreCase("user")) 
+				{
+					my_current_user_id = attr.getValue("id");
+				} 
+				else if (my_current_user_id != null && 
+						qName.equalsIgnoreCase("role")) 
+				{
+					Set<Role> user_roles = 
+							my_users_roles.get(my_current_user_id);
+					if (user_roles == null) {
+						user_roles = new HashSet<Role>(5);
+						my_users_roles.put(my_current_user_id, user_roles);
+					}
+					
+					try 
+					{
+						Role role = Role.valueOf(attr.getValue("name"));
+						user_roles.add(role);
+					} catch (final IllegalArgumentException e) {
+						System.out.println("Encountered invalid Role name: '" +
+								attr.getValue("name") + "'");
+					}
+				}
+			}
+		}
+		
+		@Override
+		public final void endUnknownFieldsElement(String uri, String localName,
+				String qName) throws SAXException 
+		{
+			if (qName.equalsIgnoreCase("my_users_roles")) 
+			{
+				my_inside_users_roles = false;
+			} 
+			else if (qName.equalsIgnoreCase("user")) 
+			{
+				my_current_user_id = null;
+			}
+		}
 	}
 	
 }

@@ -43,10 +43,20 @@ public abstract class InfoHandler extends DefaultHandler {
 		if (qName.equalsIgnoreCase("fields")) 
 		{
 			fieldsElem = false;
+		} 
+		else if (fieldsElem) 
+		{
+			endUnknownFieldsElement(uri, localName, qName);
 		}
 		
 		System.out.println("End Element: " + qName);
  
+	}
+	
+	public void endUnknownFieldsElement(String uri, String localName,
+			String qName) throws SAXException 
+	{
+		// Do nothing...
 	}
 
 }
