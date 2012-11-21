@@ -7,11 +7,21 @@
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -33,12 +43,12 @@ public class LoginPanel extends AbstractConferencesPanel
 	/**
 	 * text field where the user will input their email/ID
 	 */
-	private JTextField my_text_field = new JTextField(15);
+	private JTextField my_text_field;
 	
 	/**
 	 * login button.
 	 */
-	private final JButton my_login_button = new JButton("Login");
+	private final JButton my_login_button;
 	
 	/*
 	 * methods
@@ -51,6 +61,8 @@ public class LoginPanel extends AbstractConferencesPanel
 	public LoginPanel(final CurrentState the_state)
 	{
 		super(the_state);
+		my_login_button = new JButton("Login");
+		my_text_field = new JTextField(15);
 		setupPanel();
 	}
 	
@@ -61,11 +73,26 @@ public class LoginPanel extends AbstractConferencesPanel
 	 */
 	private void setupPanel()
 	{
-		JPanel login_panel = new JPanel(new FlowLayout());
-		login_panel.add(my_text_field);
-		login_panel.add(my_login_button);
+		Box login_box = Box.createVerticalBox();
+		JPanel email_panel = new JPanel(new FlowLayout());
+		JLabel title_label = new JLabel("Login with your Email");
+		title_label.setFont(new Font(null, Font.BOLD, 18));
+		JLabel enter_label = new JLabel("Email:");
+		email_panel.add(enter_label);
+		email_panel.add(my_text_field);
+		
+		title_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		email_panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		my_login_button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		login_box.add(title_label);
+		login_box.add(email_panel);
+		login_box.add(my_login_button, Component.CENTER_ALIGNMENT);
 		my_login_button.addActionListener(new LoginAction());
-		this.add(login_panel, BorderLayout.CENTER);
+		//creates an empty "border" above the login box so that the login box
+		//is more centered in the middle of the frame.
+		setBorder(BorderFactory.createEmptyBorder(ConferencesFrame.HEIGHT / 3, 0, 0, 0));
+		add(login_box);
 	}
 	
 	/**
@@ -77,17 +104,21 @@ public class LoginPanel extends AbstractConferencesPanel
 	{
 		public void actionPerformed(ActionEvent the_event)
 		{
-			String text = my_text_field.getText();
+			String text = my_text_field.getText().trim();
 			if (text.trim().length() > 0)
 			{
 				ConferencesManager cf = my_current_state.getConferencesManager();
-				if (cf.getUser(text) == null)
+				if (cf.getUser(text) != null)
 				{
-					//TODO: prompt user for name for registration,
-					//set up a User object given that information
-					//and add them to the ConferencesManager object.
+					my_current_state.setCurrentUser(text);
+					//TODO: push next frame on stack.
 				}
-				my_current_state.setCurrentUser(text);
+				else
+				{
+					String message = text + " is not a valid username";
+					JOptionPane.showMessageDialog(new JFrame(), message, "Error",
+					        JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}

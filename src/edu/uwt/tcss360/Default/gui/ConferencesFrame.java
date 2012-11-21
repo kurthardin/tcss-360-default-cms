@@ -101,6 +101,8 @@ public class ConferencesFrame extends JFrame implements PanelManager
 		pack();
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    setResizable(false);
+	    //places the frame in the center of the screen.
+	    setLocationRelativeTo(null);
 	    setVisible(true);
 	}
 	
