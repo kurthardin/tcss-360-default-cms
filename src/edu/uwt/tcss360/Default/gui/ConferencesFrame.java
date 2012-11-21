@@ -47,6 +47,11 @@ public class ConferencesFrame extends JFrame implements PanelManager
 	public static final int HEIGHT = 500;
 	
 	/**
+	 * height of the top panel
+	 */
+	public static final int TOP_HEIGHT = 50;
+	
+	/**
 	 * the current state object
 	 */
 	CurrentState my_current_state;
@@ -66,7 +71,7 @@ public class ConferencesFrame extends JFrame implements PanelManager
 	/**
 	 * the upper panel.
 	 */
-	private AbstractConferencesPanel my_top_panel;
+	private TopPanel my_top_panel;
 	
 	/*
 	 * methods
@@ -81,7 +86,7 @@ public class ConferencesFrame extends JFrame implements PanelManager
 		my_panels_stack = new Stack<AbstractConferencesPanel>();
 		my_current_state = new CurrentState(new ConferencesManager());
 		my_panel = new JPanel(new BorderLayout());
-		my_top_panel = new AbstractConferencesPanel(my_current_state, this);
+		my_top_panel = new TopPanel(my_current_state, this);
 		my_panels_stack.push(new LoginPanel(my_current_state, this));
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
 	}
@@ -94,7 +99,7 @@ public class ConferencesFrame extends JFrame implements PanelManager
 		//TODO implement any other startup stuff.
 		
 		//TODO setup my_panel more.
-		my_panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		my_panel.setPreferredSize(new Dimension(WIDTH, HEIGHT + TOP_HEIGHT));
 		my_panel.setBackground(Color.WHITE);
 		add(my_panel);
 		

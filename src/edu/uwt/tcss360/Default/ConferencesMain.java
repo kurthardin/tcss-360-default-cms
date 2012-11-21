@@ -12,6 +12,7 @@ public class ConferencesMain {
 	{
 		ConferencesFrame cf = new ConferencesFrame();
 		cf.start();
+		cf.updateView();
 	}
 
 }

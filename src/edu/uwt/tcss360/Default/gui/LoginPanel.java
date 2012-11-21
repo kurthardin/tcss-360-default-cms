@@ -57,6 +57,7 @@ public class LoginPanel extends AbstractConferencesPanel
 	/**
 	 * constructor
 	 * @param the_state the current state object used by the frame.
+	 * @param the_panel_mgr the panel manager object creating this panel.
 	 */
 	public LoginPanel(final CurrentState the_state, 
 			final PanelManager the_panel_mgr)
@@ -68,9 +69,7 @@ public class LoginPanel extends AbstractConferencesPanel
 	}
 	
 	/**
-	 * sets up the panel to be used.
-	 * TODO: Fix positioning for login panel and add more
-	 * text indicating that it is the login screen.
+	 * sets up the login panel to be used.
 	 */
 	private void setupPanel()
 	{
@@ -92,7 +91,8 @@ public class LoginPanel extends AbstractConferencesPanel
 		my_login_button.addActionListener(new LoginAction());
 		//creates an empty "border" above the login box so that the login box
 		//is more centered in the middle of the frame.
-		setBorder(BorderFactory.createEmptyBorder(ConferencesFrame.HEIGHT / 3, 0, 0, 0));
+		setBorder(BorderFactory.createEmptyBorder((ConferencesFrame.HEIGHT + 
+				ConferencesFrame.TOP_HEIGHT) / 3, 0, 0, 0));
 		add(login_box);
 	}
 	
