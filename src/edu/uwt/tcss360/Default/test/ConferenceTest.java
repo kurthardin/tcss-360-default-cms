@@ -34,6 +34,11 @@ public class ConferenceTest {
 				TEST_CONFERENCE.getEndDate(), FINAL_DATE);
 		
 	}
+	
+	@Test (expected  = IllegalArgumentException.class)
+	public void testConstructorWithStartDatAfterEndDate() {
+		new Conference("PC name", "Conf Name", FINAL_DATE, INITIAL_DATE);
+	}
 
 	@Test
 	public void testGetName() 
@@ -47,8 +52,6 @@ public class ConferenceTest {
 	{
 		assertEquals("The start dates are not equal.", 
 				TEST_CONFERENCE.getStartDate(), INITIAL_DATE);
-		Conference test2 = new Conference("PC name", "Conf Name", FINAL_DATE, INITIAL_DATE);
-		assertEquals("The start dates are not equal.", test2.getStartDate(), FINAL_DATE);
 	}
 	
 	@Test

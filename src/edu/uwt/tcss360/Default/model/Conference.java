@@ -176,6 +176,11 @@ public final class Conference {
 					"The conference end date cannot be null");
 		}
 		
+		if (the_start.compareTo(the_end) > 0) {
+			throw new IllegalArgumentException(
+					"The conference start date must be before the end date");
+		}
+		
 		my_name = the_name;
 		my_start_date = the_start;
 		my_end_date = the_end;
