@@ -1,12 +1,17 @@
-package edu.uwt.tcss360.Default.model;
+package edu.uwt.tcss360.Default.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Date;
 
 import org.junit.Test;
 
+import edu.uwt.tcss360.Default.model.Conference;
+import edu.uwt.tcss360.Default.model.Paper;
+import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 public class ConferenceTest {
@@ -134,7 +139,7 @@ public class ConferenceTest {
 	@Test
 	public void testGetConferenceID()
 	{
-		assertEquals("The Conference IDs should be equal.", TEST_CONFERENCE.getConferenceID(), "PNW Risk Forum" + INITIAL_DATE.toString() + FINAL_DATE.toString());
+		assertEquals("The Conference IDs should be equal.", TEST_CONFERENCE.getID(), "PNW Risk Forum" + INITIAL_DATE.toString() + FINAL_DATE.toString());
 	}
 	
 }
