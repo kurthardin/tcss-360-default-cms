@@ -43,7 +43,11 @@ public class ConferencesManager
 		initUsers();
 		initConfs();
 	}
-		
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	private void initUsers() 
 	{	
 		File data_dir = FileHelper.getDataDirectory();
@@ -104,6 +108,10 @@ public class ConferencesManager
 		}
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	private void initConfs() 
 	{
 		File confs_dir = FileHelper.getConferencesDirectory();
@@ -123,12 +131,20 @@ public class ConferencesManager
 		}
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	public void writeData() 
 	{
 		writeUsers();
 		writeConferences();
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	private void writeUsers() 
 	{
 		try {
@@ -173,6 +189,10 @@ public class ConferencesManager
 		  }
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	private void writeConferences() 
 	{
 		for (Conference conf : my_conferences) 
