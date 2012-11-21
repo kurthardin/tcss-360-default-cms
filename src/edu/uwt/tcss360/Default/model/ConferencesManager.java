@@ -1,9 +1,9 @@
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,7 +17,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -26,7 +25,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
-
 
 public class ConferencesManager 
 {
@@ -111,17 +109,9 @@ public class ConferencesManager
 		File confs_dir = FileHelper.getConferencesDirectory();
 		if (confs_dir != null) 
 		{
-			String[] conf_dir_names = confs_dir.list(
-					new FilenameFilter() 
-					{
-						@Override
-						public boolean accept(File dir, String name) 
-						{
-							return (new File(dir, name).isDirectory());
-						}
-					});
-
-			my_conferences = new HashSet<Conference>(conf_dir_names.length);
+			List<String> conf_dir_names = 
+					FileHelper.getSubdirectoryNames(confs_dir);
+			my_conferences = new HashSet<Conference>(conf_dir_names.size());
 
 			for (String conf_dir_name : conf_dir_names) 
 			{
@@ -159,18 +149,19 @@ public class ConferencesManager
 			}
 			
 			// write the content into xml file
+			File users_file = new File(FileHelper.getDataDirectory(), 
+					FileHelper.USERS_DATA_FILE_NAME);
+			if (users_file.exists()) {
+				users_file.delete();
+			}
+			users_file = FileHelper.createFile(FileHelper.getDataDirectory(), 
+					FileHelper.USERS_DATA_FILE_NAME);
+			StreamResult result = new StreamResult(users_file);
+			
 			TransformerFactory transformerFactory = 
 					TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			File users_file = new File(FileHelper.getDataDirectory(), 
-					FileHelper.USERS_DATA_FILE_NAME);
-			if (!users_file.exists()) {
-				users_file = FileHelper.createFile(
-						FileHelper.getDataDirectory(), 
-						FileHelper.USERS_DATA_FILE_NAME);
-			}
-			StreamResult result = new StreamResult(users_file);
 			transformer.transform(source, result);
 	 
 			System.out.println("Users file saved");

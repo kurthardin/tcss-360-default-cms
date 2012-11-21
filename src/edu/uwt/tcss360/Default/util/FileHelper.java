@@ -13,9 +13,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import org.xml.sax.InputSource;
 
@@ -246,6 +249,31 @@ public class FileHelper {
 			return newdir;
 		else
 			return null;
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_parent
+	 * @return
+	 */
+	public static List<String> getSubdirectoryNames(File the_parent) 
+	{
+		// if the parent isn't a directory or if it doesn't exist, you can't
+		// make a subdirectory in it...
+		if(!the_parent.exists() || !the_parent.isDirectory())
+			return null;
+		
+		String[] dir_names = the_parent.list(
+				new FilenameFilter() 
+				{
+					@Override
+					public boolean accept(File dir, String name) 
+					{
+						return (new File(dir, name).isDirectory());
+					}
+				});
+		return Arrays.asList(dir_names);
 	}
 	
 	/**
