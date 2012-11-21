@@ -58,9 +58,10 @@ public class LoginPanel extends AbstractConferencesPanel
 	 * constructor
 	 * @param the_state the current state object used by the frame.
 	 */
-	public LoginPanel(final CurrentState the_state)
+	public LoginPanel(final CurrentState the_state, 
+			final PanelManager the_panel_mgr)
 	{
-		super(the_state);
+		super(the_state, the_panel_mgr);
 		my_login_button = new JButton("Login");
 		my_text_field = new JTextField(15);
 		setupPanel();
@@ -107,10 +108,10 @@ public class LoginPanel extends AbstractConferencesPanel
 			String text = my_text_field.getText().trim();
 			if (text.trim().length() > 0)
 			{
-				ConferencesManager cf = my_current_state.getConferencesManager();
+				ConferencesManager cf = getCurrentState().getConferencesManager();
 				if (cf.getUser(text) != null)
 				{
-					my_current_state.setCurrentUser(text);
+					getCurrentState().setCurrentUser(text);
 					//TODO: push next frame on stack.
 				}
 				else

@@ -20,12 +20,12 @@ public class AbstractConferencesPanel extends JPanel
 	/**
 	 * the current state.
 	 */
-	protected final CurrentState my_current_state;
+	private final CurrentState my_current_state;
 	
 	/**
 	 * the panel manager that this panel will send signals to.
 	 */
-	protected PanelManager my_panel_mgr;
+	private final PanelManager my_panel_mgr;
 	
 	/*
 	 * methods
@@ -34,21 +34,33 @@ public class AbstractConferencesPanel extends JPanel
 	/**
 	 * Constructor for AbstractConferencesPanel.
 	 * @param the_state the CurrentState passed to it by the frame.
+	 * @param the_panel_mgr the panel manager object that is creating this panel.
 	 */
 	//TODO make this constructor protected so that it can't be initiated
 	//unless its children call super().
-	public AbstractConferencesPanel(final CurrentState the_state)
+	public AbstractConferencesPanel(final CurrentState the_state, 
+			final PanelManager the_panel_mgr)
 	{
 		super();
+		my_panel_mgr = the_panel_mgr;
 		my_current_state = the_state;
 	}
 	
 	/**
-	 * adds a PanelManager object to be used by this class.
-	 * @param the_panel_mgr
+	 * returns the current state object to subclasses.
+	 * @return the current state
 	 */
-	public void addPanelManager(PanelManager the_panel_mgr)
+	protected CurrentState getCurrentState()
 	{
-		my_panel_mgr = the_panel_mgr;
+		return my_current_state;
+	}
+	
+	/**
+	 * returns the panel manager object to subclasses.
+	 * @return the panel manager
+	 */
+	protected PanelManager getPanelManager()
+	{
+		return my_panel_mgr;
 	}
 }

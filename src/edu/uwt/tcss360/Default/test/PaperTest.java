@@ -26,7 +26,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		assertFalse("Did not initialize", p == null);
 		assertEquals("Author ID doesn't match", s, p.getAuthorID());
 	}
@@ -37,7 +37,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		assertEquals("Review list not Empty", 0, p.getReviews().size());
 	}
 	
@@ -47,7 +47,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		p.addReview(new Review(dir, "test2@test.com", doc, 3));
 		assertEquals("Review list size incorrect", 1, p.getReviews().size());
 		p.addReview(new Review(dir, "test3@test.com", doc, 2));
@@ -62,7 +62,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		p.assignReviewer("testReviewer@test.com");
 		p.assignSubprogramChair("testSubprogramChair@test.com");
 		
@@ -82,7 +82,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		
 		assertEquals("Author doesnt match ID", 
 				"test@test.com", p.getAuthorID());
@@ -94,7 +94,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		p.assignSubprogramChair("testSubprogramChair@test.com");
 		assertEquals("Author doesnt match ID", 
 				"testSubprogramChair@test.com", p.getSubprogramChairID());
@@ -106,7 +106,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		p.assignReviewer("test2@test.com");
 		p.assignReviewer("test3@test.com");
 		p.assignReviewer("test4@test.com");
@@ -122,7 +122,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		//there was no ACCEPT or DECLINE status in paper so I used 0 and 1
 		p.setAcceptanceStatus(0, Role.PROGRAM_CHAIR);
 		assertEquals("Incorrect Paper Status", 0, p.getAcceptanceStatus());
@@ -136,7 +136,7 @@ public class PaperTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Paper p = new Paper(s, doc, dir);
+		Paper p = new Paper(s, "testtitle", doc, dir);
 		
 		p.setTitle("testTitle", Role.AUTHOR);
 		assertEquals("Title incorrectly set", "testTitle", p.getTitle());

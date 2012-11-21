@@ -81,8 +81,8 @@ public class ConferencesFrame extends JFrame implements PanelManager
 		my_panels_stack = new Stack<AbstractConferencesPanel>();
 		my_current_state = new CurrentState(new ConferencesManager());
 		my_panel = new JPanel(new BorderLayout());
-		my_top_panel = new AbstractConferencesPanel(my_current_state);
-		my_panels_stack.push(new LoginPanel(my_current_state));
+		my_top_panel = new AbstractConferencesPanel(my_current_state, this);
+		my_panels_stack.push(new LoginPanel(my_current_state, this));
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
 	}
 	
