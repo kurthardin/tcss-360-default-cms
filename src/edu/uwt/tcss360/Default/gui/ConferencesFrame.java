@@ -42,7 +42,7 @@ public class ConferencesFrame extends JFrame implements PanelManager
 	public static final int WIDTH = 750;
 	
 	/**
-	 * height of the window
+	 * height of the main panel
 	 */
 	public static final int HEIGHT = 500;
 	

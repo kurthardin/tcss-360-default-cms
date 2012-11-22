@@ -1,12 +1,19 @@
 package edu.uwt.tcss360.Default.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 
 import edu.uwt.tcss360.Default.model.CurrentState;
 
 public class TopPanel extends AbstractConferencesPanel
 {
+	
+	private final JButton my_back_button;
 	
 	/**
 	 * constructor
@@ -17,6 +24,7 @@ public class TopPanel extends AbstractConferencesPanel
 			final PanelManager the_panel_mgr)
 	{
 		super(the_state, the_panel_mgr);
+		my_back_button = new JButton("Back");
 		setupPanel();
 	}
 	
@@ -26,8 +34,28 @@ public class TopPanel extends AbstractConferencesPanel
 	 */
 	private void setupPanel()
 	{
-		this.setPreferredSize(new Dimension(ConferencesFrame.WIDTH, 
+		setPreferredSize(new Dimension(ConferencesFrame.WIDTH, 
 				ConferencesFrame.TOP_HEIGHT));
-		this.setBackground(Color.BLACK);
+		Box box = Box.createHorizontalBox();
+		my_back_button.setAlignmentX(LEFT_ALIGNMENT);
+		JLabel label = new JLabel("temporary name");
+		label.setAlignmentX(RIGHT_ALIGNMENT);
+		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
+				ConferencesFrame.TOP_HEIGHT));
+		
+		box.add(my_back_button);
+		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH - 
+				label.getPreferredSize().getWidth() - 
+				my_back_button.getPreferredSize().getWidth()),0)));
+		box.add(label);
+		add(box);
+	}
+	
+	private class BackAction extends AbstractAction
+	{
+		public void actionPerformed(ActionEvent the_event)
+		{
+			getPanelManager().popPanel();
+		}
 	}
 }

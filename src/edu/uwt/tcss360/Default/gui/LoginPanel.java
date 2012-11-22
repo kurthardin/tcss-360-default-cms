@@ -6,10 +6,7 @@
 
 package edu.uwt.tcss360.Default.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -17,7 +14,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,7 +83,7 @@ public class LoginPanel extends AbstractConferencesPanel
 		
 		login_box.add(title_label);
 		login_box.add(email_panel);
-		login_box.add(my_login_button, Component.CENTER_ALIGNMENT);
+		login_box.add(my_login_button);
 		my_login_button.addActionListener(new LoginAction());
 		//creates an empty "border" above the login box so that the login box
 		//is more centered in the middle of the frame.
@@ -112,7 +108,8 @@ public class LoginPanel extends AbstractConferencesPanel
 				if (cf.getUser(text) != null)
 				{
 					getCurrentState().setCurrentUser(text);
-					//TODO: push next frame on stack.
+					//TODO: push new ConferencesListPanel onto the panel manager
+					//getPanelManager().pushPanel();
 				}
 				else
 				{
