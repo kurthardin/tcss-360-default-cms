@@ -174,13 +174,15 @@ public class Review
 		
 		String directory_name = "review_" + my_reviewer_id;
 		File directory = new File(the_paper_directory, directory_name);
-		if (!directory.exists()) {
-			directory = FileHelper.createDirectory(the_paper_directory, 
-					directory_name);
-		}
+		
+		//TODO: uncomment the lines below when needed
+//		if (!directory.exists()) {
+//			directory = FileHelper.createDirectory(the_paper_directory, 
+//					directory_name);
+//		}
 		my_directory = directory;
 		
-		copyReviewDoc(my_directory, the_review_doc);
+//		copyReviewDoc(my_directory, the_review_doc);
 	}
 	
 	

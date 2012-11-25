@@ -228,15 +228,16 @@ public class Paper
 	    
 	    my_manuscript_title = the_title;
 	    
+		//TODO: uncomment this stuff when needed
 	    String directory_name = my_manuscript_title + my_author_id;
 		File directory = new File(the_papers_directory, directory_name);
-		if (!directory.exists()) {
-			directory = FileHelper.createDirectory(the_papers_directory, 
-					directory_name);
-		}
+//		if (!directory.exists()) {
+//			directory = FileHelper.createDirectory(the_papers_directory, 
+//					directory_name);
+//		}
 		my_directory = directory;
 		
-		copyPaperDoc(my_directory, the_manuscript_doc);		
+		//copyPaperDoc(my_directory, the_manuscript_doc);		
 	}
 	
 	
@@ -252,6 +253,17 @@ public class Paper
 	public List<Review> getReviews() 
 	{
 		return new ArrayList<Review>(my_reviews);
+	}
+	
+	public Review getRecommendation()
+	{
+		return my_recommendation;
+	}
+	
+	public void setRecommendation(Review the_recommendation)
+	{
+		//TODO: add some permission checking
+		my_recommendation = the_recommendation;
 	}
 	
 	/**
@@ -289,6 +301,10 @@ public class Paper
 		return new ArrayList<String>(ids);
 	}
 	
+	/**
+	 * Returns the ID of the author, not the name.
+	 * @return The ID (email address) of the author.
+	 */
 	public String getAuthorID() 
 	{
 		return my_author_id;
