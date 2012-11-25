@@ -1,7 +1,9 @@
 package edu.uwt.tcss360.Default;
 import edu.uwt.tcss360.Default.gui.ConferencesFrame;
 
-
+/**
+ * main class
+ */
 public class ConferencesMain {
 
 	/**
@@ -12,7 +14,5 @@ public class ConferencesMain {
 	{
 		ConferencesFrame cf = new ConferencesFrame();
 		cf.start();
-		cf.updateView();
 	}
-
 }

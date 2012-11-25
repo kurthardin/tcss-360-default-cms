@@ -1,3 +1,8 @@
+/**
+ * TopPanel.java
+ * Scott Sanderson
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.Dimension;
@@ -9,11 +14,21 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import edu.uwt.tcss360.Default.model.CurrentState;
+import edu.uwt.tcss360.Default.model.User;
 
+/**
+ * Panel that will be at the top of the screen except 
+ * when at the login panel.
+ * @author Scott Sanderson
+ * @version 1.0
+ */
+@SuppressWarnings("serial")
 public class TopPanel extends AbstractConferencesPanel
 {
 	
 	private final JButton my_back_button;
+	
+	private final JLabel my_label;
 	
 	/**
 	 * constructor
@@ -25,6 +40,7 @@ public class TopPanel extends AbstractConferencesPanel
 	{
 		super(the_state, the_panel_mgr);
 		my_back_button = new JButton("Back");
+		my_label = new JLabel();
 		setupPanel();
 	}
 	
@@ -38,16 +54,22 @@ public class TopPanel extends AbstractConferencesPanel
 				ConferencesFrame.TOP_HEIGHT));
 		Box box = Box.createHorizontalBox();
 		my_back_button.setAlignmentX(LEFT_ALIGNMENT);
-		JLabel label = new JLabel("temporary name");
-		label.setAlignmentX(RIGHT_ALIGNMENT);
+		my_back_button.addActionListener(new BackAction());
+//		JLabel label = new JLabel(getCurrentState().getCurrentUser().getEmail());
+		my_label.setAlignmentX(RIGHT_ALIGNMENT);
 		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
 				ConferencesFrame.TOP_HEIGHT));
+		User user = getCurrentState().getCurrentUser();
+		if (user != null)
+			my_label.setText(user.getName());
+		else
+			my_label.setText("no current user");//remove
 		
 		box.add(my_back_button);
 		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH - 
-				label.getPreferredSize().getWidth() - 
+				my_label.getPreferredSize().getWidth() - 
 				my_back_button.getPreferredSize().getWidth()),0)));
-		box.add(label);
+		box.add(my_label);
 		add(box);
 	}
 	
@@ -63,6 +85,7 @@ public class TopPanel extends AbstractConferencesPanel
 	public void updatePanel()
 	{
 		// TODO Auto-generated method stub
-		
+		removeAll();
+		setupPanel();
 	}
 }

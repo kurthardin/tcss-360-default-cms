@@ -1,12 +1,17 @@
+/**
+ * ConferencesListPanel.java
+ * Scott Sanderson
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -18,6 +23,14 @@ import javax.swing.SwingConstants;
 
 import edu.uwt.tcss360.Default.model.CurrentState;
 
+
+/**
+ * Panel that lists the conferences and allows the user to select
+ * a conference.
+ * @author Scott Sanderson
+ * @version 1.0
+ */
+@SuppressWarnings("serial")
 public class ConferencesListPanel extends AbstractConferencesPanel
 {
 	
@@ -59,7 +72,11 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		//TODO: add buttons that link to conferences.
 		//temporary
 		for (int i = 0; i < 20; i++)
-			center_panel.add(new JButton("Conference number:" + i));
+		{
+			JButton button = new JButton("Conference number:" + i);
+			button.addActionListener(new ConferenceSelectAction(button.getText()));
+			center_panel.add(button);
+		}
 		//end temporary
 		
 		JScrollPane scroll_pane = new JScrollPane(center_panel);
@@ -67,8 +84,51 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		add(scroll_pane, BorderLayout.CENTER);
 	}
 	
-
+	private class ConferenceSelectAction extends AbstractAction
+	{
+//		private final Conference my_conference;
+//		
+//		public ConferenceSelectAction(final Conference the_conference)
+//		{
+//			super();
+//			my_conference = the_conference;
+//		}
+		
+		//FOR TESTING PURPOSES
+		private final String my_conference;
+		
+		public ConferenceSelectAction(final String the_conference)
+		{
+			super();
+			my_conference = the_conference;
+		}
+		//FOR TESTING PURPOSES END
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			// TODO go to conference screen.
+			System.out.println(my_conference);
+		}
+		
+	}
 	
+	private class NewConferenceAction extends AbstractAction
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			// TODO get info from user and create conference.
+		}
+	}
+	
+	
+	@Override
+	public void updatePanel() 
+	{
+		// TODO Auto-generated method stub
+	}
 	
 	//test main
 	public static void main(String[]args)
@@ -86,11 +146,5 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-	}
-
-	@Override
-	public void updatePanel() 
-	{
-		// TODO Auto-generated method stub
 	}
 }

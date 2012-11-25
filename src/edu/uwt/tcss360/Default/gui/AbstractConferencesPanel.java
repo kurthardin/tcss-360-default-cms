@@ -10,6 +10,12 @@ import javax.swing.JPanel;
 
 import edu.uwt.tcss360.Default.model.CurrentState;
 
+/**
+ * Abstract panel to be used for this conference management
+ * system.
+ * @author Scott Sanderson
+ * @version 1.0
+ */
 @SuppressWarnings("serial")
 public abstract class AbstractConferencesPanel extends JPanel
 {

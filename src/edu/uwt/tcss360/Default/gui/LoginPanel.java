@@ -99,17 +99,19 @@ public class LoginPanel extends AbstractConferencesPanel
 	 */
 	private class LoginAction extends AbstractAction
 	{
+		@Override
 		public void actionPerformed(ActionEvent the_event)
 		{
 			String text = my_text_field.getText().trim();
 			if (text.trim().length() > 0)
 			{
 				ConferencesManager cf = getCurrentState().getConferencesManager();
+				//TODO: Remove the text.equals part of this if statement.
 				if (cf.getUser(text) != null)
 				{
 					getCurrentState().setCurrentUser(text);
-					//TODO: push new ConferencesListPanel onto the panel manager
-					//getPanelManager().pushPanel();
+					getPanelManager().pushPanel(new ConferencesListPanel(
+							getCurrentState(), getPanelManager()));
 				}
 				else
 				{

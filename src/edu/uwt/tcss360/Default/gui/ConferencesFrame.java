@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
+import edu.uwt.tcss360.Default.model.User;
 
 /**
  * The main frame to be used. It will hold all of the panels it needs
@@ -87,6 +88,9 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		super(WINDOW_TITLE);
 		my_panels_stack = new Stack<AbstractConferencesPanel>();
 		my_current_state = new CurrentState(new ConferencesManager());
+		//test code remove start
+		my_current_state.getConferencesManager().addUser(new User("test@test.com", "Test Name"));
+		//test code remove end
 		my_panel = new JPanel(new BorderLayout());
 		my_top_panel = new TopPanel(my_current_state, this);
 		my_panels_stack.push(new LoginPanel(my_current_state, this));
@@ -123,10 +127,10 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	 */
 	public void pushPanel(AbstractConferencesPanel the_panel)
 	{
+		if (my_panels_stack.size() == 1)
+			my_top_panel.updatePanel();
 		my_panels_stack.push(the_panel);
 		updateView();
-		//TODO add "this" to the panels when they are pushed on the stack
-		//casted as a PanelManager object.
 	}
 	
 	/**
@@ -137,6 +141,8 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	public JPanel popPanel()
 	{
 		JPanel panel = null;
+		if (my_panels_stack.size() == 2)
+			my_top_panel.updatePanel();
 		if (my_panels_stack.size() > 1)
 		{
 			panel = my_panels_stack.pop();
@@ -150,12 +156,14 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	 */
 	public void updateView()
 	{
+		my_panel.setVisible(false);
 		my_panel.removeAll();
 		if(my_panels_stack.size() > 1)
 		{
 			my_panel.add(my_top_panel, BorderLayout.NORTH);
 		}
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
+		my_panel.setVisible(true);
 	}
 
 	@Override
