@@ -58,4 +58,11 @@ public class TopPanel extends AbstractConferencesPanel
 			getPanelManager().popPanel();
 		}
 	}
+
+	@Override
+	public void updatePanel()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -120,4 +120,11 @@ public class LoginPanel extends AbstractConferencesPanel
 			}
 		}
 	}
+
+	@Override
+	public void updatePanel()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

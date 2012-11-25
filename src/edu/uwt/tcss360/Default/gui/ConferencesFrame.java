@@ -9,6 +9,8 @@ package edu.uwt.tcss360.Default.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Stack;
 
 import javax.swing.JFrame;
@@ -25,7 +27,7 @@ import edu.uwt.tcss360.Default.model.CurrentState;
  * @version 1.0
  */
 @SuppressWarnings("serial")
-public class ConferencesFrame extends JFrame implements PanelManager
+public class ConferencesFrame extends JFrame implements PanelManager, Observer
 {
 	/*
 	 * fields
@@ -154,5 +156,14 @@ public class ConferencesFrame extends JFrame implements PanelManager
 			my_panel.add(my_top_panel, BorderLayout.NORTH);
 		}
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
+	}
+
+	@Override
+	public void update(Observable the_o, Object the_arg)
+	{
+		for(AbstractConferencesPanel panel : my_panels_stack)
+		{
+			panel.updatePanel();
+		}
 	}
 }

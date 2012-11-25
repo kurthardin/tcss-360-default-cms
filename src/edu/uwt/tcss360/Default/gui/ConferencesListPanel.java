@@ -87,4 +87,10 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
+
+	@Override
+	public void updatePanel() 
+	{
+		// TODO Auto-generated method stub
+	}
 }

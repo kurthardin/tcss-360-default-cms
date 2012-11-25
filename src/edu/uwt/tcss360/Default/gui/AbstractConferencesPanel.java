@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import edu.uwt.tcss360.Default.model.CurrentState;
 
 @SuppressWarnings("serial")
-public class AbstractConferencesPanel extends JPanel
+public abstract class AbstractConferencesPanel extends JPanel
 {
 	/*
 	 * fields
@@ -63,4 +63,9 @@ public class AbstractConferencesPanel extends JPanel
 	{
 		return my_panel_mgr;
 	}
+
+	/**
+	 * updates the panel 
+	 */
+	public abstract void updatePanel();
 }
