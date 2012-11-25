@@ -161,6 +161,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	@Override
 	public void update(Observable the_o, Object the_arg)
 	{
+		my_top_panel.updatePanel();
 		for(AbstractConferencesPanel panel : my_panels_stack)
 		{
 			panel.updatePanel();
