@@ -65,7 +65,7 @@ public class CurrentStateTests
 			testPaperFile = FileHelper.createFile(
 					testPaperDirectory, "testPaper.docx");
 		}
-		my_test_paper = new Paper(my_test_user.getID(), 
+		my_test_paper = new Paper(my_test_user.getID(), "testName", 
 				testPaperFile, testPaperDirectory);
 	}
 	
