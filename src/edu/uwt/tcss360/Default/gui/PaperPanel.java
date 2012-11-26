@@ -19,7 +19,8 @@ import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.Review;
 
-public class PaperPanel extends AbstractConferencesPanel {
+public class PaperPanel extends AbstractConferencesPanel 
+{
 	/*
 	 * info that needs to be shown for a paper:
 	 * - author
@@ -33,6 +34,7 @@ public class PaperPanel extends AbstractConferencesPanel {
 	 * - button to open recomendation panel
 	 */
 	
+	// probably only for testing.
 	private Paper my_paper;
 
 	public PaperPanel(CurrentState the_state, PanelManager the_panel_mgr) 
@@ -42,6 +44,8 @@ public class PaperPanel extends AbstractConferencesPanel {
 		setupPanel();
 	}
 	
+	//should be able to get the Paper from the CurrentState passed in,
+	//this constructor is pretty much for testing only.
 	public PaperPanel(final Paper the_paper, CurrentState the_state,
 		PanelManager the_panel_mgr)
 	{
@@ -66,10 +70,6 @@ public class PaperPanel extends AbstractConferencesPanel {
 		
 		//information for north: back button, author, title, download button
 		JPanel north_panel = new JPanel(new GridLayout(0,1));
-		
-		JButton back_button = new JButton("Back");
-		back_button.addActionListener(new BackAction(getPanelManager()));
-		north_panel.add(back_button);
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Author: ");
@@ -238,24 +238,4 @@ public class PaperPanel extends AbstractConferencesPanel {
 		frame.setVisible(true);
 	}
 	
-	/////////////
-	// PRIVATE CLASSES
-	/////////////
-	
-	private class BackAction extends AbstractAction
-	{
-		private PanelManager my_panel_manager;
-		
-		public BackAction(PanelManager a_panel_manager)
-		{
-			super();
-			my_panel_manager = a_panel_manager;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent the_event) 
-		{
-			my_panel_manager.popPanel();
-		}
-	}
 }
