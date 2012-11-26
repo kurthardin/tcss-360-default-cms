@@ -1,25 +1,82 @@
 package edu.uwt.tcss360.Default.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.User;
+import edu.uwt.tcss360.Default.util.FileHelper;
 
 public class ConferencesManagerTest
 {
-
-//    @Test
-//    public void test()
-//    {
-//        fail("Not yet implemented");
-//    }
+	
+	/**
+	 * @author Kurt Hardin
+	 */
+	@Test
+	public void writeUsersTest() {
+		try {
+			FileUtils.deleteDirectory(new File("./data"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ConferencesManager confMan = new ConferencesManager();
+		User u = new User("test@testing.com", "Test User");
+		confMan.addUser(u);
+		u = new User("test1@testing.com", "Test One User");
+		confMan.addUser(u);
+		confMan.writeData();
+		BufferedReader usersReader = 
+				FileHelper.getFileReader(new File("./data/users.cmsd"));
+		String usersFileString = null;
+		String expectedPrefix = "<?xml version=\"1.0\" " +
+				"encoding=\"UTF-8\" standalone=\"no\"?>";
+		String expectedUserNode1 = "<user " +
+				"my_email=\"test@testing.com\" my_id=\"test@testing.com" +
+				"\" my_name=\"Test User\"/>";
+		String expectedUserNode2 = "<user my_email=\"test1@" +
+				"testing.com\" my_id=\"test1@testing.com\" my_name=" +
+				"\"Test One User\"/>";
+		try {
+			usersFileString = usersReader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		assertTrue("XML header missing", 
+				usersFileString.startsWith(expectedPrefix));
+		assertTrue("Missing \"Test User\"", 
+				usersFileString.contains(expectedUserNode1));
+		assertTrue("Missing \"Test One User\"", 
+				usersFileString.contains(expectedUserNode2));
+	}
+	
+	/**
+	 * @author Kurt Hardin
+	 */
+	@Test
+	public void readUsersTest() {
+		ConferencesManager confMan = new ConferencesManager();
+		User u = confMan.getUser("test@testing.com");
+		assertNotNull("user@testing.com not found", u);
+		u = confMan.getUser("test1@testing.com");
+		assertNotNull("user1@testing.com not found", u);
+	}
     
     @Test
     public void emptySetTest()
