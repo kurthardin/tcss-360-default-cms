@@ -54,14 +54,17 @@ public class ConferencesManager
 		File data_dir = FileHelper.getDataDirectory();
 		if (data_dir != null) {
 			
+			// Create users data file if it doesn't exist
 			FileHelper.createFile(data_dir, FileHelper.USERS_DATA_FILE_NAME);
 			
+			// Get input source for users data file
 			InputSource info = FileHelper.getInputSource(data_dir,
 					FileHelper.USERS_DATA_FILE_NAME);
 			
 			if(info == null) 
 			{
-			    throw new IllegalArgumentException(FileHelper.USERS_DATA_FILE_NAME +
+			    throw new IllegalArgumentException(
+			    		FileHelper.USERS_DATA_FILE_NAME + 
 			    		" could not be found");
 			}
 			else
@@ -156,6 +159,10 @@ public class ConferencesManager
 					DocumentBuilderFactory.newInstance();
 			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
 			Document doc = doc_builder.newDocument();
+			
+			Element users_element = doc.createElement("users");
+			doc.appendChild(users_element);
+			
 			Element user_element;
 			for (User user : my_users) 
 			{
@@ -163,7 +170,7 @@ public class ConferencesManager
 				user_element.setAttribute("my_id", user.getID());
 				user_element.setAttribute("my_email", user.getEmail());
 				user_element.setAttribute("my_name", user.getName());
-				doc.appendChild(user_element);
+				users_element.appendChild(user_element);
 			}
 
 			// write the content into xml file
