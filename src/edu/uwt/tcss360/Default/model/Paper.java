@@ -125,8 +125,8 @@ public class Paper
 
 				saxParser.parse(info, handler);
 				
-				File recommendation_dir = new File(
-						my_directory.getAbsolutePath() + "/recommendation");
+				File recommendation_dir = new File(my_directory, 
+						"recommendation");
 				my_recommendation = new Review(recommendation_dir);
 				
 				String[] review_dir_names = my_directory.list(
@@ -144,9 +144,7 @@ public class Paper
 				
 				for (String review_dir_name : review_dir_names) 
 				{
-					File review_dir = new File(
-							my_directory.getAbsolutePath() + "/" + 
-							review_dir_name);
+					File review_dir = new File(my_directory, review_dir_name);
 					
 					Review review = new Review(review_dir);
 					my_reviews.add(review);
@@ -262,7 +260,7 @@ public class Paper
 	
 	public File getDirectory() 
 	{
-		return new File(my_directory.getAbsolutePath());
+		return my_directory.getAbsoluteFile();
 	}
 	
 	public Review getRecommendation()
@@ -393,7 +391,7 @@ public class Paper
 	{
 	    if(my_manuscript_doc == null)
 	        return null;
-	    return new File(my_manuscript_doc.getAbsolutePath());
+	    return my_manuscript_doc.getAbsoluteFile();
 	}
 	
 	/**
@@ -534,8 +532,7 @@ public class Paper
 			final File the_manuscript_doc) 
 	{
 		String docname = FileHelper.getLeafString(the_manuscript_doc);
-		File copy = new File(the_paper_directory.getAbsolutePath() + "/" +
-				docname);
+		File copy = new File(the_paper_directory, docname);
 		
 		FileHelper.copyFile(the_manuscript_doc, copy);
 		my_manuscript_doc = copy;

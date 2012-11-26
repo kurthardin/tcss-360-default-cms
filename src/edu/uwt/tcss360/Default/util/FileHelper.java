@@ -37,9 +37,9 @@ public class FileHelper {
 	public static final String USERS_DATA_FILE_NAME = "users.cmsd";
 	
 	public static final File getDataDirectory() {
-		File dir = new File(".", "data");
+		File dir = new File(".", "data").getAbsoluteFile();
 		if (!dir.exists()) {
-			dir = createDirectory(new File("."), "data");
+			dir = createDirectory(new File(".").getAbsoluteFile(), "data");
 		}
 		return dir;
 	}

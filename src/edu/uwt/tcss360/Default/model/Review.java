@@ -199,7 +199,7 @@ public class Review
 	
 	public File getDirectory() 
 	{
-		return new File(my_directory.getAbsolutePath());
+		return my_directory.getAbsoluteFile();
 	}
 	
 	public String getReviewerID() 
@@ -216,7 +216,7 @@ public class Review
 	public File getReviewDoc() 
 	{
 		if(my_review_doc.exists())
-			return new File(my_review_doc.getPath());
+			return my_review_doc.getAbsoluteFile();
 		else
 			return null;
 	}
@@ -313,8 +313,7 @@ public class Review
 			final File the_review_doc) 
 	{
 		String docname = FileHelper.getLeafString(the_review_doc);
-		File copied_file = new File(the_review_directory.getAbsolutePath() 
-				+ "/" + docname);
+		File copied_file = new File(the_review_directory, docname);
 		
 		FileHelper.copyFile(the_review_doc, copied_file);
 		my_review_doc = copied_file;

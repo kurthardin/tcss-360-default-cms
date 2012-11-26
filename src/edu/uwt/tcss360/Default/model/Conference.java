@@ -417,7 +417,7 @@ public final class Conference {
 	
 	public File getDirectory() 
 	{
-		return new File(my_directory.getAbsolutePath());
+		return my_directory.getAbsoluteFile();
 	}
 	
 	public File getPapersDirectory() 
@@ -427,7 +427,7 @@ public final class Conference {
 			papers_dir = FileHelper.createDirectory(my_directory, 
 					"papers");
 		}
-		return new File(papers_dir.getAbsolutePath());
+		return papers_dir.getAbsoluteFile();
 	}
 	
 	/**
