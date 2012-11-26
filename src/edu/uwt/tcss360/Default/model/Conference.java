@@ -195,6 +195,7 @@ public final class Conference {
 			directory = FileHelper.createDirectory(confs_dir, conf_dir_name);
 		}
 		my_directory = directory;
+		writeData();
 	}
 	
 	public void writeData() {
