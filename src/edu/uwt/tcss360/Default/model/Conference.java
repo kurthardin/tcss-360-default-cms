@@ -679,11 +679,14 @@ public final class Conference {
 				e.printStackTrace();
 			}
 			
+			String date_string;
 			try {
-				my_submission_deadline = 
-						DateFormat.getInstance().parse(
-								attr.getValue(
-										"my_submission_deadline"));
+				date_string = attr.getValue("my_submission_deadline");
+				if (date_string != null) 
+				{
+					my_submission_deadline = 
+							DateFormat.getInstance().parse(date_string);
+				}
 			} 
 			catch (ParseException e) 
 			{
@@ -693,8 +696,12 @@ public final class Conference {
 			
 			try 
 			{
-				my_review_deadline = DateFormat.getInstance().parse(
-						attr.getValue("my_review_deadline"));
+				date_string = attr.getValue("my_review_deadline");
+				if (date_string != null) 
+				{
+					my_review_deadline = DateFormat.getInstance().parse(
+							date_string);
+				}
 			} 
 			catch (ParseException e) 
 			{
@@ -703,10 +710,12 @@ public final class Conference {
 			}
 			
 			try {
-				my_recommendation_deadline = 
-						DateFormat.getInstance().parse(
-								attr.getValue(
-										"my_recommendation_deadline"));
+				date_string = attr.getValue("my_recommendation_deadline");
+				if (date_string != null) 
+				{
+					my_recommendation_deadline = 
+							DateFormat.getInstance().parse(date_string);
+				}
 			} 
 			catch (ParseException e) 
 			{
@@ -716,10 +725,12 @@ public final class Conference {
 			
 			try 
 			{
-				my_final_revision_deadline = 
-						DateFormat.getInstance().parse(
-								attr.getValue(
-										"my_final_revision_deadline"));
+				date_string = attr.getValue("my_final_revision_deadline");
+				if (date_string != null) 
+				{
+					my_final_revision_deadline = 
+							DateFormat.getInstance().parse(date_string);
+				}
 			} 
 			catch (ParseException e) 
 			{
