@@ -40,6 +40,7 @@ public class TopPanel extends AbstractConferencesPanel
 	{
 		super(the_state, the_panel_mgr);
 		my_back_button = new JButton("Back");
+		my_back_button.addActionListener(new BackAction());
 		my_label = new JLabel();
 		setupPanel();
 	}
@@ -54,7 +55,6 @@ public class TopPanel extends AbstractConferencesPanel
 				ConferencesFrame.TOP_HEIGHT));
 		Box box = Box.createHorizontalBox();
 		my_back_button.setAlignmentX(LEFT_ALIGNMENT);
-		my_back_button.addActionListener(new BackAction());
 //		JLabel label = new JLabel(getCurrentState().getCurrentUser().getEmail());
 		my_label.setAlignmentX(RIGHT_ALIGNMENT);
 		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
@@ -84,8 +84,9 @@ public class TopPanel extends AbstractConferencesPanel
 	@Override
 	public void updatePanel()
 	{
-		// TODO Auto-generated method stub
+		setVisible(false);
 		removeAll();
 		setupPanel();
+		setVisible(true);
 	}
 }

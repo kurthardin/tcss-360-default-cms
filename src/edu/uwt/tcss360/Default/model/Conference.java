@@ -457,6 +457,17 @@ public final class Conference {
 	}
 	
 	/**
+	 * Gets the roles for the specified user id passed in.
+	 * @param the_user_id the user id.
+	 * @return a set of roles associated with the user id.
+	 * @author Scott Sanderson
+	 */
+	public Set<Role> getRoles(final String the_user_id)
+	{
+		return my_users_roles.get(the_user_id);
+	}
+	
+	/**
 	 * Gets all Papers assigned to the specified User with the specified Role
 	 * for this Conference.
 	 * @param the_user_id the User for which to retrieve Papers.

@@ -60,6 +60,7 @@ public class LoginPanel extends AbstractConferencesPanel
 	{
 		super(the_state, the_panel_mgr);
 		my_login_button = new JButton("Login");
+		my_login_button.addActionListener(new LoginAction());
 		my_text_field = new JTextField(15);
 		setupPanel();
 	}
@@ -84,7 +85,6 @@ public class LoginPanel extends AbstractConferencesPanel
 		login_box.add(title_label);
 		login_box.add(email_panel);
 		login_box.add(my_login_button);
-		my_login_button.addActionListener(new LoginAction());
 		//creates an empty "border" above the login box so that the login box
 		//is more centered in the middle of the frame.
 		setBorder(BorderFactory.createEmptyBorder((ConferencesFrame.HEIGHT + 
@@ -106,7 +106,6 @@ public class LoginPanel extends AbstractConferencesPanel
 			if (text.trim().length() > 0)
 			{
 				ConferencesManager cf = getCurrentState().getConferencesManager();
-				//TODO: Remove the text.equals part of this if statement.
 				if (cf.getUser(text) != null)
 				{
 					getCurrentState().setCurrentUser(text);
@@ -126,7 +125,6 @@ public class LoginPanel extends AbstractConferencesPanel
 	@Override
 	public void updatePanel()
 	{
-		// TODO Auto-generated method stub
-		
+		//no need to do anything for this panel...
 	}
 }
