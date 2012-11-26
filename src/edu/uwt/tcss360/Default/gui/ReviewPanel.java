@@ -1,3 +1,9 @@
+/**
+ * ReviewPanel.java
+ * Author: Travis Lewis
+ * Date: 25 Nov 2012
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
@@ -6,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +20,13 @@ import javax.swing.JPanel;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Review;
 
+/**
+ * A JPanel that displays information and allows actions relevant to the
+ * current Review object.
+ * @author Travis Lewis
+ * @version 25 Nov 2012
+ */
+@SuppressWarnings("serial")
 public class ReviewPanel extends AbstractConferencesPanel 
 {
 	

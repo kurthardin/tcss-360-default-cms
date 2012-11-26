@@ -23,6 +23,11 @@ import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.InfoHandler;
 
+/**
+ * Holds information about a manuscript along with reviews of it, etc.
+ * @author Travis Lewis
+ * @version 8 Nov 2012
+ */
 public class Paper 
 {
 	/////////////
@@ -38,6 +43,12 @@ public class Paper
 	/////////////
 	// FIELDS
 	/////////////
+	/** Set of review objects. */
+    public Set<Review> my_reviews;
+    // that ^ might as well be public if we're just going to have getReviews()
+    // unless we're returning a read-only copy of the list, but that would
+    // make it kind of hard to modify the Reviews...
+	
 	/** The location on disk of the directory belonging to the paper. */
 	private final File my_directory;
 	
@@ -53,11 +64,6 @@ public class Paper
 	
 	/** User ID of the subprogram chair for the paper. */
 	private String my_subprogram_chair_id;
-	
-	/** List of review objects. */
-	private Set<Review> my_reviews;
-	// that ^ might as well be public if we're just going to have getReviews()
-	// unless we're returning a read-only copy of the list
 	
 	/** The recommendation of the subprogram chair. */
 	private Review my_recommendation;
@@ -250,11 +256,6 @@ public class Paper
 		return new File(my_directory.getAbsolutePath());
 	}
 	
-	public List<Review> getReviews() 
-	{
-		return new ArrayList<Review>(my_reviews);
-	}
-	
 	public Review getRecommendation()
 	{
 		return my_recommendation;
@@ -262,7 +263,7 @@ public class Paper
 	
 	public void setRecommendation(Review the_recommendation)
 	{
-		//TODO: add some permission checking
+		//permission checking should be done by the GUI
 		my_recommendation = the_recommendation;
 	}
 	
@@ -289,14 +290,31 @@ public class Paper
 		return Role.USER;
 	}
 	
+	/**
+	 * Gets a List of strings containing the user IDs of the given role for
+	 * the Paper.
+	 * @param a_user_role The role of the users to put in the list.
+	 * @return A List of users with the given role associated with the Paper.
+	 */
 	public List<String> getUserIDs(final Role a_user_role) 
 	{
 	    if(a_user_role == null)
 	        throw new IllegalArgumentException("Role cannot be null");
 	    
-		List<String> ids = new ArrayList<String>();
+		List<String> ids = null;// = new ArrayList<String>();
 		
-		//TODO: actually get the IDs.
+		if(a_user_role == Role.REVIEWER)
+		    ids = new ArrayList<String>(my_reviewer_ids);
+		else if(a_user_role == Role.AUTHOR)
+		{
+		    ids = new ArrayList<String>();
+		    ids.add(my_author_id);
+		}
+		else if(a_user_role == Role.SUBPROGRAM_CHAIR)
+		{
+		    ids = new ArrayList<String>();
+		    ids.add(my_subprogram_chair_id);
+		}
 		
 		return new ArrayList<String>(ids);
 	}
@@ -321,28 +339,19 @@ public class Paper
 	}
 	
 	/**
-	 * Sets the acceptance status for the paper, If I understand correctly
-	 * only the Program Chair for the conference can set the status.
+	 * Sets the acceptance status for the paper, should only be used
+	 * by the program chair.
 	 * @param the_status The status to set.
-	 * @param a_role The role of the user trying to set the status.
 	 * @return <code>true</code> if the status was successfully set.
 	 */
-	public boolean setAcceptanceStatus(final int the_status, 
-			final Role a_role) 
+	public boolean setAcceptanceStatus(final int the_status) 
 	{
+	    //permission handling should be done in the GUI
 	    if(the_status > 5 || the_status < -1 || the_status == 0)
 	        throw new IllegalArgumentException("Status is an invalid value");
-	    if(a_role == null)
-	        throw new IllegalArgumentException("Role cannot be null");
-	    
-		if(a_role.equals(Role.PROGRAM_CHAIR)) 
-		{
-		    if(the_status >= 0 && the_status <= 5)
-		        my_acceptance_status = the_status;
-			return true;
-		}
-		
-		return false;
+
+        my_acceptance_status = the_status;
+		return true;
 	}
 	
 	public String getTitle() 
@@ -352,29 +361,18 @@ public class Paper
 	
 	
 	/**
-	 * Allows an authorized user to set the title of the paper. This only
-	 * changes what will show in the software, not what's written in the
-	 * manuscript document itself.
+	 * Sets the title of the paper. This only changes what will show in the 
+	 * software, not what's written in the manuscript document itself.
 	 * @param a_title The new title of the paper.
-	 * @param a_role The role of the user attempting to change the title.
-	 * @return <code>true</code> if the title was successfully changed.
 	 */
-	public boolean setTitle(final String a_title, final Role a_role) 
+	public void setTitle(final String a_title) 
 	{
 	    if(a_title == null)
 	        throw new IllegalArgumentException("Title cannot be null");
-	    if(a_role == null)
-	        throw new IllegalArgumentException("Role cannot be null");
+	    if(a_title == "")
+	        throw new IllegalArgumentException("Title cannot be empty");
 	    
-		if(a_role.equals(Role.PROGRAM_CHAIR) || 
-				a_role.equals(Role.SUBPROGRAM_CHAIR) ||
-				a_role.equals(Role.AUTHOR)) 
-		{
-			my_manuscript_title = a_title;
-			return true;
-		}
-		
-		return false;
+	    my_manuscript_title = a_title;
 	}
 	
 	/**
@@ -390,16 +388,14 @@ public class Paper
 	}
 	
 	/**
-	 * Sets the manuscript document to the one given if the action is 
-	 * requested by the author. Used to update the manuscript to a 
-	 * new version.
+	 * Sets the manuscript document to the one given. Used to update 
+	 * the manuscript to a new version.
 	 * @param the_manuscript The manuscript doc to set.
-	 * @param the_role The role of the user requesting the action.
 	 * @return <code>true</code> if the manuscript was successfully changed.
 	 */
-	public boolean setManuscript(final File the_manuscript, 
-	        final Role the_role)
+	public boolean setManuscript(final File the_manuscript)
 	{
+	    //permissions checking should be handled by the GUI
 	    if(the_manuscript == null)
 	        throw new IllegalArgumentException("Manuscript cannot be null");
 	    if(!the_manuscript.exists())
@@ -407,12 +403,7 @@ public class Paper
 	    if(the_manuscript.isDirectory())
 	        throw new IllegalArgumentException("Manuscript cannot be " +
 	        		"a directory");
-	    if(the_role == null)
-	        throw new IllegalArgumentException("Role cannot be null");
-	    
-	    if(the_role != Role.AUTHOR)
-	        return false;
-	    
+
 	    if(my_manuscript_doc.exists())
 	        my_manuscript_doc.delete();
 	    
@@ -431,26 +422,24 @@ public class Paper
 	/**
 	 * Assigns the given userid as the subprogram chair for the paper.
 	 * @param userid The user ID to make subprogram chair for the paper.
-	 * @return <code>true</code> if the user was made subprogram chair,
-	 * <code>false</code> if they couldn't be made subprogram chair for some
-	 * reason (ex: if the given user is the author).
 	 */
-	public boolean assignSubprogramChair(final String the_user_id) 
+	public void assignSubprogramChair(final String the_user_id) 
 	{
 	    if(the_user_id == null)
 	        throw new IllegalArgumentException("Subprogram Chair user " +
 	        		"ID cannot be null");
 	    
-		Role r = getRole(the_user_id);
-		
-		//business rule 9
-		if(r != Role.AUTHOR) 
-		{
-			my_subprogram_chair_id = the_user_id;
-			return true;
-		}
-		
-		return false;
+	    //business rule 9 should be handled by the GUI...
+	    my_subprogram_chair_id = the_user_id;
+	    
+//		Role r = getRole(the_user_id);
+//		if(r != Role.AUTHOR) 
+//		{
+//			my_subprogram_chair_id = the_user_id;
+//			return true;
+//		}
+//		
+//		return false;
 	}
 	
 	/**
@@ -469,11 +458,11 @@ public class Paper
 		Role r = getRole(a_user_id);
 		
 		//business rules 8 and 10 (they're pretty much the same thing...)
+		// should be handled by the GUI, (but it isn't required by the official
+		// requirements...
+		
 		if(r != Role.AUTHOR && r != Role.REVIEWER) 
-		{
-			my_reviewer_ids.add(a_user_id);
-			return true;
-		}
+			return my_reviewer_ids.add(a_user_id);
 		
 		return false;
 	}

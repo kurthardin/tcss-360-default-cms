@@ -1,3 +1,9 @@
+/**
+ * PaperPanel.java
+ * Author: Travis Lewis
+ * Date: 25 Nov 2012
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
@@ -6,26 +12,32 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+    
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.Review;
 
+/**
+ * @author Travis Lewis
+ * @version 25 Nov 2012
+ * Creates a PaperPanel, which displays information relevant to the
+ * current Paper object.
+ */
+@SuppressWarnings("serial")
 public class PaperPanel extends AbstractConferencesPanel 
 {
 	/*
 	 * info that needs to be shown for a paper:
 	 * - author
 	 * - title
-	 * - link to the paper
+	 * - button to download paper
+	 * - button to upload paper
 	 * - reviewers
 	 * - reviewers scores
 	 * - button to open review panels
@@ -40,8 +52,8 @@ public class PaperPanel extends AbstractConferencesPanel
 	public PaperPanel(CurrentState the_state, PanelManager the_panel_mgr) 
 	{
 		super(the_state, the_panel_mgr);
-		// TODO Auto-generated constructor stub
-		setupPanel();
+		my_paper = getCurrentState().getCurrentPaper();
+		setupPanel(false);
 	}
 	
 	//should be able to get the Paper from the CurrentState passed in,
@@ -51,7 +63,7 @@ public class PaperPanel extends AbstractConferencesPanel
 	{
 		super(the_state, the_panel_mgr);
 		my_paper = the_paper;
-		setupPanel();
+		setupPanel(true);
 		
 	}
 
@@ -62,19 +74,25 @@ public class PaperPanel extends AbstractConferencesPanel
 
 	}
 
-	private void setupPanel()
+	private void setupPanel(final boolean is_test)
 	{
+	    //TODO: modify display contents based on current user
+	    
 		//new GridLayout(rows, cols);
 		setLayout(new BorderLayout());
-		//ConferencesManager cm = getCurrentState().getConferencesManager();
+		ConferencesManager cm = null;
+		if(!is_test)
+		    cm = getCurrentState().getConferencesManager();
 		
 		//information for north: back button, author, title, download button
 		JPanel north_panel = new JPanel(new GridLayout(0,1));
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Author: ");
-		//sb.append(cm.getUser(my_paper.getAuthorID()).getName()); 
-		sb.append("Some Name");//TODO: replace with^
+		if(!is_test)
+		    sb.append(cm.getUser(my_paper.getAuthorID()).getName());
+		else
+    		sb.append("Some Name");
 		sb.append(" [");
 		sb.append(my_paper.getAuthorID());
 		sb.append("]");
@@ -92,7 +110,25 @@ public class PaperPanel extends AbstractConferencesPanel
 						" Manuscript button...");
 			}
 		});
-		north_panel.add(dl_button);
+		JButton ul_button = new JButton("Upload Manuscript");
+		ul_button.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent the_event)
+            {
+                System.out.println("TODO: Add an action for the Upload" +
+                        " Manuscript button...");
+            }
+        });
+		JPanel downup = new JPanel(new GridLayout(0,2));
+		downup.add(dl_button);
+		if(is_test)
+		    downup.add(ul_button);
+		else if(getCurrentState().getCurrentUser().getID() 
+		        == my_paper.getAuthorID())
+		    downup.add(ul_button);
+		north_panel.add(downup);
+		
 		
 		
 		//info for middle: reviewers, their scores, buttons to their 
@@ -100,11 +136,14 @@ public class PaperPanel extends AbstractConferencesPanel
 		JPanel center_panel = new JPanel(new BorderLayout());
 		JPanel meta_review = new JPanel(new GridLayout(0,1));
 		
-		List<Review> reviews = my_paper.getReviews();
-		int review_count = reviews.size();
+		//Set<Review> reviews = my_paper.getReviews();
+		int review_count = my_paper.my_reviews.size();//reviews.size();
 		int reviews_complete = 0;
-		for(Review r : reviews)
-			reviews_complete += (r.my_summary_rating == r.NO_RATING) ? 0 : 1;
+		for(Review r : my_paper.my_reviews)
+		{
+		    if(r.my_summary_rating != Review.NO_RATING)
+		        reviews_complete += 1;
+		}
 
 		sb = new StringBuilder();
 		sb.append("Reviews complete: ");
@@ -116,7 +155,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		sb = new StringBuilder();
 		sb.append("Average Score: ");
 		float avg = 0;
-		for(Review r : reviews)
+		for(Review r : my_paper.my_reviews)
 		{
 			if(r.my_summary_rating != Review.NO_RATING)
 				avg += r.my_summary_rating;
@@ -133,11 +172,13 @@ public class PaperPanel extends AbstractConferencesPanel
 		revs.add(new JLabel("Score"));
 		revs.add(new JLabel("")); // this col contains buttons to open reviews
 		
-		for(Review r : reviews)
+		for(Review r : my_paper.my_reviews)
 		{
 			//real name
-			//revs.add(new JLabel(cm.getUser(r.getReviewerID()).getName()));
-			revs.add(new JLabel("Some Name"));//TODO: replace with^
+			if(!is_test)
+			    revs.add(new JLabel(cm.getUser(r.getReviewerID()).getName()));
+			else
+			    revs.add(new JLabel("Some Name"));
 			//email address
 			revs.add(new JLabel(r.getReviewerID()));
 			//score
@@ -160,14 +201,18 @@ public class PaperPanel extends AbstractConferencesPanel
 		}
 		center_panel.add(revs, BorderLayout.CENTER);
 		
+		
+		
 		//info for south:
 		//subprogram chair (recommender), recommendation score, download 
 		//button for doc
 		JPanel south_panel = new JPanel(new GridLayout(0,1));
 		sb = new StringBuilder();
 		sb.append("Subprogram Chair: ");
-		//sb.append(cm.getUser(my_paper.getSubprogramChairID()).getName());
-		sb.append("Some Name");//TODO: replace with^
+		if(!is_test)
+		    sb.append(cm.getUser(my_paper.getSubprogramChairID()).getName());
+		else
+		    sb.append("Some Name");
 		sb.append(" [");
 		sb.append(my_paper.getSubprogramChairID());
 		sb.append("]");
@@ -186,7 +231,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		{
 			public void actionPerformed(ActionEvent the_event)
 			{
-				//TODO: make this open a review panel...
+				//TODO: make this open a recommendation panel...
 				System.out.println("TODO: add action for Open " +
 						"Recommendation button");
 			}

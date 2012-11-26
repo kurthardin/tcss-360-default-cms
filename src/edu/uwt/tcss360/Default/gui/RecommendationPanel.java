@@ -1,3 +1,9 @@
+/**
+ * RecommendationPanel.java
+ * Author: Travis Lewis
+ * Date: 25 Nov 2012
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
@@ -14,6 +20,13 @@ import javax.swing.JPanel;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Review;
 
+/**
+ * A JPanel that displays information and allows actions relevant to the
+ * current Review (recommendation) object.
+ * @author Travis Lewis
+ * @version 25 Nov 2012
+ */
+@SuppressWarnings("serial")
 public class RecommendationPanel extends AbstractConferencesPanel 
 {
 	/////////////

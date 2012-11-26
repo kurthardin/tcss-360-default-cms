@@ -231,7 +231,7 @@ public class Review
 	 */
 	public void setSummaryRating(int the_rating)
 	{
-		if (the_rating < 1 || the_rating > 5)
+		if (the_rating < 1 || the_rating > 5 || the_rating == 0)
 			throw new IllegalArgumentException();
 		my_summary_rating = the_rating;
 	}
