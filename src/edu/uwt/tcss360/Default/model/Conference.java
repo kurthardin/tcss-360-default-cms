@@ -132,6 +132,8 @@ public final class Conference {
 				e.printStackTrace();
 			}
 		}
+
+		// TODO Write unit tests for Conference(File)
 	}
 	
 	/**
@@ -197,6 +199,7 @@ public final class Conference {
 	
 	public void writeData() {
 		// TODO Implement Conference.writeData()
+		// TODO Write unit tests for Conference.writeData()
 	}
 	
 	/**

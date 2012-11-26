@@ -42,6 +42,7 @@ public class ConferencesManager
 	{	
 		initUsers();
 		initConfs();
+		// TODO Write unit tests for ConferencesManager()
 	}
 	
 	/**
@@ -139,6 +140,7 @@ public class ConferencesManager
 	{
 		writeUsers();
 		writeConferences();
+		// TODO Write unit tests for ConferencesManager.writeData()
 	}
 	
 	/**
@@ -147,8 +149,8 @@ public class ConferencesManager
 	 */
 	private void writeUsers() 
 	{
-		try {
-			
+		try 
+		{
 			// Build the XML document
 			DocumentBuilderFactory doc_factory = 
 					DocumentBuilderFactory.newInstance();
@@ -163,7 +165,7 @@ public class ConferencesManager
 				user_element.setAttribute("my_name", user.getName());
 				doc.appendChild(user_element);
 			}
-			
+
 			// write the content into xml file
 			File users_file = new File(FileHelper.getDataDirectory(), 
 					FileHelper.USERS_DATA_FILE_NAME);
@@ -173,20 +175,23 @@ public class ConferencesManager
 			users_file = FileHelper.createFile(FileHelper.getDataDirectory(), 
 					FileHelper.USERS_DATA_FILE_NAME);
 			StreamResult result = new StreamResult(users_file);
-			
+
 			TransformerFactory transformerFactory = 
 					TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 			transformer.transform(source, result);
-	 
+
 			System.out.println("Users file saved");
-	 
-		  } catch (ParserConfigurationException pce) {
+		} 
+		catch (ParserConfigurationException pce) 
+		{
 			pce.printStackTrace();
-		  } catch (TransformerException tfe) {
+		} 
+		catch (TransformerException tfe) 
+		{
 			tfe.printStackTrace();
-		  }
+		}
 	}
 	
 	/**

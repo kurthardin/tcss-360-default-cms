@@ -90,6 +90,8 @@ public class Review
 						String ratingStr = attr.getValue("my_summary_rating");
 						my_summary_rating = (ratingStr == null) ? 
 								NO_RATING : Integer.valueOf(ratingStr);
+						
+						// TODO Initialize my_review_doc
 					}
 				};
 
@@ -100,6 +102,8 @@ public class Review
 			{
 				e.printStackTrace();
 			}
+
+			// TODO Write unit tests for Review(File)
 			
 //			String str;
 //			try 
@@ -175,20 +179,23 @@ public class Review
 		String directory_name = "review_" + my_reviewer_id;
 		File directory = new File(the_paper_directory, directory_name);
 		
-		//TODO: uncomment the lines below when needed
-//		if (!directory.exists()) {
-//			directory = FileHelper.createDirectory(the_paper_directory, 
-//					directory_name);
-//		}
+		if (!directory.exists()) {
+			directory = FileHelper.createDirectory(the_paper_directory, 
+					directory_name);
+		}
 		my_directory = directory;
 		
-//		copyReviewDoc(my_directory, the_review_doc);
+		copyReviewDoc(my_directory, the_review_doc);
 	}
 	
 	
 	//////////////
 	// METHODS
 	//////////////
+	public void writeData() {
+		// TODO Implement Review.writeData()
+		// TODO Write unit tests for Review.writeData()
+	}
 	
 	public File getDirectory() 
 	{

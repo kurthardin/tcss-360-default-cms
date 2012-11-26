@@ -107,6 +107,8 @@ public class Paper
 					@Override
 					public void handleFieldsAttributes(Attributes attr) 
 					{
+						// TODO Initialize my_manuscript_doc
+						
 						String acceptStatusStr = attr.getValue(
 								"my_acceptance_status");
 						my_acceptance_status = (acceptStatusStr == null) ? 
@@ -156,6 +158,8 @@ public class Paper
 			{
 				e.printStackTrace();
 			}
+
+			// TODO Write unit tests for Paper(File)
 			
 // TODO Remove old code...
 //			String str;
@@ -250,6 +254,11 @@ public class Paper
 	/////////////
 	// METHODS
 	/////////////
+	
+	public void writeData() {
+		// TODO Implement Paper.writeData()
+		// TODO Write unit tests for Paper.writeData()
+	}
 	
 	public File getDirectory() 
 	{
