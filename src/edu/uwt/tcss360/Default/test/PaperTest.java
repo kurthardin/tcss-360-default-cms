@@ -38,7 +38,7 @@ public class PaperTest
 		File doc = new File("\\");
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
-		assertEquals("Review list not Empty", 0, p.getReviews().size());
+		assertEquals("Review list not Empty", 0, p.my_reviews.size());
 	}
 	
 	@Test
@@ -49,11 +49,11 @@ public class PaperTest
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
 		p.addReview(new Review(dir, "test2@test.com", doc, 3));
-		assertEquals("Review list size incorrect", 1, p.getReviews().size());
+		assertEquals("Review list size incorrect", 1, p.my_reviews.size());
 		p.addReview(new Review(dir, "test3@test.com", doc, 2));
-		assertEquals("Review list size incorrect", 2, p.getReviews().size());
+		assertEquals("Review list size incorrect", 2, p.my_reviews.size());
 		p.addReview(new Review(dir, "test4@test.com", doc, 5));
-		assertEquals("Review list size incorrect", 3, p.getReviews().size());
+		assertEquals("Review list size incorrect", 3, p.my_reviews.size());
 	}
 	
 	@Test

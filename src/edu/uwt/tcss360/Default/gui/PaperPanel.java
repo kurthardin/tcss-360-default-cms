@@ -22,6 +22,7 @@ import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.Review;
+import edu.uwt.tcss360.Default.model.User.Role;
 
 /**
  * @author Travis Lewis
@@ -76,7 +77,17 @@ public class PaperPanel extends AbstractConferencesPanel
 
 	private void setupPanel(final boolean is_test)
 	{
-	    //TODO: modify display contents based on current user
+	    //TODO: BR12: a reviewer can only see their own review
+	    //TODO: BR20: only subprogram chair (for the paper) and program 
+	    // chair can see all reviews
+	    //TODO: add reviewer button (SPC only)
+	    //TODO: BR18: author can only access reviews after PC makes a decision
+	    //TODO: BR8/BR10: an author cannot review their own paper
+	    //TODO: BR9: a user cannot be SPC on a paper they authored
+	    //TODO: US2: allow PC to make a yes/no acceptence decision on a paper
+	    //TODO: take out the 1-5 ratings
+	    //TODO: need to be able to assign multiple reviewers, but no maximum
+	    // amount of reviewers.
 	    
 		//new GridLayout(rows, cols);
 		setLayout(new BorderLayout());
@@ -84,7 +95,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		if(!is_test)
 		    cm = getCurrentState().getConferencesManager();
 		
-		//information for north: back button, author, title, download button
+		//information for north: author, title, download button
 		JPanel north_panel = new JPanel(new GridLayout(0,1));
 		
 		StringBuilder sb = new StringBuilder();
@@ -99,6 +110,9 @@ public class PaperPanel extends AbstractConferencesPanel
 		north_panel.add(new JLabel(sb.toString()));
 		
 		north_panel.add(new JLabel("Title: " + my_paper.getTitle()));
+		
+		//under what conditions can a user download a manuscript?
+		//
 		
 		JButton dl_button = new JButton("Download Manuscript");
 		dl_button.addActionListener(new ActionListener()
@@ -136,7 +150,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		JPanel center_panel = new JPanel(new BorderLayout());
 		JPanel meta_review = new JPanel(new GridLayout(0,1));
 		
-		//Set<Review> reviews = my_paper.getReviews();
 		int review_count = my_paper.my_reviews.size();//reviews.size();
 		int reviews_complete = 0;
 		for(Review r : my_paper.my_reviews)
@@ -205,7 +218,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		
 		//info for south:
 		//subprogram chair (recommender), recommendation score, download 
-		//button for doc
+		//button for doc, assign subprogram chair (if PC)
 		JPanel south_panel = new JPanel(new GridLayout(0,1));
 		sb = new StringBuilder();
 		sb.append("Subprogram Chair: ");
@@ -227,16 +240,50 @@ public class PaperPanel extends AbstractConferencesPanel
 		south_panel.add(new JLabel(sb.toString()));
 		
 		JButton rec_button = new JButton("Open Recommendation");
-		rec_button.addActionListener(new ActionListener()
+		JButton assign_spc_button = new JButton("Assign Subprogram Chair");
+		
+		//assign actions for buttons only if we aren't displaying a test
+		if(!is_test)
 		{
-			public void actionPerformed(ActionEvent the_event)
-			{
-				//TODO: make this open a recommendation panel...
-				System.out.println("TODO: add action for Open " +
-						"Recommendation button");
-			}
-		});
-		south_panel.add(rec_button);
+        	rec_button.addActionListener(new ActionListener()
+        	{
+        		public void actionPerformed(ActionEvent the_event)
+        		{
+        			//TODO: make this open a recommendation panel...
+        			System.out.println("TODO: add action for Open " +
+        					"Recommendation button");
+        		}
+        	});
+        	
+        	assign_spc_button.addActionListener(new ActionListener()
+            {
+                public void actionPerformed(ActionEvent the_event)
+                {
+                    //TODO: make this open a recommendation panel...
+                    System.out.println("TODO: add action for Open " +
+                            "Recommendation button");
+                }
+            });
+		}
+		JPanel southbuttons = new JPanel(new GridLayout(0,2));
+		if(!is_test)
+		{
+		    Role r = getCurrentState().getCurrentRole();
+		    //TODO: probably need to change what shows depending on the date
+		    
+		    //business rule 14
+		    if(r == Role.SUBPROGRAM_CHAIR || r == Role.PROGRAM_CHAIR)
+		        southbuttons.add(rec_button);
+		    
+		    if(r == Role.PROGRAM_CHAIR)
+		        southbuttons.add(assign_spc_button);
+		}
+		else
+		{
+		    southbuttons.add(rec_button);
+		    southbuttons.add(assign_spc_button);
+		}
+		south_panel.add(southbuttons);
 		
 		
 		add(north_panel, BorderLayout.NORTH);
@@ -272,7 +319,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		paper.addReview(r4);
 		
 		paper.assignSubprogramChair("spc@blah.com");
-		Review rec = new Review(papers_dir, "recid",doc);
+		Review rec = new Review(papers_dir, "recid@www.com",doc);
 		paper.setRecommendation(rec);
 		
 		frame.add(new PaperPanel(paper,null,null));
