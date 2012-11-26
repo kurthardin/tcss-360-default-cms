@@ -124,9 +124,9 @@ public class PaperTest
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
 		//there was no ACCEPT or DECLINE status in paper so I used 0 and 1
-		p.setAcceptanceStatus(0, Role.PROGRAM_CHAIR);
+		p.setAcceptanceStatus(0);
 		assertEquals("Incorrect Paper Status", 0, p.getAcceptanceStatus());
-		p.setAcceptanceStatus(1, Role.PROGRAM_CHAIR);
+		p.setAcceptanceStatus(1);
 		assertEquals("Incorrect Paper Status", 1, p.getAcceptanceStatus());
 	}
 	
@@ -138,7 +138,7 @@ public class PaperTest
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
 		
-		p.setTitle("testTitle", Role.AUTHOR);
+		p.setTitle("testTitle");
 		assertEquals("Title incorrectly set", "testTitle", p.getTitle());
 	}
 	
