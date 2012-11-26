@@ -8,6 +8,7 @@ package edu.uwt.tcss360.Default.model;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +46,9 @@ import edu.uwt.tcss360.Default.util.InfoHandler;
  * @version 1.0
  */
 public final class Conference {
+	
+	private static final DateFormat CONFERENCE_DATE_FORMAT = 
+			new SimpleDateFormat("MM/dd/yyyy");
 	
 	/**
 	 * The name of this conference.
@@ -220,28 +224,32 @@ public final class Conference {
 			Element fields_element = doc.createElement("fields");
 			fields_element.setAttribute("my_name", my_name);
 			fields_element.setAttribute("my_start_date", 
-					my_start_date.toString());
+					CONFERENCE_DATE_FORMAT.format(my_start_date));
 			fields_element.setAttribute("my_end_date", 
-					my_end_date.toString());
+					CONFERENCE_DATE_FORMAT.format(my_end_date));
 			if (my_submission_deadline != null) 
 			{
 				fields_element.setAttribute("my_submission_deadline", 
-						my_submission_deadline.toString());
+						CONFERENCE_DATE_FORMAT.format(
+								my_submission_deadline));
 			}
 			if (my_review_deadline != null) 
 			{
 				fields_element.setAttribute("my_review_deadline", 
-						my_review_deadline.toString());
+						CONFERENCE_DATE_FORMAT.format(
+								my_review_deadline));
 			}
 			if (my_recommendation_deadline != null) 
 			{
 				fields_element.setAttribute("my_recommendation_deadline", 
-						my_recommendation_deadline.toString());
+						CONFERENCE_DATE_FORMAT.format(
+								my_recommendation_deadline));
 			}
 			if (my_final_revision_deadline != null) 
 			{
 				fields_element.setAttribute("my_final_revision_deadline", 
-						my_final_revision_deadline.toString());
+						CONFERENCE_DATE_FORMAT.format(
+								my_final_revision_deadline));
 			}
 			
 			Element users_roles_elem = doc.createElement("my_users_roles");
@@ -659,23 +667,21 @@ public final class Conference {
 			my_name = attr.getValue("my_name");
 			try 
 			{
-				my_start_date = DateFormat.getInstance().parse(
+				my_start_date = CONFERENCE_DATE_FORMAT.parse(
 						attr.getValue("my_start_date"));
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			try 
 			{
-				my_end_date = DateFormat.getInstance().parse(
+				my_end_date = CONFERENCE_DATE_FORMAT.parse(
 						attr.getValue("my_end_date"));
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -685,12 +691,11 @@ public final class Conference {
 				if (date_string != null) 
 				{
 					my_submission_deadline = 
-							DateFormat.getInstance().parse(date_string);
+							CONFERENCE_DATE_FORMAT.parse(date_string);
 				}
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -699,13 +704,12 @@ public final class Conference {
 				date_string = attr.getValue("my_review_deadline");
 				if (date_string != null) 
 				{
-					my_review_deadline = DateFormat.getInstance().parse(
+					my_review_deadline = CONFERENCE_DATE_FORMAT.parse(
 							date_string);
 				}
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -714,12 +718,11 @@ public final class Conference {
 				if (date_string != null) 
 				{
 					my_recommendation_deadline = 
-							DateFormat.getInstance().parse(date_string);
+							CONFERENCE_DATE_FORMAT.parse(date_string);
 				}
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -729,12 +732,11 @@ public final class Conference {
 				if (date_string != null) 
 				{
 					my_final_revision_deadline = 
-							DateFormat.getInstance().parse(date_string);
+							CONFERENCE_DATE_FORMAT.parse(date_string);
 				}
 			} 
 			catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
