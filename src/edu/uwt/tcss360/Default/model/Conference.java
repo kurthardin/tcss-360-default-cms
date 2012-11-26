@@ -16,9 +16,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -199,7 +209,82 @@ public final class Conference {
 	}
 	
 	public void writeData() {
-		// TODO Implement Conference.writeData()
+		try 
+		{
+			// Build the XML document
+			DocumentBuilderFactory doc_factory = 
+					DocumentBuilderFactory.newInstance();
+			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
+			Document doc = doc_builder.newDocument();
+			
+			Element fields_element = doc.createElement("fields");
+			fields_element.setAttribute("my_name", my_name);
+			fields_element.setAttribute("my_start_date", 
+					my_start_date.toString());
+			fields_element.setAttribute("my_end_date", 
+					my_end_date.toString());
+			if (my_submission_deadline != null) 
+			{
+				fields_element.setAttribute("my_submission_deadline", 
+						my_submission_deadline.toString());
+			}
+			if (my_review_deadline != null) 
+			{
+				fields_element.setAttribute("my_review_deadline", 
+						my_review_deadline.toString());
+			}
+			if (my_recommendation_deadline != null) 
+			{
+				fields_element.setAttribute("my_recommendation_deadline", 
+						my_recommendation_deadline.toString());
+			}
+			if (my_final_revision_deadline != null) 
+			{
+				fields_element.setAttribute("my_final_revision_deadline", 
+						my_final_revision_deadline.toString());
+			}
+			
+			Element users_roles_elem = doc.createElement("my_users_roles");
+			for (String user_id : my_users_roles.keySet()) {
+				Element user_elem = doc.createElement("user");
+				user_elem.setAttribute("id", user_id);
+				for (Role role : my_users_roles.get(user_id)) {
+					Element role_elem = doc.createElement("role");
+					role_elem.setAttribute("name", role.name());
+					user_elem.appendChild(role_elem);
+				}
+				users_roles_elem.appendChild(user_elem);
+			}
+			fields_element.appendChild(users_roles_elem);
+			
+			doc.appendChild(fields_element);
+
+			// write the content into xml file
+			File data_file = new File(my_directory, 
+					FileHelper.DATA_FILE_NAME);
+			if (data_file.exists()) {
+				data_file.delete();
+			}
+			data_file = FileHelper.createFile(my_directory, 
+					FileHelper.DATA_FILE_NAME);
+			StreamResult result = new StreamResult(data_file);
+
+			TransformerFactory transformerFactory = 
+					TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			transformer.transform(source, result);
+
+			System.out.println("Conference data file saved");
+		} 
+		catch (ParserConfigurationException pce) 
+		{
+			pce.printStackTrace();
+		} 
+		catch (TransformerException tfe) 
+		{
+			tfe.printStackTrace();
+		}
 		// TODO Write unit tests for Conference.writeData()
 	}
 	
