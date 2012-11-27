@@ -89,7 +89,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		my_panels_stack = new Stack<AbstractConferencesPanel>();
 		my_current_state = new CurrentState(new ConferencesManager());
 		//test code remove start
-		my_current_state.getConferencesManager().addUser(new User("test@test.com", "Test Name"));
+		//my_current_state.getConferencesManager().addUser(new User("test@test.com", "Test Name"));
 		//test code remove end
 		my_panel = new JPanel(new BorderLayout());
 		my_top_panel = new TopPanel(my_current_state, this);
