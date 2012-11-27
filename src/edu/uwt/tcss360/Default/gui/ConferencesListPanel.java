@@ -99,8 +99,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 //			center_panel.add(button);
 //		}
 		//END FOR TESTING PURPOSES
-		
-		JScrollPane scroll_pane = new JScrollPane(center_panel);
+		JPanel center_outer_panel = new JPanel(new BorderLayout());
+		center_outer_panel.add(center_panel, BorderLayout.NORTH);
+		JScrollPane scroll_pane = new JScrollPane(center_outer_panel);
 		add(upper_box, BorderLayout.NORTH);
 		add(scroll_pane, BorderLayout.CENTER);
 	}
