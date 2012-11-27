@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
-import edu.uwt.tcss360.Default.model.User;
 
 /**
  * The main frame to be used. It will hold all of the panels it needs

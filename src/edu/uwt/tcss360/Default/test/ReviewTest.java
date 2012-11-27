@@ -46,7 +46,7 @@ public class ReviewTest
 	{
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Review r = new Review(null, s, doc, 5);
+		new Review(null, s, doc, 5);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -54,7 +54,7 @@ public class ReviewTest
 	{
 		File dir = new File("\\");
 		String s = "test@test.com";
-		Review r = new Review(dir, s, null, 5);
+		new Review(dir, s, null, 5);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -62,7 +62,7 @@ public class ReviewTest
 	{
 		File dir = new File("\\");
 		File doc = new File("\\");
-		Review r = new Review(dir, null, doc, 5);
+		new Review(dir, null, doc, 5);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -71,7 +71,7 @@ public class ReviewTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Review r = new Review(dir, s, doc, 6);
+		new Review(dir, s, doc, 6);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -80,7 +80,7 @@ public class ReviewTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		Review r = new Review(dir, s, doc, 0);
+		new Review(dir, s, doc, 0);
 	}
 
 }
