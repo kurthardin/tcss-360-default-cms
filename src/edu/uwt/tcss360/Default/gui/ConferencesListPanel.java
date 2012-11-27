@@ -75,9 +75,7 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
 		JPanel center_panel = new JPanel(new GridLayout(0, 1));
 		
-		//TODO: add buttons that link to conferences.
-		
-		//ACTUAL CODE
+
 		Set<Conference> conferences = 
 				getCurrentState().getConferencesManager().getAllConferences();
 		for (Conference c : conferences)
@@ -88,25 +86,18 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			button.addActionListener(new ConferenceSelectAction(c));
 			center_panel.add(button);
 		}
-		//END ACTUAL CODE
 		
-		//FOR TESTING PURPOSES
-//		for (int i = 0; i < 20; i++)
-//		{
-//			JButton button = new JButton("Conference number:" + i);
-//			button.addActionListener(new ConferenceSelectAction(button.getText()));
-//			center_panel.add(button);
-//		}
-		//END FOR TESTING PURPOSES
-		
-		JScrollPane scroll_pane = new JScrollPane(center_panel);
+		JPanel center_outer_panel = new JPanel(new BorderLayout());
+		//fixes the vertical stretching problem with the conference buttons
+		//since panels in BorderLayout.NORTH only stretch horizontally.
+		center_outer_panel.add(center_panel, BorderLayout.NORTH);
+		JScrollPane scroll_pane = new JScrollPane(center_outer_panel);
 		add(upper_box, BorderLayout.NORTH);
 		add(scroll_pane, BorderLayout.CENTER);
 	}
 	
 	private class ConferenceSelectAction extends AbstractAction
 	{
-		//ACTUAL CODE
 		private final Conference my_conference;
 		
 		public ConferenceSelectAction(final Conference the_conference)
@@ -114,27 +105,16 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			super();
 			my_conference = the_conference;
 		}
-		//END ACTUAL CODE
-		
-		//FOR TESTING PURPOSES
-//		private final String my_conference;
-//		
-//		public ConferenceSelectAction(final String the_conference)
-//		{
-//			super();
-//			my_conference = the_conference;
-//		}
-		//FOR TESTING PURPOSES END
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
 			System.out.println(my_conference);
-			//ACTUAL CODE
 			Set<Role> roles = my_conference.getRoles(
 					getCurrentState().getCurrentUser().getID());
-			Role[] roles_array = new Role[roles.size()];
-			int i = 0;
+			Role[] roles_array = new Role[roles.size() + 1];
+			roles_array[0] = Role.USER;
+			int i = 1;
 			for(Role role : roles)
 			{
 				roles_array[i] = role;
@@ -151,7 +131,6 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 //				getPanelManager().pushPanel(new ConferencePanel(
 //						getCurrentState(), getPanelManager()));
 			}
-			//END ACTUAL CODE
 		}
 		
 	}

@@ -55,7 +55,6 @@ public class TopPanel extends AbstractConferencesPanel
 				ConferencesFrame.TOP_HEIGHT));
 		Box box = Box.createHorizontalBox();
 		my_back_button.setAlignmentX(LEFT_ALIGNMENT);
-//		JLabel label = new JLabel(getCurrentState().getCurrentUser().getEmail());
 		my_label.setAlignmentX(RIGHT_ALIGNMENT);
 		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
 				ConferencesFrame.TOP_HEIGHT));
