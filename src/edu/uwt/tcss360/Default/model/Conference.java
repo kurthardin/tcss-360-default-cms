@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -559,9 +560,11 @@ public final class Conference {
 	 * @return a set of roles associated with the user id.
 	 * @author Scott Sanderson
 	 */
+	@SuppressWarnings("unchecked")
 	public Set<Role> getRoles(final String the_user_id)
 	{
-		return my_users_roles.get(the_user_id);
+		Set<Role> roles = my_users_roles.get(the_user_id);
+		return roles == null ? Collections.EMPTY_SET : roles;
 	}
 	
 	/**
