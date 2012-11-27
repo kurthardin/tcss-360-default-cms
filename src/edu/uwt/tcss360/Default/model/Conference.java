@@ -48,7 +48,7 @@ import edu.uwt.tcss360.Default.util.InfoHandler;
 public final class Conference {
 	
 	private static final DateFormat CONFERENCE_DATE_FORMAT = 
-			new SimpleDateFormat("MM/dd/yyyy");
+			new SimpleDateFormat("MM-dd-yyyy");
 	
 	/**
 	 * The name of this conference.
@@ -651,8 +651,8 @@ public final class Conference {
 	public String getID()
 	{
 		StringBuilder sb = new StringBuilder(my_name);
-		sb.append(my_start_date);
-		sb.append(my_end_date);
+		sb.append(CONFERENCE_DATE_FORMAT.format(my_start_date));
+		sb.append(CONFERENCE_DATE_FORMAT.format(my_end_date));
 		return sb.toString();
 	}
 	
