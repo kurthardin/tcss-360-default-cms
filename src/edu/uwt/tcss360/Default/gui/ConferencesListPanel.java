@@ -134,8 +134,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			//ACTUAL CODE
 			Set<Role> roles = my_conference.getRoles(
 					getCurrentState().getCurrentUser().getID());
-			Role[] roles_array = new Role[roles.size()];
-			int i = 0;
+			Role[] roles_array = new Role[roles.size() + 1];
+			roles_array[0] = Role.USER;
+			int i = 1;
 			for(Role role : roles)
 			{
 				roles_array[i] = role;
