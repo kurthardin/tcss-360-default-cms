@@ -2,25 +2,25 @@ package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.io.File;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
+import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 /**
- * 
+ * Panel to be shown when a conference has been selected.
  * @author Brett Cate
  *
  */
@@ -28,8 +28,20 @@ import edu.uwt.tcss360.Default.model.User.Role;
 public class ConferencePanel extends AbstractConferencesPanel 
 {
 
+	/**
+	 * The Conference whose information is displayed by this panel.
+	 */
 	public final Conference my_conference;
 	
+	/**
+	 * Creates a ConferencePanel object with the given CurrentState, the given
+	 * PanelManager, and the Conference.
+	 * 
+	 * @param the_current_state The CurrentState to be used.
+	 * @param the_manager The PanelManager to be used.
+	 * @param the_conference The Conference whose information is displayed by
+	 * this panel.
+	 */
 	public ConferencePanel(final CurrentState the_current_state, final PanelManager the_manager,
 			final Conference the_conference) 
 	{
@@ -38,6 +50,10 @@ public class ConferencePanel extends AbstractConferencesPanel
 		setupPanel();
 	}
 	
+	/**
+	 * Sets up the Panel for display, adding the information for the conference
+	 * as well as the list of papers.
+	 */
 	private void setupPanel()
 	{
 		setLayout(new BorderLayout());
@@ -49,66 +65,89 @@ public class ConferencePanel extends AbstractConferencesPanel
 		top_panel.add(conference_information);
 		add(top_panel, BorderLayout.NORTH);
 		
-		JPanel role_buttons_panel = new JPanel();
-		role_buttons_panel.setLayout(new FlowLayout());
+		JPanel papers_panel = new JPanel();
+		addPapersButtons(papers_panel);
+		add(papers_panel, BorderLayout.CENTER);
 		
-		JButton program_chair_button = new JButton("Program Chair");
-		JButton subprogram_chair_button = new JButton("Subprogram Chair");
-		JButton reviewer_button = new JButton("Reviewer");
-		JButton author_button = new JButton("Author");
-		
-		addProgramChairListener(program_chair_button);
-		addSubprogramChairListener(subprogram_chair_button);
-		addReviewerListener(reviewer_button);
-		addAuthorListener(author_button);
-		
-		Set<Role> current_user_roles =
-				my_conference.getRoles(super.getCurrentState().
-						getCurrentUser().getID());
-		role_buttons_panel.add(new JLabel("Please select a role: "));
-		role_buttons_panel.add(program_chair_button);
-		if (!current_user_roles.contains(Role.PROGRAM_CHAIR)) 
-		{
-			program_chair_button.setEnabled(false);
-		}
-		role_buttons_panel.add(subprogram_chair_button);
-		if (!current_user_roles.contains(Role.SUBPROGRAM_CHAIR)) 
-		{
-			subprogram_chair_button.setEnabled(false);
-		}
-		role_buttons_panel.add(reviewer_button);
-		if (!current_user_roles.contains(Role.REVIEWER)) 
-		{
-			reviewer_button.setEnabled(false);
-		}
-		role_buttons_panel.add(author_button);
-		if (!current_user_roles.contains(Role.AUTHOR)) 
-		{
-			author_button.setEnabled(false);
-		}
-		add(role_buttons_panel, BorderLayout.WEST);
+//		JPanel role_buttons_panel = new JPanel();
+//		role_buttons_panel.setLayout(new FlowLayout());
+//		
+//		JButton program_chair_button = new JButton("Program Chair");
+//		JButton subprogram_chair_button = new JButton("Subprogram Chair");
+//		JButton reviewer_button = new JButton("Reviewer");
+//		JButton author_button = new JButton("Author");
+//		
+//		addProgramChairListener(program_chair_button);
+//		addSubprogramChairListener(subprogram_chair_button);
+//		addReviewerListener(reviewer_button);
+//		addAuthorListener(author_button);
+//		
+//		Set<Role> current_user_roles =
+//				my_conference.getRoles(super.getCurrentState().
+//						getCurrentUser().getID());
+//		role_buttons_panel.add(new JLabel("Please select a role: "));
+//		role_buttons_panel.add(program_chair_button);
+//		if (!current_user_roles.contains(Role.PROGRAM_CHAIR)) 
+//		{
+//			program_chair_button.setEnabled(false);
+//		}
+//		role_buttons_panel.add(subprogram_chair_button);
+//		if (!current_user_roles.contains(Role.SUBPROGRAM_CHAIR)) 
+//		{
+//			subprogram_chair_button.setEnabled(false);
+//		}
+//		role_buttons_panel.add(reviewer_button);
+//		if (!current_user_roles.contains(Role.REVIEWER)) 
+//		{
+//			reviewer_button.setEnabled(false);
+//		}
+//		role_buttons_panel.add(author_button);
+//		if (!current_user_roles.contains(Role.AUTHOR)) 
+//		{
+//			author_button.setEnabled(false);
+//		}
+//		add(role_buttons_panel, BorderLayout.WEST);
 	}
 	
-	private void addProgramChairListener(final JButton the_button) 
+	/**
+	 * Adds the buttons for the papers to the given panel.
+	 * @param the_panel The panel the buttons are added to.
+	 */
+	private void addPapersButtons(final JPanel the_panel)
 	{
-		
+		List<Paper> papers = my_conference.
+				getPapers(super.getCurrentState().getCurrentUser().getID(),
+				super.getCurrentState().getCurrentRole());
+		for (Paper a_paper : papers)
+		{
+			the_panel.add(new JButton(a_paper.getTitle()));
+		}
 	}
 	
-	private void addSubprogramChairListener(final JButton the_button)
-	{
-		
-	}
+//	private void addProgramChairListener(final JButton the_button) 
+//	{
+//		
+//	}
+//	
+//	private void addSubprogramChairListener(final JButton the_button)
+//	{
+//		
+//	}
+//	
+//	private void addReviewerListener(final JButton the_button)
+//	{
+//		
+//	}
+//	
+//	private void addAuthorListener(final JButton the_button)
+//	{
+//		
+//	}
 	
-	private void addReviewerListener(final JButton the_button)
-	{
-		
-	}
-	
-	private void addAuthorListener(final JButton the_button)
-	{
-		
-	}
-	
+	/**
+	 * Returns a string containing all of the conference information.
+	 * @return
+	 */
 	private String getConferenceInfo() 
 	{
 		StringBuilder sb = new StringBuilder();
@@ -143,29 +182,30 @@ public class ConferencePanel extends AbstractConferencesPanel
 
 	}
 	
-	public static void main(final String[] the_arguments)
-	{
-		JFrame frame = new JFrame("Conference");
-		Conference c = new Conference("brettcate",
-				"Pacific Northwest Enterprise Risk Forum",
-				new Date());
-		c.setFinalRevisionDeadline(new Date());
-		c.setRecommendationDeadline(new Date());
-		c.setReviewDeadline(new Date());
-		c.setSubmissionDeadline(new Date());
-		c.authorizeUser("brettcate", Role.REVIEWER);
-		frame.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
-											 ConferencesFrame.HEIGHT));
-		ConferencesManager cmgr = new ConferencesManager();
-		cmgr.addUser(new User("brettcate"));
-		CurrentState cs = new CurrentState(cmgr);
-		cs.setCurrentUser("brettcate");
-		frame.add(new ConferencePanel(cs, null, c));
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	}
+//	public static void main(final String[] the_arguments)
+//	{
+//		JFrame frame = new JFrame("Conference");
+//		Conference c = new Conference("brettcate",
+//				"Pacific Northwest Enterprise Risk Forum",
+//				new Date());
+//		c.setFinalRevisionDeadline(new Date());
+//		c.setRecommendationDeadline(new Date());
+//		c.setReviewDeadline(new Date());
+//		c.setSubmissionDeadline(new Date());
+//		c.authorizeUser("brettcate", Role.REVIEWER);	
+//		frame.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
+//											 ConferencesFrame.HEIGHT));
+//		ConferencesManager cmgr = new ConferencesManager();
+//		cmgr.addUser(new User("brettcate"));
+//		CurrentState cs = new CurrentState(cmgr);
+//		cs.setCurrentUser("brettcate");
+//		cs.setCurrentRole(Role.PROGRAM_CHAIR);
+//		frame.add(new ConferencePanel(cs, null, c));
+//		frame.pack();
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setResizable(false);
+//		frame.setLocationRelativeTo(null);
+//		frame.setVisible(true);
+//	}
 
 }
