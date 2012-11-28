@@ -17,7 +17,11 @@ public class User
 	public enum Role
 	{
 		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER;
-		
+
+		/**
+		 * 
+		 * @author Kurt Hardin
+		 */
 		@Override
 		public String toString() {
 			StringBuilder result = new StringBuilder();
