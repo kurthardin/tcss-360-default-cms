@@ -16,7 +16,24 @@ public class User
 	
 	public enum Role
 	{
-		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER
+		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER;
+		
+		@Override
+		public String toString() {
+			StringBuilder result = new StringBuilder();
+			String [] words = name().split("\\_");
+			for (int i = 0; i < words.length; i++) 
+			{
+				if (i > 0) 
+				{
+					result.append(" ");
+				}
+				String word = words[i].toLowerCase();
+				result.append(Character.toUpperCase(word.charAt(0)))
+		        .append(word.substring(1));
+			}
+			return result.toString();
+		}
 	}
 	
 	/////////////
