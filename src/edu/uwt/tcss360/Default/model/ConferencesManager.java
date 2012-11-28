@@ -20,6 +20,10 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
 
+/**
+ * 
+ * @author Brett Cate
+ */
 public class ConferencesManager 
 {
 

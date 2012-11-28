@@ -38,7 +38,9 @@ import org.xml.sax.InputSource;
  * 
  * Go ahead and modify this class and add yourself as an author if you've
  * created a method that you've needed.
+ * 
  * @author Travis Lewis
+ * @editor Kurt Hardin
  * @version 8 November 2012
  */
 public class FileHelper {

@@ -21,6 +21,12 @@ import org.xml.sax.InputSource;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.InfoHandler;
 
+/**
+ * 
+ * @author Travis Lewis
+ * @editor Kurt Hardin
+ * @version 1.0
+ */
 public class Review 
 {	
 	//////////////

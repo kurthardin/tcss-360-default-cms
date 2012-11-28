@@ -29,7 +29,9 @@ import edu.uwt.tcss360.Default.util.InfoHandler;
 
 /**
  * Holds information about a manuscript along with reviews of it, etc.
+ * 
  * @author Travis Lewis
+ * @editor Kurt Hardin
  * @version 8 Nov 2012
  */
 public class Paper 

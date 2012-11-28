@@ -1,7 +1,18 @@
+/**
+ * User.java
+ * Author: Travis Lewis
+ * Date: 8 November 2012
+ */
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
+/**
+ * 
+ * @author Travis Lewis
+ * @editor Kurt Hardin
+ * @version 1.0
+ */
 public class User 
 {
 

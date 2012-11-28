@@ -4,6 +4,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * 
+ * @author Kurt Hardin
+ * @version 1.0
+ */
 public abstract class InfoHandler extends DefaultHandler {
 	
 	private boolean fieldsElem = false;

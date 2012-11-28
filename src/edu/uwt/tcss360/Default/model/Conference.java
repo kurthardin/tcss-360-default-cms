@@ -37,6 +37,7 @@ import edu.uwt.tcss360.Default.util.InfoHandler;
  * Class representing a single conference in the 
  * conference management system.  This class Maintains 
  * all data relevant to a given conference. 
+ * 
  * @author Kurt Hardin
  * @version 1.0
  */
@@ -118,7 +119,6 @@ public final class Conference {
 	/**
 	 * Creates a new Conference initialized with 
 	 * data from the specified File.
-	 * @author Kurt Hardin
 	 * @param a_data_file the data file to initialize this Conference from.
 	 */
 	public Conference(final File the_conference_dir) 
@@ -239,7 +239,6 @@ public final class Conference {
 	
 	/**
 	 * 
-	 * @author Kurt Hardin
 	 */
 	public void writeData() {
 		try 
