@@ -35,6 +35,7 @@ public class ConferencesManager
 	
 	/**
 	 * Constructs a ConferencesManager object.
+	 * @author Kurt Hardin
 	 */
 	public ConferencesManager() 
 	{	
