@@ -9,12 +9,15 @@ package edu.uwt.tcss360.Default.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
@@ -103,11 +106,28 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		add(my_panel);
 		
 		pack();
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setupClosingOperation();
 	    setResizable(false);
 	    //places the frame in the center of the screen.
 	    setLocationRelativeTo(null);
 	    setVisible(true);
+	}
+	
+	/**
+	 * sets up the closing operation for the frame.
+	 */
+	private void setupClosingOperation()
+	{
+		addWindowListener(new WindowAdapter()
+		{
+		    public void windowClosing(WindowEvent e)
+		    {
+		        //TODO: write everything out to files.
+		    	System.out.println("program closed");
+		    }
+		});
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	
 	/*

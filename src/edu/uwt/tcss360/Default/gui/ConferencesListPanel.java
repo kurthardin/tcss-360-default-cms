@@ -12,6 +12,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -150,9 +151,11 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 	
 	private class NewConferenceAction extends AbstractAction
 	{		
+		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			//creating dialog panel
 			JPanel creation_panel = new JPanel(new GridLayout(0,1));
 			JPanel name_panel = new JPanel(new FlowLayout());
 			name_panel.add(new JLabel("Conference Name:"));
@@ -189,44 +192,65 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 				
 				creation_panel.add(date_panels[i]);
 			}
+			
+			//show dialog window.
 			int result = JOptionPane.showConfirmDialog(null, creation_panel, 
 		               "Create Conference", JOptionPane.OK_CANCEL_OPTION);
+			//if OK is pressed:
 			if (result == JOptionPane.OK_OPTION)
 			{
-				//TODO: create conference given date information, not just the title.
-				String conference_name = name_field.getText();
-				if (conference_name.trim().length() < 1)
+				try
 				{
-					JOptionPane.showMessageDialog(new JFrame(), "Conference Name Invalid", "Error",
-					        JOptionPane.ERROR_MESSAGE);
-				}
-				else
-				{
-					User current = getCurrentState().getCurrentUser();
-					Conference new_conf = new Conference(current.getID(), conference_name, new Date());
-					getCurrentState().getConferencesManager().addConference(new_conf);
+					if (name_field.getText().trim().length() < 1)
+						throw new IllegalArgumentException("Conference Name Empty");
+					String name = name_field.getText().trim();
+					Date start_date = new Date(Integer.parseInt(date_fields[0][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[0][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[0][1].getText().trim()));
+					Date end_date = new Date(Integer.parseInt(date_fields[1][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[1][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[1][1].getText().trim()));
+					Conference conf = new Conference(getCurrentState().getCurrentUser().getID(), 
+							name, start_date, end_date);
+					
+					Date sub_deadline = new Date(Integer.parseInt(date_fields[2][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[2][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[2][1].getText().trim()));
+					conf.setSubmissionDeadline(sub_deadline);
+					
+					Date rev_deadline = new Date(Integer.parseInt(date_fields[3][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[3][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[3][1].getText().trim()));
+					conf.setReviewDeadline(rev_deadline);
+					
+					Date rec_deadline = new Date(Integer.parseInt(date_fields[4][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[4][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[4][1].getText().trim()));
+					conf.setRecommendationDeadline(rec_deadline);
+					
+					Date final_deadline = new Date(Integer.parseInt(date_fields[5][2].getText().trim())-1900, 
+							Integer.parseInt(date_fields[5][0].getText().trim()) - 1, 
+							Integer.parseInt(date_fields[5][1].getText().trim()));
+					conf.setFinalRevisionDeadline(final_deadline);
+					
+					
+					
+					getCurrentState().getConferencesManager().addConference(conf);
 					updatePanel();
 				}
+				catch(NumberFormatException error)
+				{
+					String message = "You can only input numbers in the date fields";
+					JOptionPane.showMessageDialog(null, message, "Error",
+					        JOptionPane.ERROR_MESSAGE);
+				}
+				catch(IllegalArgumentException error)
+				{
+					String message = error.getMessage();
+					JOptionPane.showMessageDialog(null, message, "Error",
+					        JOptionPane.ERROR_MESSAGE);
+				}
 			}
-			
-			
-			
-			
-//			String conference_name = JOptionPane.showInputDialog("Enter Conference Name");
-//			if (conference_name.trim().length() < 1)
-//			{
-//				JOptionPane.showMessageDialog(new JFrame(), "Conference Name Invalid", "Error",
-//				        JOptionPane.ERROR_MESSAGE);
-//			}
-//			else
-//			{
-//				if (getCurrentState() == null)
-//					System.out.println("asafsdsd");
-//				User current = getCurrentState().getCurrentUser();
-//				Conference new_conf = new Conference(current.getID(), conference_name, new Date());
-//				getCurrentState().getConferencesManager().addConference(new_conf);
-//				updatePanel();
-//			}
 		}
 	}
 	
