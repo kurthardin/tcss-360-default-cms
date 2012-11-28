@@ -312,7 +312,8 @@ public final class Conference {
 	 */
 	public Date getStartDate() 
 	{
-		return (Date) my_start_date.clone();
+		return my_start_date == null ? null : 
+			(Date) my_start_date.clone();
 	}
 	
 	/**
@@ -321,7 +322,8 @@ public final class Conference {
 	 */
 	public Date getEndDate() 
 	{
-		return (Date) my_end_date.clone();
+		return my_end_date == null ? null : 
+			(Date) my_end_date.clone();
 	}
 	
 	/**
@@ -330,7 +332,8 @@ public final class Conference {
 	 */
 	public Date getSubmissionDeadline() 
 	{
-		return (Date) my_submission_deadline.clone();
+		return my_submission_deadline == null ? null : 
+			(Date) my_submission_deadline.clone();
 	}
 	
 	/**
@@ -353,7 +356,8 @@ public final class Conference {
 	 */
 	public Date getReviewDeadline() 
 	{
-		return (Date) my_review_deadline.clone();
+		return my_review_deadline == null ? null : 
+			(Date) my_review_deadline.clone();
 	}
 	
 	/**
@@ -376,7 +380,8 @@ public final class Conference {
 	 */
 	public Date getRecommendationDeadline() 
 	{
-		return (Date) my_recommendation_deadline.clone();
+		return my_recommendation_deadline == null ? null : 
+			(Date) my_recommendation_deadline.clone();
 	}
 	
 	/**
@@ -399,7 +404,8 @@ public final class Conference {
 	 */
 	public Date getFinalRevisionDeadline() 
 	{
-		return (Date) my_final_revision_deadline.clone();
+		return my_final_revision_deadline == null ? null : 
+			(Date) my_final_revision_deadline.clone();
 	}
 	
 	/**
