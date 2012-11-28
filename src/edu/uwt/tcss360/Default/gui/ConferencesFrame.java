@@ -123,7 +123,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		{
 		    public void windowClosing(WindowEvent e)
 		    {
-		        //TODO: write everything out to files.
+		        my_current_state.getConferencesManager().writeData();
 		    	System.out.println("program closed");
 		    }
 		});

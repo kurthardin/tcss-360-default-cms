@@ -136,7 +136,7 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			}
 			Role role = (Role) JOptionPane.showInputDialog(null, "Select a role.", 
 					"Role", JOptionPane.PLAIN_MESSAGE, null, roles_array, 
-					Role.PROGRAM_CHAIR);
+					roles_array[0]);
 			if (role != null)
 			{
 				getCurrentState().setCurrentRole(role);
