@@ -2,10 +2,11 @@
 
 <!-- This will contain users' data -->
 
-<user my_id='user@sample.com' 
-	  my_email='user@sample.com' 
-	  my_name='Sample User'/>
-	  
-<user my_id='another_user@sample.com' 
-	  my_email='another_user@sample.com' 
-	  my_name='Another User'/>
+<users>
+	<user my_id='user@sample.com' 
+	  	  my_email='user@sample.com' 
+	      my_name='Sample User'/>
+	<user my_id='another_user@sample.com' 
+		  my_email='another_user@sample.com' 
+	      my_name='Another User'/>
+</users>
