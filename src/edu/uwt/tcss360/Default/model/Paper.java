@@ -13,9 +13,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.TransformerException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
@@ -33,6 +37,19 @@ public class Paper
 	/////////////
 	// CONSTANTS
 	/////////////
+	
+	// XML attribute names
+	public static final String XML_ATTR_MY_MANUSCRIPT_DOC = 
+			"my_manuscript_doc";
+	public static final String XML_ATTR_MY_ACCEPTANCE_STATUS = 
+			"my_acceptance_status";
+	public static final String XML_ATTR_MY_AUTHOR_ID = 
+			"my_author_id";
+	public static final String XML_ATTR_MY_SUBPROGRAM_CHAIR_ID = 
+			"my_subprogram_chair_id";
+	public static final String XML_ATTR_MY_MANUSCRIPT_TITLE = 
+			"my_manuscript_title";
+	
     /** The value of my_acceptance_status until one is set. */
 	public static final int NO_ACCEPTANCE_STATUS = -1;
 	
@@ -52,7 +69,6 @@ public class Paper
 	/** The location on disk of the directory belonging to the paper. */
 	private final File my_directory;
 	
-	// TODO Remove my_manuscript_doc or include in XML data file.
 	/** The actual document (docx, pdf, etc), of the manuscript. */
 	private File my_manuscript_doc;
 	
@@ -80,6 +96,7 @@ public class Paper
 	/**
 	 * Constructs a Paper object from a previously created and saved Paper
 	 * object's data file.
+	 * @author Kurt Hardin
 	 * @param the_paper_directory The directory containing the data file for 
 	 * the paper and the review/recommendation folders.
 	 */
@@ -107,91 +124,60 @@ public class Paper
 					@Override
 					public void handleFieldsAttributes(Attributes attr) 
 					{
-						// TODO Initialize my_manuscript_doc
-						
 						String acceptStatusStr = attr.getValue(
-								"my_acceptance_status");
+								XML_ATTR_MY_ACCEPTANCE_STATUS);
 						my_acceptance_status = (acceptStatusStr == null) ? 
 								NO_ACCEPTANCE_STATUS : 
 								Integer.valueOf(acceptStatusStr);
 						
-						my_author_id = attr.getValue("my_author_id");
+						my_author_id = attr.getValue(XML_ATTR_MY_AUTHOR_ID);
 						my_subprogram_chair_id = attr.getValue(
-								"my_subprogram_chair_id");
+								XML_ATTR_MY_SUBPROGRAM_CHAIR_ID);
 						my_manuscript_title = attr.getValue(
-								"my_manuscript_title");
+								XML_ATTR_MY_MANUSCRIPT_TITLE);
+						
+						String doc_name = attr.getValue(
+								XML_ATTR_MY_MANUSCRIPT_DOC);
+						my_manuscript_doc = new File(my_directory, doc_name);
 					}
 				};
 
 				saxParser.parse(info, handler);
-				
-				File recommendation_dir = new File(my_directory, 
-						"recommendation");
-				my_recommendation = new Review(recommendation_dir);
-				
-				String[] review_dir_names = my_directory.list(
-						new FilenameFilter() 
-						{
-							@Override
-							public boolean accept(File dir, String name) 
-							{
-								return name.startsWith("review_") &&
-										(new File(dir, name).isDirectory());
-							}
-						});
-				
-				my_reviewer_ids = new HashSet<String>(review_dir_names.length);
-				
-				for (String review_dir_name : review_dir_names) 
-				{
-					File review_dir = new File(my_directory, review_dir_name);
-					
-					Review review = new Review(review_dir);
-					my_reviews.add(review);
-					my_reviewer_ids.add(review.getReviewerID());
-				}
 
 			} 
 			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
+			
+			my_recommendation = new Review(
+					FileHelper.getRecommendationDirectory(
+							my_directory));
+			
+			String[] review_dir_names = my_directory.list(
+					new FilenameFilter() 
+					{
+						@Override
+						public boolean accept(File dir, String name) 
+						{
+							return name.startsWith(
+									FileHelper.REVIEW_DIRECTORY_PREFIX) &&
+									((new File(dir, name)).isDirectory());
+						}
+					});
+			
+			my_reviewer_ids = new HashSet<String>(review_dir_names.length);
+			
+			for (String review_dir_name : review_dir_names) 
+			{
+				File review_dir = new File(my_directory, review_dir_name);
+				
+				Review review = new Review(review_dir);
+				my_reviews.add(review);
+				my_reviewer_ids.add(review.getReviewerID());
+			}
 
 			// TODO Write unit tests for Paper(File)
-			
-// TODO Remove old code...
-//			String str;
-//			try 
-//			{
-//				str = info.readLine();
-//				my_author_id = str;
-//				
-//				str = info.readLine();
-//				my_manuscript_title = str;
-//				
-//				str = info.readLine();
-//				my_subprogram_chair_id = str;
-//				
-//				str = info.readLine();
-//				if(str != NOT_AVAILIBLE)
-//					my_recommendation = new Review(new 
-//							File(my_directory.getAbsolutePath() +
-//							"/" + str));
-//				
-//				while((str = info.readLine()) != NOT_AVAILIBLE) 
-//				{
-//					File review_folder = new File(
-//							my_directory.getAbsolutePath() + "/" + str);
-//					
-//					Review r = new Review(review_folder);
-//					my_reviews.add(r);
-//				}
-//			} 
-//			catch (IOException e) 
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
 			
 		}
 	}
@@ -236,16 +222,12 @@ public class Paper
 	    
 	    my_manuscript_title = the_title;
 	    
-		//TODO: uncomment this stuff when needed
-	    String directory_name = my_manuscript_title + my_author_id;
-		File directory = new File(the_papers_directory, directory_name);
-//		if (!directory.exists()) {
-//			directory = FileHelper.createDirectory(the_papers_directory, 
-//					directory_name);
-//		}
-		my_directory = directory;
+	    String directory_name = FileHelper.formatFilename(
+	    		my_manuscript_title + "_" + my_author_id);
+		my_directory = FileHelper.getDirectory(the_papers_directory, 
+				directory_name);
 		
-		//copyPaperDoc(my_directory, the_manuscript_doc);		
+		copyPaperDoc(my_directory, the_manuscript_doc);		
 	}
 	
 	
@@ -253,8 +235,64 @@ public class Paper
 	// METHODS
 	/////////////
 	
-	public void writeData() {
-		// TODO Implement Paper.writeData()
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
+	public void writeData() 
+	{
+		try 
+		{
+			// Build the XML document
+			Document doc = FileHelper.createXmlDocument();
+			
+			Element fields_element = doc.createElement(
+					FileHelper.XML_ELEMENT_FIELDS);
+			
+			fields_element.setAttribute(XML_ATTR_MY_MANUSCRIPT_TITLE, 
+					my_manuscript_title);
+			
+			fields_element.setAttribute(XML_ATTR_MY_MANUSCRIPT_DOC,
+					my_manuscript_doc.getName());
+			
+			fields_element.setAttribute(XML_ATTR_MY_ACCEPTANCE_STATUS, 
+					String.valueOf(my_acceptance_status));
+			
+			fields_element.setAttribute(XML_ATTR_MY_AUTHOR_ID,
+					my_author_id);
+			
+			if (my_subprogram_chair_id != null) 
+			{
+				fields_element.setAttribute(XML_ATTR_MY_SUBPROGRAM_CHAIR_ID,
+						my_subprogram_chair_id);
+			}
+			
+			doc.appendChild(fields_element);
+
+			FileHelper.writeXmlDataFile(doc, my_directory, 
+					FileHelper.DATA_FILE_NAME);
+
+			System.out.println("Paper data file saved: " + my_manuscript_title);
+		} 
+		catch (ParserConfigurationException pce) 
+		{
+			pce.printStackTrace();
+		} 
+		catch (TransformerException tfe) 
+		{
+			tfe.printStackTrace();
+		}
+		
+		if (my_recommendation != null) 
+		{
+			my_recommendation.writeData();
+		}
+		
+		for (Review review : my_reviews) 
+		{
+			review.writeData();
+		}
+		
 		// TODO Write unit tests for Paper.writeData()
 	}
 	

@@ -20,6 +20,16 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 /**
@@ -35,21 +45,137 @@ public class FileHelper {
 	
 	public static final String DATA_FILE_NAME = "info.cmsd";
 	public static final String USERS_DATA_FILE_NAME = "users.cmsd";
+	public static final String REVIEW_DIRECTORY_PREFIX = "review_";
 	
-	public static final File getDataDirectory() {
-		File dir = new File("data").getAbsoluteFile();
+	// XML element names
+	public static final String XML_ELEMENT_FIELDS = "fields";
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_parent
+	 * @param the_directory_name
+	 * @return
+	 */
+	public static final File getDirectory(final File the_parent, 
+			final String the_directory_name) 
+	{
+		File dir = new File(the_parent, the_directory_name);
 		if (!dir.exists()) {
-			dir = createDirectory(new File(".").getAbsoluteFile(), "data");
+			dir  = createDirectory(the_parent, the_directory_name);
 		}
 		return dir;
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @return
+	 */
+	public static final File getDataDirectory() {
+		return getDirectory(new File("."), "data");
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @return
+	 */
 	public static final File getConferencesDirectory() {
-		File dir = new File(getDataDirectory(), "conferences");
-		if (!dir.exists()) {
-			dir = createDirectory(getDataDirectory(), "conferences");
+		return getDirectory(getDataDirectory(), "conferences");
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_conference_directory
+	 * @return
+	 */
+	public static final File getPapersDirectory(File the_conference_directory)
+	{
+		return getDirectory(the_conference_directory, "papers");
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_paper_directory
+	 * @return
+	 */
+	public static final File getRecommendationDirectory(
+			File the_paper_directory)
+	{
+		return getDirectory(the_paper_directory, "recommendation");
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_name
+	 * @return
+	 */
+	public static final String formatFilename(String the_name) 
+	{
+		final char escapeChar = '%';
+		int len = the_name.length();
+		StringBuilder sb = new StringBuilder(len);
+		for (int i = 0; i < len; i++) {
+		    char ch = the_name.charAt(i);
+		    if (ch < ' ' || ch >= 0x7F || ch == '/' || ch == ':'
+		        || (ch == '.' && i == 0)
+		        || ch == escapeChar) {
+		        sb.append(escapeChar);
+		        if (ch < 0x10) {
+		            sb.append('0');
+		        }
+		        sb.append(Integer.toHexString(ch));
+		    } else {
+		        sb.append(ch);
+		    }
 		}
-		return dir;
+		return sb.toString();
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @return
+	 * @throws ParserConfigurationException
+	 */
+	public static final Document createXmlDocument() 
+			throws ParserConfigurationException 
+	{
+		DocumentBuilderFactory doc_factory = 
+				DocumentBuilderFactory.newInstance();
+		DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
+		return doc_builder.newDocument();
+	}
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @param the_xml
+	 * @param the_data_file
+	 * @throws TransformerException 
+	 */
+	public static final void writeXmlDataFile(Document the_xml,
+			File the_parent, String the_data_file_name) 
+					throws TransformerException 
+	{
+		File data_file = new File(the_parent, 
+				the_data_file_name);
+		if (data_file.exists()) {
+			data_file.delete();
+		}
+		data_file = FileHelper.createFile(the_parent, 
+				the_data_file_name);
+		StreamResult result = new StreamResult(data_file);
+
+		TransformerFactory transformerFactory = 
+				TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(the_xml);
+		transformer.transform(source, result);
 	}
 	
 	/**

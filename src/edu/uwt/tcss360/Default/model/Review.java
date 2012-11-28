@@ -8,9 +8,13 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.TransformerException;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
@@ -22,6 +26,12 @@ public class Review
 	//////////////
 	// CONSTANTS
 	//////////////
+	
+	// XML attribute names
+	public static final String XML_ATTR_MY_REVIEWER_ID = "my_reviewer_id";
+	public static final String XML_ATTR_MY_SUMMARY_RATING = "my_summary_rating";
+	public static final String XML_ATTR_MY_REVIEW_DOC = "my_review_doc";
+	
 	/** If the review has not been assigned a summary rating yet. */
 	public static final int NO_RATING = -1;
 	
@@ -48,6 +58,7 @@ public class Review
 	/**
 	 * Constructs a Review object using previously saved information located
 	 * in the data file in the given directory.
+	 * @author Kurt Hardin
 	 * @param the_review_directory The review's directory, which contains the
 	 * data file and the review document file.
 	 */
@@ -85,13 +96,16 @@ public class Review
 					@Override
 					public void handleFieldsAttributes(Attributes attr) 
 					{
-						my_reviewer_id = attr.getValue("my_reviewer_id");
+						my_reviewer_id = attr.getValue(XML_ATTR_MY_REVIEWER_ID);
 						
-						String ratingStr = attr.getValue("my_summary_rating");
-						my_summary_rating = (ratingStr == null) ? 
-								NO_RATING : Integer.valueOf(ratingStr);
+						String rating_str = attr.getValue(
+								XML_ATTR_MY_SUMMARY_RATING);
+						my_summary_rating = (rating_str == null) ? 
+								NO_RATING : Integer.valueOf(rating_str);
 						
-						// TODO Initialize my_review_doc
+						String review_doc_str = attr.getValue(
+								XML_ATTR_MY_REVIEW_DOC);
+						my_review_doc = new File(my_directory, review_doc_str);
 					}
 				};
 
@@ -104,23 +118,6 @@ public class Review
 			}
 
 			// TODO Write unit tests for Review(File)
-			
-//			String str;
-//			try 
-//			{
-//				str = info.readLine();
-//				my_reviewer_id = str;
-//				str = info.readLine();
-//				my_summary_rating = Integer.parseInt(str);
-//				str = info.readLine();
-//				my_review_doc = new File(my_directory + "/" + str);
-//				info.close();
-//			} 
-//			catch (IOException e) 
-//			{
-//				//auto generated, don't know what to replace it with
-//				e.printStackTrace();
-//			}
 			
 		}
 	}
@@ -176,14 +173,10 @@ public class Review
 		my_review_doc = null;
 		my_summary_rating = the_summary_rating;
 		
-		String directory_name = "review_" + my_reviewer_id;
-		File directory = new File(the_paper_directory, directory_name);
-		
-		if (!directory.exists()) {
-			directory = FileHelper.createDirectory(the_paper_directory, 
-					directory_name);
-		}
-		my_directory = directory;
+		String directory_name = FileHelper.formatFilename(
+				FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id);
+		my_directory = FileHelper.getDirectory(the_paper_directory, 
+				directory_name);
 		
 		copyReviewDoc(my_directory, the_review_doc);
 	}
@@ -192,8 +185,47 @@ public class Review
 	//////////////
 	// METHODS
 	//////////////
-	public void writeData() {
-		// TODO Implement Review.writeData()
+	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
+	public void writeData() 
+	{
+		try 
+		{
+			// Build the XML document
+			Document doc = FileHelper.createXmlDocument();
+			
+			Element fields_element = doc.createElement(
+					FileHelper.XML_ELEMENT_FIELDS);
+			
+			fields_element.setAttribute("my_reviewer_id", 
+					my_reviewer_id);
+
+			fields_element.setAttribute("my_summary_rating", 
+					String.valueOf(my_summary_rating));
+			
+			fields_element.setAttribute("my_review_doc", 
+					my_review_doc.getName());
+			
+			doc.appendChild(fields_element);
+
+			FileHelper.writeXmlDataFile(doc, my_directory, 
+					FileHelper.DATA_FILE_NAME);
+
+			System.out.println("Review data file saved: " + 
+					my_directory.getName());
+		} 
+		catch (ParserConfigurationException pce) 
+		{
+			pce.printStackTrace();
+		} 
+		catch (TransformerException tfe) 
+		{
+			tfe.printStackTrace();
+		}
+		
 		// TODO Write unit tests for Review.writeData()
 	}
 	

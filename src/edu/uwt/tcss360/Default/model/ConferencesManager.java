@@ -6,16 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -85,10 +79,12 @@ public class ConferencesManager
 					 
 							System.out.println("Start Element: " + qName);
 					 
-							if (qName.equalsIgnoreCase("user")) 
+							if (qName.equalsIgnoreCase(
+									User.XML_ELEMENT_USER)) 
 							{
-								User user = new User(attr.getValue("my_id"),
-										attr.getValue("my_name"));
+								User user = new User(attr.getValue(
+										User.XML_ATTR_MY_ID),
+										attr.getValue(User.XML_ATTR_MY_NAME));
 								my_users.add(user);
 							} 
 							else 
@@ -155,39 +151,27 @@ public class ConferencesManager
 		try 
 		{
 			// Build the XML document
-			DocumentBuilderFactory doc_factory = 
-					DocumentBuilderFactory.newInstance();
-			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
-			Document doc = doc_builder.newDocument();
+			Document doc = FileHelper.createXmlDocument();
 			
-			Element users_element = doc.createElement("users");
+			Element users_element = doc.createElement(
+					User.XML_ELEMENT_USERS);
 			doc.appendChild(users_element);
 			
 			Element user_element;
 			for (User user : my_users) 
 			{
-				user_element = doc.createElement("user");
-				user_element.setAttribute("my_id", user.getID());
-				user_element.setAttribute("my_email", user.getEmail());
-				user_element.setAttribute("my_name", user.getName());
+				user_element = doc.createElement(User.XML_ELEMENT_USER);
+				user_element.setAttribute(User.XML_ATTR_MY_ID, 
+						user.getID());
+				user_element.setAttribute(User.XML_ATTR_MY_EMAIL, 
+						user.getEmail());
+				user_element.setAttribute(User.XML_ATTR_MY_NAME, 
+						user.getName());
 				users_element.appendChild(user_element);
 			}
 
-			// write the content into xml file
-			File users_file = new File(FileHelper.getDataDirectory(), 
+			FileHelper.writeXmlDataFile(doc, FileHelper.getDataDirectory(), 
 					FileHelper.USERS_DATA_FILE_NAME);
-			if (users_file.exists()) {
-				users_file.delete();
-			}
-			users_file = FileHelper.createFile(FileHelper.getDataDirectory(), 
-					FileHelper.USERS_DATA_FILE_NAME);
-			StreamResult result = new StreamResult(users_file);
-
-			TransformerFactory transformerFactory = 
-					TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			transformer.transform(source, result);
 
 			System.out.println("Users file saved");
 		} 

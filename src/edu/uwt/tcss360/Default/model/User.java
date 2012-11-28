@@ -4,6 +4,20 @@ import java.io.File;
 
 public class User 
 {
+
+	/////////////
+	// CONSTANTS
+	/////////////
+	
+	// XML element names
+	public static final String XML_ELEMENT_USER = "user";
+	public static final String XML_ELEMENT_USERS = "users";
+	
+	// XML attribute names
+	public static final String XML_ATTR_MY_NAME = "my_name";
+	public static final String XML_ATTR_MY_ID = "my_id";
+	public static final String XML_ATTR_MY_EMAIL = "my_email";
+	
 	/////////////
 	// FIELDS
 	/////////////

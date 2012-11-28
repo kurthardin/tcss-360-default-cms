@@ -18,16 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,6 +41,25 @@ import edu.uwt.tcss360.Default.util.InfoHandler;
  * @version 1.0
  */
 public final class Conference {
+
+	// XML element names
+	public static final String XML_ELEMENT_MY_USERS_ROLES = "my_users_roles";
+	public static final String XML_ELEMENT_ROLE = "role";
+	
+	// XML attribute names
+	public static final String XML_ATTR_MY_NAME = "my_name";
+	public static final String XML_ATTR_MY_START_DATE = "my_start_date";
+	public static final String XML_ATTR_MY_END_DATE = "my_end_date";
+	public static final String XML_ATTR_MY_SUBMISSION_DEADLINE = 
+			"my_submission_deadline";
+	public static final String XML_ATTR_MY_REVIEW_DEADLINE = 
+			"my_review_deadline";
+	public static final String XML_ATTR_MY_RECOMMENDATION_DEADLINE = 
+			"my_recommendation_deadline";
+	public static final String XML_ATTR_MY_REVISION_DEADLINE = 
+			"my_final_revision_deadline";
+	public static final String XML_ATTR_ID = "id";
+	public static final String XML_ATTR_NAME = "name";
 	
 	private static final DateFormat CONFERENCE_DATE_FORMAT = 
 			new SimpleDateFormat("MM-dd-yyyy");
@@ -105,6 +118,7 @@ public final class Conference {
 	/**
 	 * Creates a new Conference initialized with 
 	 * data from the specified File.
+	 * @author Kurt Hardin
 	 * @param a_data_file the data file to initialize this Conference from.
 	 */
 	public Conference(final File the_conference_dir) 
@@ -140,14 +154,28 @@ public final class Conference {
 				InfoHandler handler = new ConferenceInfoHandler();
 
 				saxParser.parse(info, handler);
-
 			} 
 			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
 		}
-
+		
+		// Initialize my_papers
+		File papers_dir = FileHelper.getPapersDirectory(my_directory);
+		if (papers_dir != null) 
+		{
+			List<String> paper_dir_names = 
+					FileHelper.getSubdirectoryNames(papers_dir);
+			
+			for (String paper_dir_name : paper_dir_names) 
+			{
+				File paper_dir = new File(papers_dir, paper_dir_name);
+				Paper conference = new Paper(paper_dir);
+				my_papers.add(conference);
+			}
+		}
+		
 		// TODO Write unit tests for Conference(File)
 	}
 	
@@ -204,62 +232,61 @@ public final class Conference {
 		authorizeUser(the_pc_user_id, Role.PROGRAM_CHAIR);
 		
 		File confs_dir = FileHelper.getConferencesDirectory();
-		String conf_dir_name = getID();
-		File directory = new File(confs_dir, conf_dir_name);
-		if (!directory.exists()) {
-			directory = FileHelper.createDirectory(confs_dir, conf_dir_name);
-		}
-		my_directory = directory;
+		String conf_dir_name = FileHelper.formatFilename(getID());
+		my_directory = FileHelper.getDirectory(confs_dir, conf_dir_name);
 		writeData();
 	}
 	
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 */
 	public void writeData() {
 		try 
 		{
 			// Build the XML document
-			DocumentBuilderFactory doc_factory = 
-					DocumentBuilderFactory.newInstance();
-			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
-			Document doc = doc_builder.newDocument();
+			Document doc = FileHelper.createXmlDocument();
 			
-			Element fields_element = doc.createElement("fields");
-			fields_element.setAttribute("my_name", my_name);
-			fields_element.setAttribute("my_start_date", 
+			Element fields_element = doc.createElement(
+					FileHelper.XML_ELEMENT_FIELDS);
+			fields_element.setAttribute(XML_ATTR_MY_NAME, my_name);
+			fields_element.setAttribute(XML_ATTR_MY_START_DATE, 
 					CONFERENCE_DATE_FORMAT.format(my_start_date));
-			fields_element.setAttribute("my_end_date", 
+			fields_element.setAttribute(XML_ATTR_MY_END_DATE, 
 					CONFERENCE_DATE_FORMAT.format(my_end_date));
 			if (my_submission_deadline != null) 
 			{
-				fields_element.setAttribute("my_submission_deadline", 
+				fields_element.setAttribute(XML_ATTR_MY_SUBMISSION_DEADLINE, 
 						CONFERENCE_DATE_FORMAT.format(
 								my_submission_deadline));
 			}
 			if (my_review_deadline != null) 
 			{
-				fields_element.setAttribute("my_review_deadline", 
+				fields_element.setAttribute(XML_ATTR_MY_REVIEW_DEADLINE, 
 						CONFERENCE_DATE_FORMAT.format(
 								my_review_deadline));
 			}
 			if (my_recommendation_deadline != null) 
 			{
-				fields_element.setAttribute("my_recommendation_deadline", 
+				fields_element.setAttribute(XML_ATTR_MY_RECOMMENDATION_DEADLINE, 
 						CONFERENCE_DATE_FORMAT.format(
 								my_recommendation_deadline));
 			}
 			if (my_final_revision_deadline != null) 
 			{
-				fields_element.setAttribute("my_final_revision_deadline", 
+				fields_element.setAttribute(XML_ATTR_MY_REVISION_DEADLINE, 
 						CONFERENCE_DATE_FORMAT.format(
 								my_final_revision_deadline));
 			}
 			
-			Element users_roles_elem = doc.createElement("my_users_roles");
+			Element users_roles_elem = doc.createElement(XML_ELEMENT_MY_USERS_ROLES);
 			for (String user_id : my_users_roles.keySet()) {
-				Element user_elem = doc.createElement("user");
-				user_elem.setAttribute("id", user_id);
+				Element user_elem = doc.createElement(
+						User.XML_ELEMENT_USER);
+				user_elem.setAttribute(XML_ATTR_ID, user_id);
 				for (Role role : my_users_roles.get(user_id)) {
-					Element role_elem = doc.createElement("role");
-					role_elem.setAttribute("name", role.name());
+					Element role_elem = doc.createElement(XML_ELEMENT_ROLE);
+					role_elem.setAttribute(XML_ATTR_NAME, role.name());
 					user_elem.appendChild(role_elem);
 				}
 				users_roles_elem.appendChild(user_elem);
@@ -268,23 +295,11 @@ public final class Conference {
 			
 			doc.appendChild(fields_element);
 
-			// write the content into xml file
-			File data_file = new File(my_directory, 
+			FileHelper.writeXmlDataFile(doc, my_directory, 
 					FileHelper.DATA_FILE_NAME);
-			if (data_file.exists()) {
-				data_file.delete();
-			}
-			data_file = FileHelper.createFile(my_directory, 
-					FileHelper.DATA_FILE_NAME);
-			StreamResult result = new StreamResult(data_file);
 
-			TransformerFactory transformerFactory = 
-					TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			transformer.transform(source, result);
-
-			System.out.println("Conference data file saved");
+			System.out.println("Conference data file saved : " +
+					my_name);
 		} 
 		catch (ParserConfigurationException pce) 
 		{
@@ -293,6 +308,10 @@ public final class Conference {
 		catch (TransformerException tfe) 
 		{
 			tfe.printStackTrace();
+		}
+		
+		for (Paper paper : my_papers) {
+			paper.writeData();
 		}
 		// TODO Write unit tests for Conference.writeData()
 	}
@@ -673,11 +692,11 @@ public final class Conference {
 		@Override
 		public void handleFieldsAttributes(Attributes attr) 
 		{
-			my_name = attr.getValue("my_name");
+			my_name = attr.getValue(XML_ATTR_MY_NAME);
 			try 
 			{
 				my_start_date = CONFERENCE_DATE_FORMAT.parse(
-						attr.getValue("my_start_date"));
+						attr.getValue(XML_ATTR_MY_START_DATE));
 			} 
 			catch (ParseException e) 
 			{
@@ -687,7 +706,7 @@ public final class Conference {
 			try 
 			{
 				my_end_date = CONFERENCE_DATE_FORMAT.parse(
-						attr.getValue("my_end_date"));
+						attr.getValue(XML_ATTR_MY_END_DATE));
 			} 
 			catch (ParseException e) 
 			{
@@ -696,7 +715,7 @@ public final class Conference {
 			
 			String date_string;
 			try {
-				date_string = attr.getValue("my_submission_deadline");
+				date_string = attr.getValue(XML_ATTR_MY_SUBMISSION_DEADLINE);
 				if (date_string != null) 
 				{
 					my_submission_deadline = 
@@ -710,7 +729,7 @@ public final class Conference {
 			
 			try 
 			{
-				date_string = attr.getValue("my_review_deadline");
+				date_string = attr.getValue(XML_ATTR_MY_REVIEW_DEADLINE);
 				if (date_string != null) 
 				{
 					my_review_deadline = CONFERENCE_DATE_FORMAT.parse(
@@ -723,7 +742,7 @@ public final class Conference {
 			}
 			
 			try {
-				date_string = attr.getValue("my_recommendation_deadline");
+				date_string = attr.getValue(XML_ATTR_MY_RECOMMENDATION_DEADLINE);
 				if (date_string != null) 
 				{
 					my_recommendation_deadline = 
@@ -737,7 +756,7 @@ public final class Conference {
 			
 			try 
 			{
-				date_string = attr.getValue("my_final_revision_deadline");
+				date_string = attr.getValue(XML_ATTR_MY_REVISION_DEADLINE);
 				if (date_string != null) 
 				{
 					my_final_revision_deadline = 
@@ -754,18 +773,18 @@ public final class Conference {
 		public void startUnknownFieldsElement(String uri, 
 				String localName, String qName, Attributes attr) 
 		{
-			if (qName.equalsIgnoreCase("my_users_roles")) 
+			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_USERS_ROLES)) 
 			{
 				my_inside_users_roles = true;
 			}
 			else if (my_inside_users_roles) 
 			{
-				if (qName.equalsIgnoreCase("user")) 
+				if (qName.equalsIgnoreCase(User.XML_ELEMENT_USER)) 
 				{
-					my_current_user_id = attr.getValue("id");
+					my_current_user_id = attr.getValue(XML_ATTR_ID);
 				} 
 				else if (my_current_user_id != null && 
-						qName.equalsIgnoreCase("role")) 
+						qName.equalsIgnoreCase(XML_ELEMENT_ROLE)) 
 				{
 					Set<Role> user_roles = 
 							my_users_roles.get(my_current_user_id);
@@ -776,11 +795,11 @@ public final class Conference {
 					
 					try 
 					{
-						Role role = Role.valueOf(attr.getValue("name"));
+						Role role = Role.valueOf(attr.getValue(XML_ATTR_NAME));
 						user_roles.add(role);
 					} catch (final IllegalArgumentException e) {
 						System.out.println("Encountered invalid Role name: '" +
-								attr.getValue("name") + "'");
+								attr.getValue(XML_ATTR_NAME) + "'");
 					}
 				}
 			}
@@ -790,11 +809,11 @@ public final class Conference {
 		public final void endUnknownFieldsElement(String uri, String localName,
 				String qName) throws SAXException 
 		{
-			if (qName.equalsIgnoreCase("my_users_roles")) 
+			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_USERS_ROLES)) 
 			{
 				my_inside_users_roles = false;
 			} 
-			else if (qName.equalsIgnoreCase("user")) 
+			else if (qName.equalsIgnoreCase(User.XML_ELEMENT_USER)) 
 			{
 				my_current_user_id = null;
 			}
