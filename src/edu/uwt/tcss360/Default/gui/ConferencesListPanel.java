@@ -6,14 +6,11 @@
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Set;
@@ -22,9 +19,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,7 +30,6 @@ import javax.swing.text.MaskFormatter;
 
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.CurrentState;
-import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 
@@ -52,8 +46,12 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 	 * Holds the dialog strings for the new conference creation dialog.
 	 */
 	public static final String[] DATE_TITLES = {"Start Date:", "End Date:", 
-		"Submission Deadline:", "Review Deadline:", 
-		"Recommendation Deadline:", "Final Submission Deadline:"};
+		"Submission Deadline:"};
+	
+	/**
+	 * the number of date fields (being 3 for month day and year)
+	 */
+	public static final int DATE_FIELD_NUM = 3;
 	
 	/**
 	 * the new conference button.
@@ -162,17 +160,21 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			JTextField name_field = new JTextField(30);
 			name_panel.add(name_field);
 			creation_panel.add(name_panel);
+			//the panels that will hold the date fields.
 			JPanel[] date_panels = new JPanel[DATE_TITLES.length];
-			JTextField[][] date_fields = new JTextField[date_panels.length][3];
+			//holds the date fields for the start date, end date, and submission deadline.
+			JTextField[][] date_fields = new JTextField[date_panels.length][DATE_FIELD_NUM];
+			//creates the date JPanels and inserts them into the panel
+			//that will be inserted into the dialog window.
 			for (int i = 0; i < date_panels.length; i++)
 			{
 				date_panels[i] = new JPanel(new FlowLayout());
 				date_panels[i].add(new JLabel(DATE_TITLES[i]));
-				for (int j = 0; j < 3; j++)
+				for (int j = 0; j < DATE_FIELD_NUM; j++)
 				{
-					String field_format = "**";//day or month
-					if (j == 2)//year
-						field_format = "****";
+					String field_format = "**";//day or month format
+					if (j == 2)
+						field_format = "****";//year format
 					try
 					{
 						date_fields[i][j] = new JFormattedTextField(new MaskFormatter(field_format));
@@ -201,9 +203,11 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			{
 				try
 				{
+					//empty conference name
 					if (name_field.getText().trim().length() < 1)
 						throw new IllegalArgumentException("Conference Name Empty");
 					String name = name_field.getText().trim();
+					//gathers data from the fields to create a conference object.
 					Date start_date = new Date(Integer.parseInt(date_fields[0][2].getText().trim())-1900, 
 							Integer.parseInt(date_fields[0][0].getText().trim()) - 1, 
 							Integer.parseInt(date_fields[0][1].getText().trim()));
@@ -212,29 +216,12 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 							Integer.parseInt(date_fields[1][1].getText().trim()));
 					Conference conf = new Conference(getCurrentState().getCurrentUser().getID(), 
 							name, start_date, end_date);
-					
+					//sets the submission deadline for the conference.
 					Date sub_deadline = new Date(Integer.parseInt(date_fields[2][2].getText().trim())-1900, 
 							Integer.parseInt(date_fields[2][0].getText().trim()) - 1, 
 							Integer.parseInt(date_fields[2][1].getText().trim()));
 					conf.setSubmissionDeadline(sub_deadline);
-					
-					Date rev_deadline = new Date(Integer.parseInt(date_fields[3][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[3][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[3][1].getText().trim()));
-					conf.setReviewDeadline(rev_deadline);
-					
-					Date rec_deadline = new Date(Integer.parseInt(date_fields[4][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[4][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[4][1].getText().trim()));
-					conf.setRecommendationDeadline(rec_deadline);
-					
-					Date final_deadline = new Date(Integer.parseInt(date_fields[5][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[5][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[5][1].getText().trim()));
-					conf.setFinalRevisionDeadline(final_deadline);
-					
-					
-					
+					//adds the conference to the manager and updates the conference list panel.
 					getCurrentState().getConferencesManager().addConference(conf);
 					updatePanel();
 				}

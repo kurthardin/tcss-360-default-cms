@@ -30,6 +30,8 @@ public class TopPanel extends AbstractConferencesPanel
 	
 	private final JLabel my_label;
 	
+	private boolean my_role_display_state;
+	
 	/**
 	 * constructor
 	 * @param the_state the current state object used by the frame.
@@ -42,6 +44,7 @@ public class TopPanel extends AbstractConferencesPanel
 		my_back_button = new JButton("Back");
 		my_back_button.addActionListener(new BackAction());
 		my_label = new JLabel();
+		my_role_display_state = false;
 		setupPanel();
 	}
 	
@@ -59,17 +62,28 @@ public class TopPanel extends AbstractConferencesPanel
 		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
 				ConferencesFrame.TOP_HEIGHT));
 		User user = getCurrentState().getCurrentUser();
+		StringBuilder sb = new StringBuilder("Name: ");
 		if (user != null)
-			my_label.setText(user.getName());
-		else
-			my_label.setText("no current user");//remove
-		
+		{
+			sb.append(user.getName());
+			if (my_role_display_state)
+			{
+				sb.append("     Role: ");
+				sb.append(getCurrentState().getCurrentRole());
+			}
+		}
+		my_label.setText(sb.toString());
 		box.add(my_back_button);
 		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH - 
 				my_label.getPreferredSize().getWidth() - 
 				my_back_button.getPreferredSize().getWidth()),0)));
 		box.add(my_label);
 		add(box);
+	}
+	
+	public void setRoleDisplay(final boolean the_choice)
+	{
+		my_role_display_state = the_choice;
 	}
 	
 	private class BackAction extends AbstractAction

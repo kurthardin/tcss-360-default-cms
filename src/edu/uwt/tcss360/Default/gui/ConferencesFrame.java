@@ -142,6 +142,11 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	{
 		if (my_panels_stack.size() == 1)
 			my_top_panel.updatePanel();
+		if (my_panels_stack.size() == 2)
+		{
+			my_top_panel.setRoleDisplay(true);
+			my_top_panel.updatePanel();
+		}
 		my_panels_stack.push(the_panel);
 		updateView();
 	}
@@ -154,8 +159,11 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	public JPanel popPanel()
 	{
 		JPanel panel = null;
-		if (my_panels_stack.size() == 2)
+		if (my_panels_stack.size() == 3)
+		{
+			my_top_panel.setRoleDisplay(false);
 			my_top_panel.updatePanel();
+		}
 		if (my_panels_stack.size() > 1)
 		{
 			panel = my_panels_stack.pop();
