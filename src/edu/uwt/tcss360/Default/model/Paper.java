@@ -50,8 +50,10 @@ public class Paper
 	public static final String XML_ATTR_MY_MANUSCRIPT_TITLE = 
 			"my_manuscript_title";
 	
-    /** The value of my_acceptance_status until one is set. */
-	public static final int NO_ACCEPTANCE_STATUS = -1;
+    //values for Program Chair's acceptance choices
+	public static final int REJECTED = -1;
+	public static final int UNDECIDED = 0;
+	public static final int ACCEPTED = 1;
 	
 	/** The value of a field that hasn't been set yet. */
 	private static final String NOT_AVAILIBLE = "n/a";
@@ -60,6 +62,7 @@ public class Paper
 	/////////////
 	// FIELDS
 	/////////////
+	
 	/** Set of review objects. */
     public Set<Review> my_reviews;
     // that ^ might as well be public if we're just going to have getReviews()
@@ -72,7 +75,7 @@ public class Paper
 	/** The actual document (docx, pdf, etc), of the manuscript. */
 	private File my_manuscript_doc;
 	
-	/** 1-5 value for acceptance status. (not recommendation the 1-5) */
+	/** The yes/no value for if the PC accepted the paper */
 	private int my_acceptance_status;
 	
 	/** User ID of the manuscript author. */
@@ -127,7 +130,7 @@ public class Paper
 						String acceptStatusStr = attr.getValue(
 								XML_ATTR_MY_ACCEPTANCE_STATUS);
 						my_acceptance_status = (acceptStatusStr == null) ? 
-								NO_ACCEPTANCE_STATUS : 
+								UNDECIDED : 
 								Integer.valueOf(acceptStatusStr);
 						
 						my_author_id = attr.getValue(XML_ATTR_MY_AUTHOR_ID);
@@ -391,12 +394,13 @@ public class Paper
 	 */
 	public boolean setAcceptanceStatus(final int the_status) 
 	{
-	    //permission handling should be done in the GUI
-	    if(the_status > 5 || the_status < -1 || the_status == 0)
-	        throw new IllegalArgumentException("Status is an invalid value");
-
-        my_acceptance_status = the_status;
-		return true;
+	    if(the_status == REJECTED || the_status == ACCEPTED ||
+	            the_status == UNDECIDED)
+	    {
+	        my_acceptance_status = the_status;
+	        return true;
+	    }
+	    return false;
 	}
 	
 	public String getTitle() 
@@ -579,7 +583,7 @@ public class Paper
 	private void initFields() 
 	{
 		my_manuscript_doc = null;
-		my_acceptance_status = NO_ACCEPTANCE_STATUS;
+		my_acceptance_status = UNDECIDED;
 		my_author_id = NOT_AVAILIBLE;
 		my_subprogram_chair_id = NOT_AVAILIBLE;
 		my_reviews = new HashSet<Review>();
