@@ -17,6 +17,11 @@ import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.Review;
 import edu.uwt.tcss360.Default.model.User.Role;
 
+/**
+ * 
+ * @author Scott Sanderson
+ * @version 1.0
+ */
 public class PaperTest 
 {
 

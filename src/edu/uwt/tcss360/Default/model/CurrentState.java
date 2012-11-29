@@ -1,5 +1,5 @@
 /**
- * Conference.java
+ * CurrentState.java
  * Scott Sanderson
  * 11/09/2012
  */
@@ -12,6 +12,7 @@ import edu.uwt.tcss360.Default.model.User.Role;
  * Class representing the current state for the Conference
  * Management System. It stores all of the current values
  * along with the ConferencesManager object.
+ * 
  * @author Scott Sanderson
  * @version 1.0
  */

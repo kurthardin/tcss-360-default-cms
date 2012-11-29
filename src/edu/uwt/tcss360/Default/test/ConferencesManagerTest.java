@@ -20,6 +20,11 @@ import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.util.FileHelper;
 
+/**
+ * 
+ * @author Brett Cate
+ * @version 1.0
+ */
 public class ConferencesManagerTest
 {
 	

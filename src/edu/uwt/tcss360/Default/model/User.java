@@ -1,7 +1,18 @@
+/**
+ * User.java
+ * Author: Travis Lewis
+ * Date: 8 November 2012
+ */
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
+/**
+ * 
+ * @author Travis Lewis
+ * @editor Kurt Hardin
+ * @version 1.0
+ */
 public class User 
 {
 
@@ -28,6 +39,11 @@ public class User
 	private String my_id;
 	private String my_email;
 	
+	/**
+	 * 
+	 * @author Travis Lewis
+	 * @version 1.0
+	 */
 	public enum Role
 	{
 		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER;

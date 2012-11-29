@@ -14,6 +14,11 @@ import org.junit.Test;
 
 import edu.uwt.tcss360.Default.model.Review;
 
+/**
+ * 
+ * @author Scott Sanderson
+ * @version 1.0
+ */
 public class ReviewTest 
 {
 

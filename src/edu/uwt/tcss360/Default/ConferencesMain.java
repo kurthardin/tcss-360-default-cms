@@ -3,6 +3,8 @@ import edu.uwt.tcss360.Default.gui.ConferencesFrame;
 
 /**
  * main class
+ * 
+ * @author Scott Sanderson
  */
 public class ConferencesMain {
 
