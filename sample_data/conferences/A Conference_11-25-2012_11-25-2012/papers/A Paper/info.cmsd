@@ -2,7 +2,8 @@
 
 <!-- This will contain the data for A Paper -->
 
-<fields my_acceptance_status=0
+<fields my_acceptance_status='0'
 		my_author_id='author@sample.com'
 		my_subprogram_chair_id='spc@sample.com'
-		my_manuscript_title='A Paper'/>
+		my_manuscript_title='A Paper'
+		my_manuscript_doc='manuscript.docx'/>

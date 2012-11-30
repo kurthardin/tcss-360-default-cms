@@ -3,4 +3,5 @@
 <!-- This will contain the data for review_[diff_reviewer_name] -->
 
 <fields my_reviewer_id='diff_reviewer@sample.com'
-		my_summary_rating=0/>
+		my_summary_rating='0'
+		my_review_doc='review.docx'/>

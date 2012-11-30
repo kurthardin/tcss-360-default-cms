@@ -9,4 +9,7 @@
 	<user my_id='another_user@sample.com' 
 		  my_email='another_user@sample.com' 
 	      my_name='Another User'/>
+	<user my_id='test@test.com'
+          my_email='test@test.com'
+          my_name='John Doe'/>
 </users>
