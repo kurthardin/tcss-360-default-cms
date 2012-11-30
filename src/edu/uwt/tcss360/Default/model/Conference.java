@@ -597,6 +597,16 @@ public final class Conference {
 	}
 	
 	/**
+	 * Gets all the papers in the conference.
+	 * @return All the papers in the conference
+	 * @author Travis Lewis
+	 */
+	public Set<Paper> getPapers()
+	{
+		return new HashSet<Paper>(my_papers);
+	}
+	
+	/**
 	 * Gets all Papers assigned to the specified User with the specified Role
 	 * for this Conference.
 	 * @param the_user_id the User for which to retrieve Papers.

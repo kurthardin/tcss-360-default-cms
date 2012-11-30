@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
     
+import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
@@ -217,7 +218,7 @@ public class PaperPanel extends AbstractConferencesPanel
     		    JPanel revbuttons = new JPanel(new GridLayout(1,0));
     		    if(r != null)
     		    {
-    		        JButton dl_rev = new JButton("Open Review");
+    		        JButton dl_rev = new JButton("Download Review");
     		        dl_rev.addActionListener(new DownloadFileAction(
     		        		r.getReviewDoc()));
     		        revbuttons.add(dl_rev);
@@ -252,7 +253,7 @@ public class PaperPanel extends AbstractConferencesPanel
     		    {
     		        revs.add(new JLabel(cm.getUser
     		                (r.getReviewerID()).getName()));
-    		        JButton b = new JButton("Open Review");
+    		        JButton b = new JButton("Download Review");
     		        b.addActionListener(new DownloadFileAction(
     		        		r.getReviewDoc()));
     		        revs.add(b);
@@ -268,7 +269,7 @@ public class PaperPanel extends AbstractConferencesPanel
 	                {
 	                    revs.add(new JLabel(cm.getUser
 	                            (r.getReviewerID()).getName()));
-	                    JButton b = new JButton("Open Review");
+	                    JButton b = new JButton("Download Review");
 	                    b.addActionListener(new DownloadFileAction(
 	                    		r.getReviewDoc()));
 	                    revs.add(b);
@@ -283,8 +284,8 @@ public class PaperPanel extends AbstractConferencesPanel
    			    revs.add(new JLabel("Some Name"));
     
     			//open review button.
-    			JButton b = new JButton("Open Review");
-    			b.addActionListener(new UploadReviewAction(r));
+    			JButton b = new JButton("Download Review");
+    			b.addActionListener(new DownloadFileAction(r.getReviewDoc()));
     			revs.add(b);
     		}
 		}
@@ -295,8 +296,8 @@ public class PaperPanel extends AbstractConferencesPanel
 	private JPanel createSouthPanel(final boolean is_test)
 	{
 		//South panel requirements:
-		// show SPC and email
-		// show acceptance status for PC
+		// show SPC and email (done)
+		// show acceptance status for PC 
 		// allow PC to set acceptance status
 		// open recommendation button
 		// add recommendation button 
@@ -364,7 +365,25 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		
 		    		if(id != null && id != "")
 		    		{
-		    			my_paper.setSubprogramChairID(id);
+		    			List<Paper> papers = getCurrentState()
+		    					.getCurrentConference().getPapers(id, 
+		    					Role.SUBPROGRAM_CHAIR);
+		    			//BR9
+		    			if(id == my_paper.getAuthorID())
+		    			{
+		    				JOptionPane.showMessageDialog(null, 
+		    						"Subprogram chair cannot be author", 
+		    						"Error",JOptionPane.ERROR_MESSAGE);
+		    			}
+		    			else if (papers.size() >= 4)
+		    			{ // BR17
+		    				JOptionPane.showMessageDialog(null, 
+		    						"Subprogram chair cannot be assigned more" 
+		    						+ "than 4 papers", "Error", 
+		    						JOptionPane.ERROR_MESSAGE);
+		    			}
+		    			else
+		    				my_paper.setSubprogramChairID(id);
 		    		}
 		    	}
 		    });
@@ -381,19 +400,30 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		
 		    		if(id != null && id != "")
 		    		{
-		    			List<Paper> papers = getCurrentState().
-		    					getCurrentConference().
-		    					getPapers(id, Role.REVIEWER);
-		    			
-		    			if(papers.size() < 4)
-		    			{
-		    				my_paper.addReviewer(id);
-		    			}
-		    			else
+		    			//BR8 and BR10
+		    			if(id == my_paper.getAuthorID())
 		    			{
 		    				JOptionPane.showMessageDialog(null, 
-		    						id + " is already workong on 4 papers.", 
+		    						"Authors cannot review their own papers", 
 		    						"Error",JOptionPane.ERROR_MESSAGE);
+		    			}
+		    			else
+			    			{
+			    			List<Paper> papers = getCurrentState().
+			    					getCurrentConference().
+			    					getPapers(id, Role.REVIEWER);
+			    			
+			    			//BR16
+			    			if(papers.size() < 4)
+			    			{
+			    				my_paper.addReviewer(id);
+			    			}
+			    			else
+			    			{
+			    				JOptionPane.showMessageDialog(null, id + 
+			    						" is already workong on 4 papers.", 
+			    						"Error",JOptionPane.ERROR_MESSAGE);
+			    			}
 		    			}
 		    		}
 		    	}
@@ -406,6 +436,13 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	dunno.setSelected(true);
 		    else
 		    	no.setSelected(true);
+		    
+		    if(current_role != Role.PROGRAM_CHAIR)
+		    {
+		    	yes.setEnabled(false);
+		    	dunno.setEnabled(false);
+		    	no.setEnabled(false);
+		    }
 		    
 		    // add action listeners for acceptance radio buttons
 		    yes.addActionListener(new ActionListener()
@@ -427,7 +464,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	{ my_paper.setAcceptanceStatus(Paper.REJECTED);}
 		    });
 
-		    //business rule 14
+		    //BR14
 		    if(current_role == Role.SUBPROGRAM_CHAIR 
 		            || current_role == Role.PROGRAM_CHAIR)
 		    {
@@ -437,18 +474,17 @@ public class PaperPanel extends AbstractConferencesPanel
 		    if(current_role == Role.PROGRAM_CHAIR)
 		    {
 		    	southbuttons.add(assign_spc_button);
-		    	south_panel.add(accept);
+		    	//south_panel.add(accept); //acceptance radio buttons
 		    }
 		    else if(current_role == Role.SUBPROGRAM_CHAIR)
 		    {
 		    	southbuttons.add(add_rec_button);
 		        southbuttons.add(assign_rev_button);
 		    }
-		    
-		    //add program chair accept/deny stuff.
+		    south_panel.add(accept);
 		   
 		}
-		else
+		else // if !is_test
 		{
 		    southbuttons.add(get_rec_button);
 		    southbuttons.add(assign_spc_button);
@@ -515,8 +551,19 @@ public class PaperPanel extends AbstractConferencesPanel
 			if(result != JFileChooser.CANCEL_OPTION 
 					&& fc.getSelectedFile() != null)
 			{
+				//TODO: delete this printline stuff
+				System.out.println("my_file: ");
+				printFileStats(my_file);
+				System.out.println("\nselected file before copy: ");
+				printFileStats(fc.getSelectedFile());
+				
 				FileHelper.copyFile(my_file, fc.getSelectedFile());
+				
+				System.out.println("\nselected file after copy: ");
+				printFileStats(fc.getSelectedFile());
 			}
+			else
+				System.out.println("cancel hit or file was null");
 		}
 	}
 	
@@ -625,6 +672,20 @@ public class PaperPanel extends AbstractConferencesPanel
 				ConferencesFrame.HEIGHT));
 		
 		
+		testPanel(frame);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		
+//		JOptionPane.showMessageDialog(null, "File must exist", "Error",
+//				JOptionPane.ERROR_MESSAGE);
+	}
+	
+	
+	private static void testPanel(JFrame frame)
+	{
 		//setup a paper object
 		File doc = new File("README.txt");
 		File papers_dir = new File(".");
@@ -647,14 +708,21 @@ public class PaperPanel extends AbstractConferencesPanel
 		paper.setRecommendation(rec);
 		
 		frame.add(new PaperPanel(paper,null,null));
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		
-//		JOptionPane.showMessageDialog(null, "File must exist", "Error",
-//				JOptionPane.ERROR_MESSAGE);
+	}
+	
+	//TODO: delete this when done testing
+	private void printFileStats(final File the_file)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("path: ");
+		sb.append(the_file.getAbsolutePath());
+		sb.append("\nexists: ");
+		sb.append(the_file.exists());
+		sb.append("\nis directory: ");
+		sb.append(the_file.isDirectory());
+		sb.append("\nis file: ");
+		sb.append(the_file.isFile());
+		System.out.println(sb.toString());
 	}
 	
 }
