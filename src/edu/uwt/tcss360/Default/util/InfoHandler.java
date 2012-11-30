@@ -1,7 +1,9 @@
 package edu.uwt.tcss360.Default.util;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -9,26 +11,33 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Kurt Hardin
  * @version 1.0
  */
-public abstract class InfoHandler extends DefaultHandler {
+public abstract class InfoHandler extends DefaultHandler 
+{
+	private Locator my_sax_locator;
+	private boolean fields_elem = false;
 	
-	private boolean fieldsElem = false;
+	@Override
+	public void setDocumentLocator(Locator locator) 
+	{
+		my_sax_locator = locator;
+	}
  
 	public final void startElement(String uri, String localName, String qName, 
                 Attributes attributes) throws SAXException 
     {
- 
-		System.out.println("Start Element: " + qName);
- 
 		if (qName.equalsIgnoreCase("fields")) 
 		{
-			fieldsElem = true;
+			fields_elem = true;
 			handleFieldsAttributes(attributes);
 		} 
-		else if (fieldsElem) 
+		else if (fields_elem) 
 		{
 			startUnknownFieldsElement(uri, localName, qName, attributes);
-		} else {
-			System.out.println("Encountered unexpected element: " + qName);
+		} 
+		else 
+		{
+			throw new SAXParseException(
+					"Encountered unexpected element: " + qName, my_sax_locator);
 		}
  
 	}
@@ -47,15 +56,12 @@ public abstract class InfoHandler extends DefaultHandler {
 		
 		if (qName.equalsIgnoreCase("fields")) 
 		{
-			fieldsElem = false;
+			fields_elem = false;
 		} 
-		else if (fieldsElem) 
+		else if (fields_elem) 
 		{
 			endUnknownFieldsElement(uri, localName, qName);
 		}
-		
-		System.out.println("End Element: " + qName);
- 
 	}
 	
 	public void endUnknownFieldsElement(String uri, String localName,
