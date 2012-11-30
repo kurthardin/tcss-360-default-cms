@@ -305,6 +305,12 @@ public class Review
 		copyReviewDoc(my_directory,the_doc);
 	}
 	
+	public Review getCopy()
+	{
+		return new Review(my_directory, my_reviewer_id, my_review_doc,
+				my_summary_rating);
+	}
+	
 	/**
 	 * Saves data about the review by deleting and creating a new data file
 	 * @return <code>true</code> if the operation succeeded.

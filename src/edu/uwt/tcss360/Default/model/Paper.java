@@ -66,7 +66,7 @@ public class Paper
 	/////////////
 	
 	/** Set of review objects. */
-    public Set<Review> my_reviews;
+    private Set<Review> my_reviews;
     // that ^ might as well be public if we're just going to have getReviews()
     // unless we're returning a read-only copy of the list, but that would
     // make it kind of hard to modify the Reviews...
@@ -383,6 +383,11 @@ public class Paper
 		return my_subprogram_chair_id;
 	}
 	
+	public void setSubprogramChairID(final String the_id)
+	{
+		my_subprogram_chair_id = the_id;
+	}
+	
 	public int getAcceptanceStatus() 
 	{ 
 	    return my_acceptance_status; 
@@ -471,6 +476,54 @@ public class Paper
 	}
 	
 	/**
+	 * Removes the Review from this paper created by the given reviewer ID.
+	 * @param reviewer_id The ID of the use whose Review we want to remove.
+	 * @return <code>true</code> if the Review was removed successfully.
+	 */
+	public boolean removeReview(final String reviewer_id)
+	{
+		for(Review r : my_reviews)
+		{
+			if(r.getReviewerID().equals(reviewer_id))
+				return my_reviews.remove(r);
+		}
+		return false;
+	}
+	
+	public Set<Review> getReviews()
+	{
+		return new HashSet<Review>(my_reviews);
+	}
+	
+	/**
+	 * Gets a given user ID's Review object if it exists.
+	 * @param an_ID The ID of the user who's review you want.
+	 * @return The given user's Review if it exists, <code>null</code> if
+	 * it does not exist.
+	 */
+	public Review getReviewByID(final String an_id)
+	{
+		for(Review r : my_reviews)
+		{
+			if(r.getReviewerID().equals(an_id))
+				return r.getCopy();
+		}
+		return null;
+	}
+	
+	public boolean addReviewer(final String an_id)
+	{
+		if(my_reviewer_ids.contains(an_id))
+			return false;
+		else
+		{
+			my_reviewer_ids.add(an_id);
+			return true;
+		}
+	}
+	
+	
+	/**
 	 * Assigns the given userid as the subprogram chair for the paper.
 	 * @param userid The user ID to make subprogram chair for the paper.
 	 */
@@ -482,15 +535,6 @@ public class Paper
 	    
 	    //business rule 9 should be handled by the GUI...
 	    my_subprogram_chair_id = the_user_id;
-	    
-//		Role r = getRole(the_user_id);
-//		if(r != Role.AUTHOR) 
-//		{
-//			my_subprogram_chair_id = the_user_id;
-//			return true;
-//		}
-//		
-//		return false;
 	}
 	
 	/**

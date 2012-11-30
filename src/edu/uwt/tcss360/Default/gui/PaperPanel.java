@@ -12,11 +12,20 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
     
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
@@ -24,6 +33,7 @@ import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.Review;
 import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
+import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
  * @author Travis Lewis
@@ -89,32 +99,39 @@ public class PaperPanel extends AbstractConferencesPanel
 
 	private void setupPanel(final boolean is_test)
 	{
-	    //TODO: US10 author can upload/unsubmit their paper.
 	    //TODO: BR18: author can only access reviews after PC makes a decision
 	    //TODO: BR8/BR10: an author cannot review their own paper
 	    //TODO: BR9: a user cannot be SPC on a paper they authored
 	    //TODO: US2: allow PC to make a yes/no acceptence decision on a paper
-	    //TODO: take out the 1-5 ratings
 	    //TODO: need to be able to assign multiple reviewers, but no maximum
 	    // amount of reviewers.
 	    //TODO: RECOMMENDATION!!!
-	    
-	    Role current_role = getCurrentState().getCurrentRole();
-	    User current_user = getCurrentState().getCurrentUser();
-	    
+
 		//new GridLayout(rows, cols);
 		setLayout(new BorderLayout());
-		ConferencesManager cm = null;
-		if(!is_test)
-		    cm = getCurrentState().getConferencesManager();
+
+		add(createNorthPanel(is_test), BorderLayout.NORTH);
+		add(createCenterPanel(is_test), BorderLayout.CENTER);
+		add(createSouthPanel(is_test),BorderLayout.SOUTH);
+	}
+	
+	private JPanel createNorthPanel(final boolean is_test)
+	{
+		//North panel requirements:
+		// author name and email (done)
+		// paper title (done)
+		// download paper button
+		// upload paper button
+		// unsubmit paper button
 		
-		//information for north: author, title, download button
+		
 		JPanel north_panel = new JPanel(new GridLayout(0,1));
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("Author: ");
 		if(!is_test)
-		    sb.append(cm.getUser(my_paper.getAuthorID()).getName());
+		    sb.append(getCurrentState().getConferencesManager()
+		    		.getUser(my_paper.getAuthorID()).getName());
 		else
     		sb.append("Some Name");
 		sb.append(" [");
@@ -124,27 +141,40 @@ public class PaperPanel extends AbstractConferencesPanel
 		
 		north_panel.add(new JLabel("Title: " + my_paper.getTitle()));
 		
-		//under what conditions can a user download a manuscript?
-		//
-		
-		JButton dl_button = new JButton("Download Manuscript");
-		//TODO: add action for download manuscript button
-		JButton ul_button = new JButton("Upload Manuscript");
-		//TODO: add action for upload manuscript button
-
-		JPanel downup = new JPanel(new GridLayout(0,2));
-		downup.add(dl_button);
-		if(is_test)
-		    downup.add(ul_button);
-		else if(getCurrentState().getCurrentUser().getID() 
-		        == my_paper.getAuthorID())
-		    downup.add(ul_button);
+		JPanel downup = new JPanel(new GridLayout(1,0));
+		if(!is_test)
+		{
+			JButton download = new JButton("Download Manuscript");
+			//add action for download
+			
+			
+			//everybody who can access this panel is authorized to download
+			downup.add(download);
+			
+			User current_user = getCurrentState().getCurrentUser();
+			if(current_user.getID().equals(my_paper.getAuthorID()))
+			{//download, upload, unsubmit
+				JButton upload = new JButton("Upload Manuscript");
+				JButton unsubmit = new JButton("Unsubmit Manuscript");
+				
+				//TODO: add actions for author buttons
+			}
+		}
+		else
+		{
+			downup.add(new JButton("Download Manuscript"));
+			downup.add(new JButton("Upload Manuscript"));
+			downup.add(new JButton("Unsubmit Manuscript"));
+		}
 		north_panel.add(downup);
-		
-		
-		
-		//info for middle: reviewers, buttons to their review docs (grid)
+		return north_panel;
+	}
+	
+	private JPanel createCenterPanel(final boolean is_test)
+	{
 		JPanel center_panel = new JPanel(new BorderLayout());
+		Set<Review> reviews = my_paper.getReviews();
+		
 
 		JPanel revs = new JPanel(new GridLayout(5,2));
 		revs.add(new JLabel("Reviewer Name"));
@@ -152,9 +182,13 @@ public class PaperPanel extends AbstractConferencesPanel
 		
 		if(!is_test)
 		{
+			Role current_role = getCurrentState().getCurrentRole();
+		    User current_user = getCurrentState().getCurrentUser();
+		    ConferencesManager cm = getCurrentState().getConferencesManager();
+		    
     		if(current_role == Role.REVIEWER)
     		{ // BR12
-    		    Review r = getReviewByID(getCurrentState().
+    		    Review r = my_paper.getReviewByID(getCurrentState().
     		            getCurrentUser().getID());
     		    
     		    revs.add(new JLabel(current_user.getName()));
@@ -177,7 +211,7 @@ public class PaperPanel extends AbstractConferencesPanel
     		        my_paper.getSubprogramChairID() == current_user.getID()) ||
     		        current_role == Role.PROGRAM_CHAIR)
     		{// BR20
-    		    for(Review r : my_paper.my_reviews)
+    		    for(Review r : reviews)
     		    {
     		        revs.add(new JLabel(cm.getUser
     		                (r.getReviewerID()).getName()));
@@ -192,7 +226,7 @@ public class PaperPanel extends AbstractConferencesPanel
     		    int stat = my_paper.getAcceptanceStatus();
     		    if(stat != Paper.UNDECIDED)
     		    {
-    	              for(Review r : my_paper.my_reviews)
+    	              for(Review r : reviews)
     	                {
     	                    revs.add(new JLabel(cm.getUser
     	                            (r.getReviewerID()).getName()));
@@ -205,32 +239,27 @@ public class PaperPanel extends AbstractConferencesPanel
 		}
 		else
 		{
-    		for(Review r : my_paper.my_reviews)
+    		for(Review r : reviews)
     		{
-    			//real name
-    			if(!is_test)
-    			    revs.add(new JLabel(cm.getUser(r.getReviewerID()).getName()));
-    			else
-    			    revs.add(new JLabel("Some Name"));
+   			    revs.add(new JLabel("Some Name"));
     
     			//open review button.
     			JButton b = new JButton("Open Review");
-    			//TODO: add action to open review buttons
+    			b.addActionListener(new UploadReviewAction(r));
     			revs.add(b);
     		}
 		}
 		center_panel.add(revs, BorderLayout.CENTER);
-		
-		
-		
-		//info for south:
-		//subprogram chair (recommender), recommendation score, download 
-		//button for doc, assign subprogram chair (if PC)
+		return center_panel;
+	}
+	
+	private JPanel createSouthPanel(final boolean is_test)
+	{
 		JPanel south_panel = new JPanel(new GridLayout(0,1));
-		sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
 		sb.append("Subprogram Chair: ");
 		if(!is_test)
-		    sb.append(cm.getUser(my_paper.getSubprogramChairID()).getName());
+		    sb.append(getCurrentState().getConferencesManager().getUser(my_paper.getSubprogramChairID()).getName());
 		else
 		    sb.append("Some Name");
 		sb.append(" [");
@@ -239,67 +268,235 @@ public class PaperPanel extends AbstractConferencesPanel
 		south_panel.add(new JLabel(sb.toString()));
 		
 		sb = new StringBuilder();
-		sb.append("Recommendation: ");
-		if(my_paper.getRecommendation().my_summary_rating == Review.NO_RATING)
-			sb.append("N/A");
-		else
-			sb.append(my_paper.getRecommendation().my_summary_rating);
-		south_panel.add(new JLabel(sb.toString()));
 		
-		JButton rec_button = new JButton("Open Recommendation");
+		JButton get_rec_button = new JButton("Open Recommendation");
+		JButton add_rec_button = new JButton("Upload Recommendation");
 		JButton assign_spc_button = new JButton("Assign Subprogram Chair");
 		JButton assign_rev_button = new JButton("Assign Reviewer");
 		JPanel southbuttons = new JPanel(new GridLayout(0,2));
 		
+	    JPanel accept = new JPanel(new GridLayout(0,4));
+	    
+	    ButtonGroup accept_group = new ButtonGroup();
+	    JRadioButton yes = new JRadioButton("Accepted");
+	    JRadioButton dunno = new JRadioButton("Undecided");
+	    JRadioButton no = new JRadioButton("Rejected");
+	    accept_group.add(yes);
+	    accept_group.add(dunno);
+	    accept_group.add(no);
+	    accept.add(new JLabel("Acceptance status:"));
+	    accept.add(yes);
+	    accept.add(dunno);
+	    accept.add(no);
+		
 		//assign actions for buttons only if we aren't displaying a test
 		if(!is_test)
 		{
-		    //TODO: add action to open recommendation button
+			Role current_role = getCurrentState().getCurrentRole();
+		    User current_user = getCurrentState().getCurrentUser();
+		    
+		    // add action to open recommendation button
+		    get_rec_button.addActionListener(
+		    		new DownloadFileAction(my_paper.getRecommendation()
+		    				.getReviewDoc()));
+		    
+		    // add action to upload recommendation button
+		    add_rec_button.addActionListener(
+		    		new UploadReviewAction(my_paper.getRecommendation()));
 
-        	//TODO: add action to assign program chair button
+        	// add action to assign subprogram chair button
+		    assign_spc_button.addActionListener(new ActionListener()
+		    {
+		    	@Override
+		    	public void actionPerformed(ActionEvent e)
+		    	{
+		    		String id = getPopupChoice(getCurrentState().
+				    		getCurrentConference().getUserIds
+				    		(Role.SUBPROGRAM_CHAIR),
+				    		"Choose Subprogram Chair");
+		    		
+		    		if(id != null)
+		    		{
+		    			my_paper.setSubprogramChairID(id);
+		    		}
+		    	}
+		    });
 
 		    //TODO: add action to assign reviewer button
-
+		    assign_rev_button.addActionListener(new ActionListener()
+		    {
+		    	@Override
+		    	public void actionPerformed(ActionEvent e)
+		    	{
+		    		String id = getPopupChoice(getCurrentState().
+				    		getCurrentConference().getUserIds(
+				    				Role.REVIEWER),
+				    		"Choose Subprogram Chair");
+		    		
+		    		//TODO: check if said reviewer is not already reviewing
+		    		// four or more papers
+		    		if(id != null)
+		    		{
+		    			List<Paper> papers = getCurrentState().
+		    					getCurrentConference().
+		    					getPapers(id, Role.REVIEWER);
+		    			
+		    			if(papers.size() < 4)
+		    			{
+		    				my_paper.addReviewer(id);
+		    			}
+		    			else
+		    			{
+		    				JOptionPane.showMessageDialog(null, 
+		    						id + " is already workong on 4 papers.", 
+		    						"Error",JOptionPane.ERROR_MESSAGE);
+		    			}
+		    		}
+		    	}
+		    });
+		    
+		    //TODO: add actions to accept/reject buttons.
+		    yes.addActionListener(new ActionListener()
+		    {
+		    	@Override
+		    	public void actionPerformed(ActionEvent e)
+		    	{ my_paper.setAcceptanceStatus(Paper.ACCEPTED); }
+		    });
+		    dunno.addActionListener(new ActionListener()
+		    {
+		    	@Override
+		    	public void actionPerformed(ActionEvent e)
+		    	{ my_paper.setAcceptanceStatus(Paper.UNDECIDED); }
+		    });
+		    dunno.addActionListener(new ActionListener()
+		    {
+		    	@Override
+		    	public void actionPerformed(ActionEvent e)
+		    	{ my_paper.setAcceptanceStatus(Paper.REJECTED);}
+		    });
 		    
 		    //TODO: probably need to change what shows depending on the date
 		    
 		    //business rule 14
 		    if(current_role == Role.SUBPROGRAM_CHAIR 
 		            || current_role == Role.PROGRAM_CHAIR)
-		        southbuttons.add(rec_button);
+		    {
+		        southbuttons.add(get_rec_button);
+		    }
 		    
 		    if(current_role == Role.PROGRAM_CHAIR)
-		        southbuttons.add(assign_spc_button);
+		    {
+		    	southbuttons.add(assign_spc_button);
+		    	south_panel.add(accept);
+		    }
 		    else if(current_role == Role.SUBPROGRAM_CHAIR)
+		    {
+		    	southbuttons.add(add_rec_button);
 		        southbuttons.add(assign_rev_button);
+		    }
+		    
+		    //add program chair accept/deny stuff.
+		   
 		}
 		else
 		{
-		    southbuttons.add(rec_button);
+		    southbuttons.add(get_rec_button);
 		    southbuttons.add(assign_spc_button);
+		    south_panel.add(accept);
 		}
 		south_panel.add(southbuttons);
-		
-		
-		add(north_panel, BorderLayout.NORTH);
-		add(center_panel, BorderLayout.CENTER);
-		add(south_panel, BorderLayout.SOUTH);
+		return south_panel;
 	}
-		
-	/**
-	 * Gets a given user ID's Review object if it exists.
-	 * @param an_ID The ID of the user who's review you want.
-	 * @return The given user's Review if it exists, <code>null</code> if
-	 * it does not exist.
-	 */
-	private Review getReviewByID(final String an_ID)
+	
+	private String getPopupChoice(final List<String> the_choices, final
+			String the_message)
 	{
-	    for(Review r : my_paper.my_reviews)
-	    {
-	        if(r.getReviewerID().equals(an_ID));
-	            return r;
-	    }
-	    return null;
+		String[] choices = new String[the_choices.size() + 1];
+		int i = 1;
+		for(String s : the_choices)
+			choices[i++] = s;
+		String result = (String) JOptionPane.showInputDialog(null, the_message,
+				"Select",JOptionPane.PLAIN_MESSAGE, null, choices,choices[0]);
+		
+		return result;
+	}
+	
+	private class DownloadFileAction extends AbstractAction
+	{
+		final File my_file;
+		
+		public DownloadFileAction(final File the_review)
+		{
+			my_file = the_review;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			JFileChooser fc = new JFileChooser();
+			fc.setSelectedFile(new File(FileHelper.getLeafString(my_file)));
+			
+			int result = fc.showSaveDialog(null);
+			
+			if(result != JFileChooser.CANCEL_OPTION 
+					&& fc.getSelectedFile() != null)
+			{
+				FileHelper.copyFile(my_file, fc.getSelectedFile());
+			}
+		}
+	}
+	
+	private class UploadReviewAction extends AbstractAction
+	{
+		final Review my_review;
+		
+		public UploadReviewAction(final Review the_review)
+		{
+			my_review = the_review;
+		}
+				
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			JFileChooser fc = new JFileChooser();
+			fc.setSelectedFile(new File(FileHelper.getLeafString
+					(my_review.getReviewDoc())));
+			
+			int result = fc.showOpenDialog(null);
+			
+			if(result != JFileChooser.CANCEL_OPTION)
+			{
+				File up = fc.getSelectedFile();
+
+				if(up == null)
+					JOptionPane.showMessageDialog(null, "File cannot be null",
+							"Error",JOptionPane.ERROR_MESSAGE);
+				else if(!up.exists())
+					JOptionPane.showMessageDialog(null, "File must exist",
+							"Error",JOptionPane.ERROR_MESSAGE);
+				else if(up.isDirectory())
+					JOptionPane.showMessageDialog(null, "File cannot be a " +
+							"directory", "Error",JOptionPane.ERROR_MESSAGE);
+				else
+				{
+					try
+					{
+						my_review.getReviewDoc().delete();
+						FileHelper.copyFile(up, my_review.getDirectory());
+						File newfile = FileHelper.createFile(
+								my_review.getDirectory(), 
+								FileHelper.getLeafString(up));
+						
+						FileHelper.copyFile(up, newfile);
+					}
+					catch(SecurityException e2)
+					{
+						JOptionPane.showMessageDialog(null, e2.getMessage());
+					}
+					
+				}
+			}
+		}
 	}
 	
 	//test main
@@ -337,6 +534,9 @@ public class PaperPanel extends AbstractConferencesPanel
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+//		JOptionPane.showMessageDialog(null, "File must exist", "Error",
+//				JOptionPane.ERROR_MESSAGE);
 	}
 	
 }
