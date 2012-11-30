@@ -8,18 +8,15 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.InfoHandler;
+import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 
 /**
  * 
@@ -198,41 +195,14 @@ public class Review
 	 */
 	public void writeData() 
 	{
-		try 
-		{
-			// Build the XML document
-			Document doc = FileHelper.createXmlDocument();
-			
-			Element fields_element = doc.createElement(
-					FileHelper.XML_ELEMENT_FIELDS);
-			
-			fields_element.setAttribute("my_reviewer_id", 
-					my_reviewer_id);
-
-			fields_element.setAttribute("my_summary_rating", 
-					String.valueOf(my_summary_rating));
-			
-			fields_element.setAttribute("my_review_doc", 
-					my_review_doc.getName());
-			
-			doc.appendChild(fields_element);
-
-			FileHelper.writeXmlDataFile(doc, my_directory, 
-					FileHelper.DATA_FILE_NAME);
-
-			System.out.println("Review data file saved: " + 
-					my_directory.getName());
-		} 
-		catch (ParserConfigurationException pce) 
-		{
-			pce.printStackTrace();
-		} 
-		catch (TransformerException tfe) 
-		{
-			tfe.printStackTrace();
-		}
-		
-		// TODO Write unit tests for Review.writeData()
+		// Build the XML document
+		File output_file = new File(my_directory, 
+				FileHelper.DATA_FILE_NAME);
+		new InfoDocument(output_file)
+		.setField("my_reviewer_id", my_reviewer_id)
+		.setField("my_summary_rating", my_summary_rating)
+		.setField("my_review_doc", my_review_doc)
+		.write();
 	}
 	
 	public File getDirectory() 

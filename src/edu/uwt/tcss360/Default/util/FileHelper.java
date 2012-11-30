@@ -20,16 +20,6 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 /**
@@ -48,9 +38,6 @@ public class FileHelper {
 	public static final String DATA_FILE_NAME = "info.cmsd";
 	public static final String USERS_DATA_FILE_NAME = "users.cmsd";
 	public static final String REVIEW_DIRECTORY_PREFIX = "review_";
-	
-	// XML element names
-	public static final String XML_ELEMENT_FIELDS = "fields";
 	
 	/**
 	 * 
@@ -136,48 +123,6 @@ public class FileHelper {
 		    }
 		}
 		return sb.toString();
-	}
-	
-	/**
-	 * 
-	 * @author Kurt Hardin
-	 * @return
-	 * @throws ParserConfigurationException
-	 */
-	public static final Document createXmlDocument() 
-			throws ParserConfigurationException 
-	{
-		DocumentBuilderFactory doc_factory = 
-				DocumentBuilderFactory.newInstance();
-		DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
-		return doc_builder.newDocument();
-	}
-	
-	/**
-	 * 
-	 * @author Kurt Hardin
-	 * @param the_xml
-	 * @param the_data_file
-	 * @throws TransformerException 
-	 */
-	public static final void writeXmlDataFile(Document the_xml,
-			File the_parent, String the_data_file_name) 
-					throws TransformerException 
-	{
-		File data_file = new File(the_parent, 
-				the_data_file_name);
-		if (data_file.exists()) {
-			data_file.delete();
-		}
-		data_file = FileHelper.createFile(the_parent, 
-				the_data_file_name);
-		StreamResult result = new StreamResult(data_file);
-
-		TransformerFactory transformerFactory = 
-				TransformerFactory.newInstance();
-		Transformer transformer = transformerFactory.newTransformer();
-		DOMSource source = new DOMSource(the_xml);
-		transformer.transform(source, result);
 	}
 	
 	/**

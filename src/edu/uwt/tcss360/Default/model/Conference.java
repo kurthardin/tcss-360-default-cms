@@ -18,13 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -32,6 +28,7 @@ import org.xml.sax.SAXException;
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.InfoHandler;
+import edu.uwt.tcss360.Default.util.xml.ConferenceDocument;
 
 /**
  * Class representing a single conference in the 
@@ -245,79 +242,28 @@ public final class Conference {
 	/**
 	 * 
 	 */
-	public void writeData() {
-		try 
-		{
+	public void writeData() 
+	{
 			// Build the XML document
-			Document doc = FileHelper.createXmlDocument();
-			
-			Element fields_element = doc.createElement(
-					FileHelper.XML_ELEMENT_FIELDS);
-			fields_element.setAttribute(XML_ATTR_MY_NAME, my_name);
-			fields_element.setAttribute(XML_ATTR_MY_START_DATE, 
-					CONFERENCE_DATE_FORMAT.format(my_start_date));
-			fields_element.setAttribute(XML_ATTR_MY_END_DATE, 
-					CONFERENCE_DATE_FORMAT.format(my_end_date));
-			if (my_submission_deadline != null) 
-			{
-				fields_element.setAttribute(XML_ATTR_MY_SUBMISSION_DEADLINE, 
-						CONFERENCE_DATE_FORMAT.format(
-								my_submission_deadline));
-			}
-			if (my_review_deadline != null) 
-			{
-				fields_element.setAttribute(XML_ATTR_MY_REVIEW_DEADLINE, 
-						CONFERENCE_DATE_FORMAT.format(
-								my_review_deadline));
-			}
-			if (my_recommendation_deadline != null) 
-			{
-				fields_element.setAttribute(XML_ATTR_MY_RECOMMENDATION_DEADLINE, 
-						CONFERENCE_DATE_FORMAT.format(
-								my_recommendation_deadline));
-			}
-			if (my_final_revision_deadline != null) 
-			{
-				fields_element.setAttribute(XML_ATTR_MY_REVISION_DEADLINE, 
-						CONFERENCE_DATE_FORMAT.format(
-								my_final_revision_deadline));
-			}
-			
-			Element users_roles_elem = doc.createElement(XML_ELEMENT_MY_USERS_ROLES);
-			for (String user_id : my_users_roles.keySet()) {
-				Element user_elem = doc.createElement(
-						User.XML_ELEMENT_USER);
-				user_elem.setAttribute(XML_ATTR_ID, user_id);
-				for (Role role : my_users_roles.get(user_id)) {
-					Element role_elem = doc.createElement(XML_ELEMENT_ROLE);
-					role_elem.setAttribute(XML_ATTR_NAME, role.name());
-					user_elem.appendChild(role_elem);
-				}
-				users_roles_elem.appendChild(user_elem);
-			}
-			fields_element.appendChild(users_roles_elem);
-			
-			doc.appendChild(fields_element);
-
-			FileHelper.writeXmlDataFile(doc, my_directory, 
+			File output_file = new File(my_directory, 
 					FileHelper.DATA_FILE_NAME);
-
-			System.out.println("Conference data file saved : " +
-					my_name);
-		} 
-		catch (ParserConfigurationException pce) 
-		{
-			pce.printStackTrace();
-		} 
-		catch (TransformerException tfe) 
-		{
-			tfe.printStackTrace();
-		}
+			new ConferenceDocument(output_file)
+			.addMyUsersRolesField(my_users_roles)
+			.setField(XML_ATTR_MY_NAME, my_name)
+			.setField(XML_ATTR_MY_START_DATE, my_start_date)
+			.setField(XML_ATTR_MY_END_DATE, my_end_date)
+			.setField(XML_ATTR_MY_SUBMISSION_DEADLINE, 
+					my_submission_deadline)
+			.setField(XML_ATTR_MY_REVIEW_DEADLINE, my_review_deadline)
+			.setField(XML_ATTR_MY_RECOMMENDATION_DEADLINE, 
+					my_recommendation_deadline)
+			.setField(XML_ATTR_MY_REVISION_DEADLINE, 
+					my_final_revision_deadline)
+			.write();
 		
 		for (Paper paper : my_papers) {
 			paper.writeData();
 		}
-		// TODO Write unit tests for Conference.writeData()
 	}
 	
 	/**

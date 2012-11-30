@@ -6,19 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.xml.UsersDocument;
 
 /**
  * 
@@ -144,7 +141,6 @@ public class ConferencesManager
 	{
 		writeUsers();
 		writeConferences();
-		// TODO Write unit tests for ConferencesManager.writeData()
 	}
 	
 	/**
@@ -153,41 +149,14 @@ public class ConferencesManager
 	 */
 	private void writeUsers() 
 	{
-		try 
+		File output_file = new File(FileHelper.getDataDirectory(), 
+				FileHelper.USERS_DATA_FILE_NAME);
+		UsersDocument doc = new UsersDocument(output_file);
+		for (User user : my_users) 
 		{
-			// Build the XML document
-			Document doc = FileHelper.createXmlDocument();
-			
-			Element users_element = doc.createElement(
-					User.XML_ELEMENT_USERS);
-			doc.appendChild(users_element);
-			
-			Element user_element;
-			for (User user : my_users) 
-			{
-				user_element = doc.createElement(User.XML_ELEMENT_USER);
-				user_element.setAttribute(User.XML_ATTR_MY_ID, 
-						user.getID());
-				user_element.setAttribute(User.XML_ATTR_MY_EMAIL, 
-						user.getEmail());
-				user_element.setAttribute(User.XML_ATTR_MY_NAME, 
-						user.getName());
-				users_element.appendChild(user_element);
-			}
-
-			FileHelper.writeXmlDataFile(doc, FileHelper.getDataDirectory(), 
-					FileHelper.USERS_DATA_FILE_NAME);
-
-			System.out.println("Users file saved");
-		} 
-		catch (ParserConfigurationException pce) 
-		{
-			pce.printStackTrace();
-		} 
-		catch (TransformerException tfe) 
-		{
-			tfe.printStackTrace();
+			doc.addUser(user);	
 		}
+		doc.write();
 	}
 	
 	/**

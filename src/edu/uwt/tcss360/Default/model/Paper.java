@@ -13,19 +13,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.TransformerException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.InfoHandler;
+import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 
 /**
  * Holds information about a manuscript along with reviews of it, etc.
@@ -246,47 +243,15 @@ public class Paper
 	 */
 	public void writeData() 
 	{
-		try 
-		{
-			// Build the XML document
-			Document doc = FileHelper.createXmlDocument();
-			
-			Element fields_element = doc.createElement(
-					FileHelper.XML_ELEMENT_FIELDS);
-			
-			fields_element.setAttribute(XML_ATTR_MY_MANUSCRIPT_TITLE, 
-					my_manuscript_title);
-			
-			fields_element.setAttribute(XML_ATTR_MY_MANUSCRIPT_DOC,
-					my_manuscript_doc.getName());
-			
-			fields_element.setAttribute(XML_ATTR_MY_ACCEPTANCE_STATUS, 
-					String.valueOf(my_acceptance_status));
-			
-			fields_element.setAttribute(XML_ATTR_MY_AUTHOR_ID,
-					my_author_id);
-			
-			if (my_subprogram_chair_id != null) 
-			{
-				fields_element.setAttribute(XML_ATTR_MY_SUBPROGRAM_CHAIR_ID,
-						my_subprogram_chair_id);
-			}
-			
-			doc.appendChild(fields_element);
-
-			FileHelper.writeXmlDataFile(doc, my_directory, 
+		File output_file = new File(my_directory, 
 					FileHelper.DATA_FILE_NAME);
-
-			System.out.println("Paper data file saved: " + my_manuscript_title);
-		} 
-		catch (ParserConfigurationException pce) 
-		{
-			pce.printStackTrace();
-		} 
-		catch (TransformerException tfe) 
-		{
-			tfe.printStackTrace();
-		}
+		new InfoDocument(output_file)
+		.setField(XML_ATTR_MY_MANUSCRIPT_TITLE, my_manuscript_title)
+		.setField(XML_ATTR_MY_MANUSCRIPT_DOC, my_manuscript_doc)
+		.setField(XML_ATTR_MY_ACCEPTANCE_STATUS, my_acceptance_status)
+		.setField(XML_ATTR_MY_AUTHOR_ID, my_author_id)
+		.setField(XML_ATTR_MY_SUBPROGRAM_CHAIR_ID, my_subprogram_chair_id)
+		.write();
 		
 		if (my_recommendation != null) 
 		{
@@ -297,8 +262,6 @@ public class Paper
 		{
 			review.writeData();
 		}
-		
-		// TODO Write unit tests for Paper.writeData()
 	}
 	
 	public File getDirectory() 
