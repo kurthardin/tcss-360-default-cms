@@ -70,7 +70,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 		top_panel.add(conference_information);
 		add(top_panel, BorderLayout.NORTH);
 		
-		JPanel papers_panel = new JPanel();
+		JPanel papers_panel = new JPanel(new BorderLayout());
 		addPapersButtons(papers_panel);
 		add(papers_panel, BorderLayout.CENTER);
 		
@@ -155,9 +155,9 @@ public class ConferencePanel extends AbstractConferencesPanel
 		//add paperspanel to jscrollpane, add scrollpane to the_panel
 		JPanel holder = new JPanel(new BorderLayout());
 		holder.add(buttonspanel,BorderLayout.NORTH);
-		JScrollPane scroll = new JScrollPane();
-		scroll.add(holder);
-		the_panel.add(holder);
+		JScrollPane scroll = new JScrollPane(holder);
+		//scroll.add(holder);
+		the_panel.add(scroll);
 		//TODO: figure out why adding the scrollpane doesn't work.
 		
 		
