@@ -180,6 +180,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		{
 			my_panel.add(my_top_panel, BorderLayout.NORTH);
 		}
+		my_panels_stack.peek().updatePanel();
 		my_panel.add(my_panels_stack.peek(), BorderLayout.CENTER);
 		my_panel.setVisible(true);
 	}

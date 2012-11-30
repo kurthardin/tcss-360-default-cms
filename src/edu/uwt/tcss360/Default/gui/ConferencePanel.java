@@ -133,21 +133,17 @@ public class ConferencePanel extends AbstractConferencesPanel
 		int cols = (role == Role.PROGRAM_CHAIR) ? 3 : 2;
 		JPanel buttonspanel = new JPanel(new GridLayout(0,cols));
 		buttonspanel.add(new JLabel("Paper Title"));
-		if(role == Role.PROGRAM_CHAIR)
-			buttonspanel.add(new JLabel("Accepted"));
+		buttonspanel.add(new JLabel("Accepted"));
 		buttonspanel.add(new JLabel(""));
 		for(Paper p : papers)
 		{
 			buttonspanel.add(new JLabel(p.getTitle()));
-			if(role == Role.PROGRAM_CHAIR)
-			{
-				if(p.getAcceptanceStatus() == Paper.ACCEPTED)
-					buttonspanel.add(new JLabel("Yes"));
-				else if(p.getAcceptanceStatus() == Paper.REJECTED)
-					buttonspanel.add(new JLabel("No"));
-				else
-					buttonspanel.add(new JLabel("Undecided"));	
-			}
+			if(p.getAcceptanceStatus() == Paper.ACCEPTED)
+				buttonspanel.add(new JLabel("Yes"));
+			else if(p.getAcceptanceStatus() == Paper.REJECTED)
+				buttonspanel.add(new JLabel("No"));
+			else
+				buttonspanel.add(new JLabel("Undecided"));	
 			JButton b = new JButton("Open Paper");
 			b.addActionListener(new OpenPaperAction(p));
 			buttonspanel.add(b);
@@ -227,7 +223,10 @@ public class ConferencePanel extends AbstractConferencesPanel
 	public void updatePanel() 
 	{
 		// TODO Auto-generated method stub
-
+		setVisible(false);
+		removeAll();
+		setupPanel();
+		setVisible(true);
 	}
 	
 	/**
