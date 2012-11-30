@@ -547,9 +547,9 @@ public final class Conference {
 	 * @return All the papers in the conference
 	 * @author Travis Lewis
 	 */
-	public Set<Paper> getPapers()
+	public List<Paper> getPapers()
 	{
-		return new HashSet<Paper>(my_papers);
+		return new ArrayList<Paper>(my_papers);
 	}
 	
 	/**

@@ -73,6 +73,14 @@ public class PaperPanel extends AbstractConferencesPanel
 		setupPanel(false);
 	}
 	
+	public PaperPanel(CurrentState the_state, PanelManager the_panel_mgr,
+			Paper the_paper)
+	{
+		super(the_state, the_panel_mgr);
+		my_paper = the_paper;
+		setupPanel(false);
+	}
+	
 	//should be able to get the Paper from the CurrentState passed in,
 	//this constructor is pretty much for testing only.
 	public PaperPanel(final Paper the_paper, CurrentState the_state,

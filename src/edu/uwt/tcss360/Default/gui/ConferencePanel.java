@@ -2,14 +2,19 @@ package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import edu.uwt.tcss360.Default.model.Conference;
@@ -115,13 +120,56 @@ public class ConferencePanel extends AbstractConferencesPanel
 	 */
 	private void addPapersButtons(final JPanel the_panel)
 	{
-		List<Paper> papers = my_conference.
+		List<Paper> papers;
+		if(getCurrentState().getCurrentRole() == Role.PROGRAM_CHAIR)
+			papers = my_conference.getPapers();
+		else
+			papers = my_conference.
 				getPapers(super.getCurrentState().getCurrentUser().getID(),
 				super.getCurrentState().getCurrentRole());
-		for (Paper a_paper : papers)
+		
+
+		Role role = getCurrentState().getCurrentRole();
+		int cols = (role == Role.PROGRAM_CHAIR) ? 3 : 2;
+		JPanel buttonspanel = new JPanel(new GridLayout(0,cols));
+		buttonspanel.add(new JLabel("Paper Title"));
+		if(role == Role.PROGRAM_CHAIR)
+			buttonspanel.add(new JLabel("Accepted"));
+		buttonspanel.add(new JLabel(""));
+		for(Paper p : papers)
 		{
-			the_panel.add(new JButton(a_paper.getTitle()));
+			buttonspanel.add(new JLabel(p.getTitle()));
+			if(role == Role.PROGRAM_CHAIR)
+			{
+				if(p.getAcceptanceStatus() == Paper.ACCEPTED)
+					buttonspanel.add(new JLabel("Yes"));
+				else if(p.getAcceptanceStatus() == Paper.REJECTED)
+					buttonspanel.add(new JLabel("No"));
+				else
+					buttonspanel.add(new JLabel("Undecided"));	
+			}
+			JButton b = new JButton("Open Paper");
+			b.addActionListener(new OpenPaperAction(p));
+			buttonspanel.add(b);
 		}
+		//add paperspanel to jscrollpane, add scrollpane to the_panel
+		JPanel holder = new JPanel(new BorderLayout());
+		holder.add(buttonspanel,BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane();
+		scroll.add(holder);
+		the_panel.add(holder);
+		//TODO: figure out why adding the scrollpane doesn't work.
+		
+		
+		
+		//old code
+//		List<Paper> papers = my_conference.
+//				getPapers(super.getCurrentState().getCurrentUser().getID(),
+//				super.getCurrentState().getCurrentRole());
+//		for (Paper a_paper : papers)
+//		{
+//			the_panel.add(new JButton(a_paper.getTitle()));
+//		}
 	}
 	
 //	private void addProgramChairListener(final JButton the_button) 
@@ -180,6 +228,29 @@ public class ConferencePanel extends AbstractConferencesPanel
 	{
 		// TODO Auto-generated method stub
 
+	}
+	
+	/**
+	 * An action for opening a paper panel.
+	 * @author Travis Lewis
+	 * @version 29 Nov 2012
+	 */
+	private class OpenPaperAction extends AbstractAction
+	{
+		final Paper my_paper;
+		
+		public OpenPaperAction(final Paper the_paper)
+		{
+			my_paper = the_paper;
+		}
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			getCurrentState().setCurrentPaper(my_paper);
+			getPanelManager().pushPanel(new PaperPanel(getCurrentState(),
+					getPanelManager(), my_paper));
+		}
+		
 	}
 	
 //	public static void main(final String[] the_arguments)
