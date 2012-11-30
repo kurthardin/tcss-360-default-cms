@@ -159,7 +159,6 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 	
 	private class NewConferenceAction extends AbstractAction
 	{		
-		@SuppressWarnings("deprecation")
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
