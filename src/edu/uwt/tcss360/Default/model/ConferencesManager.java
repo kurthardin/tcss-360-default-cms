@@ -6,16 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.UsersDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
+import edu.uwt.tcss360.Default.util.xml.parsers.UsersHandler;
 
 /**
  * 
@@ -28,7 +22,7 @@ public class ConferencesManager
 	private Set<Conference> my_conferences;
 	
 	/** A set of all the users. */
-	private Set<User> my_users;
+	private final Set<User> my_users = new HashSet<User>();
 	
 	/**
 	 * Constructs a ConferencesManager object.
@@ -47,67 +41,47 @@ public class ConferencesManager
 	 */
 	private void initUsers() 
 	{	
-		File data_dir = FileHelper.getDataDirectory();
-		if (data_dir != null) {
-			
-			// Create users data file if it doesn't exist
-			FileHelper.createFile(data_dir, FileHelper.USERS_DATA_FILE_NAME);
-			
-			// Get input source for users data file
-			InputSource info = FileHelper.getInputSource(data_dir,
-					FileHelper.USERS_DATA_FILE_NAME);
-			
-			if(info == null) 
-			{
-			    throw new IllegalArgumentException(
-			    		FileHelper.USERS_DATA_FILE_NAME + 
-			    		" could not be found");
-			}
-			else
-			{
-				try 
-				{
-					SAXParserFactory factory = SAXParserFactory.newInstance();
-					SAXParser saxParser = factory.newSAXParser();
-
-					DefaultHandler handler = new DefaultHandler() {
-						
-						public final void startElement(
-								String uri, 
-								String localName, 
-								String qName, 
-								Attributes attr) throws SAXException 
-					    {
-					 
-							System.out.println("Start Element: " + qName);
-					 
-							if (qName.equalsIgnoreCase(
-									User.XML_ELEMENT_USER)) 
-							{
-								User user = new User(attr.getValue(
-										User.XML_ATTR_MY_ID),
-										attr.getValue(User.XML_ATTR_MY_NAME));
-								my_users.add(user);
-							} 
-							else 
-							{
-								System.out.println("Encountered unexpected element: " + qName);
-							}
-					 
-						}
-
-					};
-					
-					my_users = new HashSet<User>();
-					saxParser.parse(info, handler);
-
-				} 
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		}
+		File input_file = new File(FileHelper.getDataDirectory(), 
+				FileHelper.USERS_DATA_FILE_NAME);
+		UsersHandler handler = new UsersHandler(this);
+		new CMSDParser(input_file, handler).parse();
+//		File data_dir = FileHelper.getDataDirectory();
+//		if (data_dir != null) {
+//			
+//			// Create users data file if it doesn't exist
+//			FileHelper.createFile(data_dir, FileHelper.USERS_DATA_FILE_NAME);
+//			
+//			// Get input source for users data file
+//			InputSource info = FileHelper.getInputSource(data_dir,
+//					FileHelper.USERS_DATA_FILE_NAME);
+//			
+//			if(info == null) 
+//			{
+//			    throw new IllegalArgumentException(
+//			    		FileHelper.USERS_DATA_FILE_NAME + 
+//			    		" could not be found");
+//			}
+//			else
+//			{	
+//				try 
+//				{
+//					SAXParserFactory factory = SAXParserFactory.newInstance();
+//					SAXParser saxParser = factory.newSAXParser();
+//					saxParser.parse(info, new UsersHandler(this));
+//				} 
+//				catch (SAXException e) 
+//				{
+//					e.printStackTrace();
+//				} 
+//				catch (IOException e) 
+//				{
+//					e.printStackTrace();
+//				}
+//				catch (ParserConfigurationException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
 	}
 	
 	/**

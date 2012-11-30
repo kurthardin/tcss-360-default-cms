@@ -8,14 +8,11 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
@@ -79,50 +76,9 @@ public class Review
 		my_summary_rating = NO_RATING;
 		my_review_doc = null;
 		
-		InputSource info = FileHelper.getInputSource(my_directory,
-				FileHelper.DATA_FILE_NAME);
-		
-		if(info == null)
-		{
-		    throw new IllegalArgumentException(FileHelper.DATA_FILE_NAME +
-		    		" could not be found");
-		}
-		else
-		{
-			try 
-			{
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-				SAXParser saxParser = factory.newSAXParser();
-
-				InfoHandler handler = new InfoHandler() 
-				{
-					@Override
-					public void handleFieldsAttributes(Attributes attr) 
-					{
-						my_reviewer_id = attr.getValue(XML_ATTR_MY_REVIEWER_ID);
-						
-						String rating_str = attr.getValue(
-								XML_ATTR_MY_SUMMARY_RATING);
-						my_summary_rating = (rating_str == null) ? 
-								NO_RATING : Integer.valueOf(rating_str);
-						
-						String review_doc_str = attr.getValue(
-								XML_ATTR_MY_REVIEW_DOC);
-						my_review_doc = new File(my_directory, review_doc_str);
-					}
-				};
-
-				saxParser.parse(info, handler);
-
-			} 
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
-
-			// TODO Write unit tests for Review(File)
-			
-		}
+		File input_file = new File(my_directory, FileHelper.DATA_FILE_NAME);
+		InfoHandler handler = new ReviewInfoHandler();
+		new CMSDParser(input_file, handler).parse();
 	}
 	
 	/**
@@ -331,5 +287,23 @@ public class Review
 		
 		FileHelper.copyFile(the_review_doc, copied_file);
 		my_review_doc = copied_file;
+	}
+	
+	private class ReviewInfoHandler extends InfoHandler 
+	{
+		@Override
+		public void handleFieldsAttributes(Attributes attr) 
+		{
+			my_reviewer_id = attr.getValue(XML_ATTR_MY_REVIEWER_ID);
+			
+			String rating_str = attr.getValue(
+					XML_ATTR_MY_SUMMARY_RATING);
+			my_summary_rating = (rating_str == null) ? 
+					NO_RATING : Integer.valueOf(rating_str);
+			
+			String review_doc_str = attr.getValue(
+					XML_ATTR_MY_REVIEW_DOC);
+			my_review_doc = new File(my_directory, review_doc_str);
+		}
 	}
 }

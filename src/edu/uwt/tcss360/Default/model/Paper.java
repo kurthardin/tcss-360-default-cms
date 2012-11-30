@@ -13,15 +13,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
@@ -110,77 +107,36 @@ public class Paper
 	    
 		my_directory = the_paper_directory;
 		initFields();
-		 
-		InputSource info = FileHelper.getInputSource(my_directory, 
-				FileHelper.DATA_FILE_NAME);
 		
-		if(info != null)
-		{
-			try 
-			{
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-				SAXParser saxParser = factory.newSAXParser();
-
-				InfoHandler handler = new InfoHandler() 
+		File input_file = new File(my_directory, FileHelper.DATA_FILE_NAME);
+		InfoHandler handler = new PaperInfoHandler();
+		new CMSDParser(input_file, handler).parse();
+		
+		my_recommendation = new Review(
+				FileHelper.getRecommendationDirectory(
+						my_directory));
+		
+		String[] review_dir_names = my_directory.list(
+				new FilenameFilter() 
 				{
 					@Override
-					public void handleFieldsAttributes(Attributes attr) 
+					public boolean accept(File dir, String name) 
 					{
-						String acceptStatusStr = attr.getValue(
-								XML_ATTR_MY_ACCEPTANCE_STATUS);
-						my_acceptance_status = (acceptStatusStr == null) ? 
-								UNDECIDED : 
-								Integer.valueOf(acceptStatusStr);
-						
-						my_author_id = attr.getValue(XML_ATTR_MY_AUTHOR_ID);
-						my_subprogram_chair_id = attr.getValue(
-								XML_ATTR_MY_SUBPROGRAM_CHAIR_ID);
-						my_manuscript_title = attr.getValue(
-								XML_ATTR_MY_MANUSCRIPT_TITLE);
-						
-						String doc_name = attr.getValue(
-								XML_ATTR_MY_MANUSCRIPT_DOC);
-						my_manuscript_doc = new File(my_directory, doc_name);
+						return name.startsWith(
+								FileHelper.REVIEW_DIRECTORY_PREFIX) &&
+								((new File(dir, name)).isDirectory());
 					}
-				};
-
-				saxParser.parse(info, handler);
-
-			} 
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
+				});
+		
+		my_reviewer_ids = new HashSet<String>(review_dir_names.length);
+		
+		for (String review_dir_name : review_dir_names) 
+		{
+			File review_dir = new File(my_directory, review_dir_name);
 			
-			my_recommendation = new Review(
-					FileHelper.getRecommendationDirectory(
-							my_directory));
-			
-			String[] review_dir_names = my_directory.list(
-					new FilenameFilter() 
-					{
-						@Override
-						public boolean accept(File dir, String name) 
-						{
-							return name.startsWith(
-									FileHelper.REVIEW_DIRECTORY_PREFIX) &&
-									((new File(dir, name)).isDirectory());
-						}
-					});
-			
-			my_reviewer_ids = new HashSet<String>(review_dir_names.length);
-			
-			for (String review_dir_name : review_dir_names) 
-			{
-				File review_dir = new File(my_directory, review_dir_name);
-				
-				Review review = new Review(review_dir);
-				my_reviews.add(review);
-				my_reviewer_ids.add(review.getReviewerID());
-			}
-
-			// TODO Write unit tests for Paper(File)
-			
+			Review review = new Review(review_dir);
+			my_reviews.add(review);
+			my_reviewer_ids.add(review.getReviewerID());
 		}
 	}
 	
@@ -545,5 +501,27 @@ public class Paper
 		my_recommendation = null;
 		my_reviewer_ids = new HashSet<String>();
 		my_manuscript_title = NOT_AVAILIBLE;
+	}
+	
+	private class PaperInfoHandler extends InfoHandler
+	{
+		@Override
+		public void handleFieldsAttributes(Attributes attr) 
+		{
+			String acceptStatusStr = attr.getValue(
+					XML_ATTR_MY_ACCEPTANCE_STATUS);
+			my_acceptance_status = InfoDocument.getIntFromAttributeValue(
+					acceptStatusStr);
+			
+			my_author_id = attr.getValue(XML_ATTR_MY_AUTHOR_ID);
+			my_subprogram_chair_id = attr.getValue(
+					XML_ATTR_MY_SUBPROGRAM_CHAIR_ID);
+			my_manuscript_title = attr.getValue(
+					XML_ATTR_MY_MANUSCRIPT_TITLE);
+			
+			String doc_name = attr.getValue(
+					XML_ATTR_MY_MANUSCRIPT_DOC);
+			my_manuscript_doc = new File(my_directory, doc_name);
+		}
 	}
 }

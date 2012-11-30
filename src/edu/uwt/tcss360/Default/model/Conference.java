@@ -18,16 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.ConferenceDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
@@ -133,30 +130,9 @@ public final class Conference {
 		my_start_date = null;
 		my_end_date = null;
 		
-		InputSource info = FileHelper.getInputSource(my_directory,
-				FileHelper.DATA_FILE_NAME);
-		
-		if(info == null) 
-		{
-		    throw new IllegalArgumentException(FileHelper.DATA_FILE_NAME +
-		    		" could not be found in " + my_directory);
-		} 
-		else 
-		{
-			try 
-			{
-				SAXParserFactory factory = SAXParserFactory.newInstance();
-				SAXParser saxParser = factory.newSAXParser();
-
-				InfoHandler handler = new ConferenceInfoHandler();
-
-				saxParser.parse(info, handler);
-			} 
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
-		}
+		File input_file = new File(my_directory, FileHelper.DATA_FILE_NAME);
+		InfoHandler handler = new ConferenceInfoHandler();
+		new CMSDParser(input_file, handler).parse();
 		
 		// Initialize my_papers
 		File papers_dir = FileHelper.getPapersDirectory(my_directory);
