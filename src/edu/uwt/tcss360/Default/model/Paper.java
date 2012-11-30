@@ -21,8 +21,8 @@ import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
-import edu.uwt.tcss360.Default.util.InfoHandler;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
  * Holds information about a manuscript along with reviews of it, etc.

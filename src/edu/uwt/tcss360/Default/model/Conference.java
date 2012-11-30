@@ -27,8 +27,8 @@ import org.xml.sax.SAXException;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
-import edu.uwt.tcss360.Default.util.InfoHandler;
 import edu.uwt.tcss360.Default.util.xml.ConferenceDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
  * Class representing a single conference in the 

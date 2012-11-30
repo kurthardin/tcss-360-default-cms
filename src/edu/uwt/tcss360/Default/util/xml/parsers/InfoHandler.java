@@ -1,4 +1,4 @@
-package edu.uwt.tcss360.Default.util;
+package edu.uwt.tcss360.Default.util.xml.parsers;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;

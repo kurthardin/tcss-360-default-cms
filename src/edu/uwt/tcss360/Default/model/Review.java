@@ -15,8 +15,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
-import edu.uwt.tcss360.Default.util.InfoHandler;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
+import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
  * 
