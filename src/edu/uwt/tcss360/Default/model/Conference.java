@@ -6,6 +6,7 @@
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -605,6 +607,13 @@ public final class Conference {
 		if (my_papers.remove(a_paper)) 
 		{
 			deauthorizeUser(a_paper.getAuthorID(), Role.AUTHOR);
+			File paper_dir = a_paper.getDirectory();
+			try {
+				FileUtils.deleteDirectory(paper_dir);
+			} catch (IOException e) {
+				System.out.println("'" + paper_dir.getName() + 
+						"' directory could not be deleted.");
+			}
 		}
 	}
 	
