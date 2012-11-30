@@ -19,6 +19,9 @@
 		<user id='test@test.com'>
 			<role name='REVIEWER'/>
 		</user>
+		<user id='author@sample.com'>
+			<role name='AUTHOR'/>
+		</user>
 	</my_users_roles>
 
 </fields>

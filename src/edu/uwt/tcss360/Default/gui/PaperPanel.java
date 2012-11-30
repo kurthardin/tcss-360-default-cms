@@ -181,6 +181,8 @@ public class PaperPanel extends AbstractConferencesPanel
 						getPanelManager().popPanel();
 					}
 				});
+				downup.add(upload);
+				downup.add(unsubmit);
 				
 				//TODO: add actions for author buttons
 			}

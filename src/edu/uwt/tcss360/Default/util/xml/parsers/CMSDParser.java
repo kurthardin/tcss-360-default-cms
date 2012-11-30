@@ -51,8 +51,11 @@ public class CMSDParser {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			try {
 				my_sax_parser = factory.newSAXParser();
-			} catch (ParserConfigurationException | SAXException e) {
+			} catch (ParserConfigurationException e) {
 				throw new RuntimeException("Unable to create SAX parser", e);
+			} catch (SAXException e)
+			{
+			    throw new RuntimeException("Unable to create SAX parser", e);
 			}
 		}
 	}
@@ -60,8 +63,11 @@ public class CMSDParser {
 	public void parse() {
 		try {
 			my_sax_parser.parse(my_input_source, my_handler);
-		} catch (SAXException | IOException e) {
+		} catch (SAXException e) {
 			System.out.println("Parsing failed for " + my_input_file.getName());
+		} catch (IOException e)
+		{
+		    System.out.println("Parsing failed for " + my_input_file.getName());
 		}
 	}
 	
