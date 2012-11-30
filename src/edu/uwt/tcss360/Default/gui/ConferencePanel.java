@@ -1,27 +1,21 @@
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
 import edu.uwt.tcss360.Default.model.Conference;
-import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
-import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 /**
@@ -67,6 +61,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 		
 		JTextPane conference_information = new JTextPane();
 		conference_information.setText(getConferenceInfo());
+		conference_information.setEditable(false);
 		top_panel.add(conference_information);
 		add(top_panel, BorderLayout.NORTH);
 		
@@ -211,16 +206,16 @@ public class ConferencePanel extends AbstractConferencesPanel
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Submission Deadline: 		");
 		sb.append(my_conference.getSubmissionDeadline());
-		sb.append(System.getProperty("line.separator"));
-		sb.append("Review Deadline: 		");
-		sb.append(my_conference.getReviewDeadline());
-		sb.append(System.getProperty("line.separator"));
-		sb.append("Recommendation Deadline: 	");
-		sb.append(my_conference.getRecommendationDeadline());
-		sb.append(System.getProperty("line.separator"));
-		sb.append("Final Revision Deadline: 		");
-		sb.append(my_conference.getFinalRevisionDeadline());
-		sb.append(System.getProperty("line.separator"));
+//		sb.append(System.getProperty("line.separator"));
+//		sb.append("Review Deadline: 		");
+//		sb.append(my_conference.getReviewDeadline());
+//		sb.append(System.getProperty("line.separator"));
+//		sb.append("Recommendation Deadline: 	");
+//		sb.append(my_conference.getRecommendationDeadline());
+//		sb.append(System.getProperty("line.separator"));
+//		sb.append("Final Revision Deadline: 		");
+//		sb.append(my_conference.getFinalRevisionDeadline());
+//		sb.append(System.getProperty("line.separator"));
 		return sb.toString();
 	}
 	
