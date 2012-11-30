@@ -290,14 +290,14 @@ public class Paper
 	    if(a_user_id == null)
 	        throw new IllegalArgumentException("User ID cannot be null");
 	    
-		if(a_user_id == my_author_id)
+		if(a_user_id.equals(my_author_id))
 			return Role.AUTHOR;
 		
-		if(my_subprogram_chair_id == a_user_id)
+		if(my_subprogram_chair_id.equals(a_user_id))
 			return Role.SUBPROGRAM_CHAIR;
 		
-		for(Review r : my_reviews) 
-			if(r.getReviewerID() == a_user_id)
+		for(String s : my_reviewer_ids) 
+			if(s.equals(a_user_id))
 				return Role.REVIEWER;
 		
 		return Role.USER;
