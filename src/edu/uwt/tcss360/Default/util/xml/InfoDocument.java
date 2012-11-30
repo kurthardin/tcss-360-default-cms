@@ -4,6 +4,7 @@
 package edu.uwt.tcss360.Default.util.xml;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.Date;
 
 import org.w3c.dom.Element;
@@ -21,14 +22,20 @@ public class InfoDocument extends CMSDDocument
 	
 	public static final int getIntFromAttributeValue(String the_value) 
 	{
-		// TODO
-		return -1;
+		return Integer.valueOf(the_value);
 	}
 	
 	public static final Date getDateFromAttributeValue(String the_value) 
 	{
-		// TODO
-		return null;
+		if (the_value == null) {
+			return null;
+		}
+		
+		try {
+			return Conference.CONFERENCE_DATE_FORMAT.parse(the_value);
+		} catch (ParseException e) {
+			return null;
+		}
 	}
 	
 	protected final Element my_fields_element;

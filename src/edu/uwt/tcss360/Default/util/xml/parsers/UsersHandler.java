@@ -54,7 +54,7 @@ public class UsersHandler extends DefaultHandler {
 					new User(attr.getValue(User.XML_ATTR_MY_ID),
 							attr.getValue(User.XML_ATTR_MY_NAME)));
 		} 
-		else 
+		else
 		{
 			throw new SAXParseException(
 					"Encountered unexpected element: " + qName, 

@@ -45,43 +45,6 @@ public class ConferencesManager
 				FileHelper.USERS_DATA_FILE_NAME);
 		UsersHandler handler = new UsersHandler(this);
 		new CMSDParser(input_file, handler).parse();
-//		File data_dir = FileHelper.getDataDirectory();
-//		if (data_dir != null) {
-//			
-//			// Create users data file if it doesn't exist
-//			FileHelper.createFile(data_dir, FileHelper.USERS_DATA_FILE_NAME);
-//			
-//			// Get input source for users data file
-//			InputSource info = FileHelper.getInputSource(data_dir,
-//					FileHelper.USERS_DATA_FILE_NAME);
-//			
-//			if(info == null) 
-//			{
-//			    throw new IllegalArgumentException(
-//			    		FileHelper.USERS_DATA_FILE_NAME + 
-//			    		" could not be found");
-//			}
-//			else
-//			{	
-//				try 
-//				{
-//					SAXParserFactory factory = SAXParserFactory.newInstance();
-//					SAXParser saxParser = factory.newSAXParser();
-//					saxParser.parse(info, new UsersHandler(this));
-//				} 
-//				catch (SAXException e) 
-//				{
-//					e.printStackTrace();
-//				} 
-//				catch (IOException e) 
-//				{
-//					e.printStackTrace();
-//				}
-//				catch (ParserConfigurationException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
 	}
 	
 	/**

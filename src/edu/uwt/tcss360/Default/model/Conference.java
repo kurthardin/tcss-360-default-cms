@@ -7,7 +7,6 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +23,7 @@ import org.xml.sax.SAXException;
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.ConferenceDocument;
+import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
@@ -620,8 +620,13 @@ public final class Conference {
 		return sb.toString();
 	}
 	
-	private class ConferenceInfoHandler extends InfoHandler {
-		
+	/**
+	 * 
+	 * @author Kurt Hardin
+	 * @version 1.0
+	 */
+	private class ConferenceInfoHandler extends InfoHandler 
+	{	
 		private boolean my_inside_users_roles;
 		private String my_current_user_id;
 		
@@ -629,80 +634,12 @@ public final class Conference {
 		public void handleFieldsAttributes(Attributes attr) 
 		{
 			my_name = attr.getValue(XML_ATTR_MY_NAME);
-			try 
-			{
-				my_start_date = CONFERENCE_DATE_FORMAT.parse(
-						attr.getValue(XML_ATTR_MY_START_DATE));
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			try 
-			{
-				my_end_date = CONFERENCE_DATE_FORMAT.parse(
+			my_start_date = InfoDocument.getDateFromAttributeValue(
+					attr.getValue(XML_ATTR_MY_START_DATE));
+			my_end_date = InfoDocument.getDateFromAttributeValue(
 						attr.getValue(XML_ATTR_MY_END_DATE));
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			String date_string;
-			try {
-				date_string = attr.getValue(XML_ATTR_MY_SUBMISSION_DEADLINE);
-				if (date_string != null) 
-				{
-					my_submission_deadline = 
-							CONFERENCE_DATE_FORMAT.parse(date_string);
-				}
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			try 
-			{
-				date_string = attr.getValue(XML_ATTR_MY_REVIEW_DEADLINE);
-				if (date_string != null) 
-				{
-					my_review_deadline = CONFERENCE_DATE_FORMAT.parse(
-							date_string);
-				}
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			try {
-				date_string = attr.getValue(XML_ATTR_MY_RECOMMENDATION_DEADLINE);
-				if (date_string != null) 
-				{
-					my_recommendation_deadline = 
-							CONFERENCE_DATE_FORMAT.parse(date_string);
-				}
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			try 
-			{
-				date_string = attr.getValue(XML_ATTR_MY_REVISION_DEADLINE);
-				if (date_string != null) 
-				{
-					my_final_revision_deadline = 
-							CONFERENCE_DATE_FORMAT.parse(date_string);
-				}
-			} 
-			catch (ParseException e) 
-			{
-				e.printStackTrace();
-			}
+			my_submission_deadline = InfoDocument.getDateFromAttributeValue(
+					attr.getValue(XML_ATTR_MY_SUBMISSION_DEADLINE));
 		}
 		
 		@Override
@@ -711,24 +648,29 @@ public final class Conference {
 		{
 			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_USERS_ROLES)) 
 			{
+				//Started "my_users_roles" element
 				my_inside_users_roles = true;
 			}
 			else if (my_inside_users_roles) 
 			{
 				if (qName.equalsIgnoreCase(User.XML_ELEMENT_USER)) 
 				{
+					// Started new "user" element within "my_users_roles"
 					my_current_user_id = attr.getValue(XML_ATTR_ID);
 				} 
 				else if (my_current_user_id != null && 
 						qName.equalsIgnoreCase(XML_ELEMENT_ROLE)) 
 				{
+					// Get the roles for the current "user" element
 					Set<Role> user_roles = 
 							my_users_roles.get(my_current_user_id);
 					if (user_roles == null) {
+						// Create Role Set if it doesn't exist
 						user_roles = new HashSet<Role>(5);
 						my_users_roles.put(my_current_user_id, user_roles);
 					}
-					
+
+					// Add Role within current "user" element
 					try 
 					{
 						Role role = Role.valueOf(attr.getValue(XML_ATTR_NAME));
