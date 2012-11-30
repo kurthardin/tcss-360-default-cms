@@ -201,6 +201,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			//if OK is pressed:
 			if (result == JOptionPane.OK_OPTION)
 			{
+				Date start_date = null;
+				Date end_date = null;
+				Date sub_deadline = null;
 				try
 				{
 					//empty conference name
@@ -208,26 +211,47 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 						throw new IllegalArgumentException("Conference Name Empty");
 					String name = name_field.getText().trim();
 					//gathers data from the fields to create a conference object.
-					Date start_date = new Date(Integer.parseInt(date_fields[0][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[0][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[0][1].getText().trim()));
-					Date end_date = new Date(Integer.parseInt(date_fields[1][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[1][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[1][1].getText().trim()));
+					StringBuilder date_str = new StringBuilder(10);
+					date_str.append(date_fields[0][0].getText()).append("-")
+							.append(date_fields[0][1].getText()).append("-")
+							.append(date_fields[0][2].getText());
+					start_date = Conference.CONFERENCE_DATE_FORMAT.parse(
+							 date_str.toString());
+					date_str.setLength(0);
+					date_str.append(date_fields[1][0].getText()).append("-")
+							.append(date_fields[1][1].getText()).append("-")
+							.append(date_fields[1][2].getText());
+					end_date = Conference.CONFERENCE_DATE_FORMAT.parse(
+							date_str.toString());
 					Conference conf = new Conference(getCurrentState().getCurrentUser().getID(), 
 							name, start_date, end_date);
 					//sets the submission deadline for the conference.
-					Date sub_deadline = new Date(Integer.parseInt(date_fields[2][2].getText().trim())-1900, 
-							Integer.parseInt(date_fields[2][0].getText().trim()) - 1, 
-							Integer.parseInt(date_fields[2][1].getText().trim()));
+					date_str.setLength(0);
+					date_str.append(date_fields[2][0].getText()).append("-")
+							.append(date_fields[2][1].getText()).append("-")
+							.append(date_fields[2][2].getText());
+					sub_deadline = Conference.CONFERENCE_DATE_FORMAT.parse(
+							date_str.toString());
 					conf.setSubmissionDeadline(sub_deadline);
 					//adds the conference to the manager and updates the conference list panel.
 					getCurrentState().getConferencesManager().addConference(conf);
 					updatePanel();
 				}
-				catch(NumberFormatException error)
+				catch(ParseException error)
 				{
-					String message = "You can only input numbers in the date fields";
+					String message;
+					if (start_date == null) 
+					{
+						message = "Invalid start date";
+					} 
+					else if (end_date == null) 
+					{
+						message = "Invalid end date";
+					}
+					else
+					{
+						message = "Invalid submission deadline";
+					}
 					JOptionPane.showMessageDialog(null, message, "Error",
 					        JOptionPane.ERROR_MESSAGE);
 				}

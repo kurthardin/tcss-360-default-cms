@@ -62,7 +62,7 @@ public final class Conference {
 	public static final String XML_ATTR_ID = "id";
 	public static final String XML_ATTR_NAME = "name";
 	
-	private static final DateFormat CONFERENCE_DATE_FORMAT = 
+	public static final DateFormat CONFERENCE_DATE_FORMAT = 
 			new SimpleDateFormat("MM-dd-yyyy");
 	
 	/**
@@ -221,9 +221,14 @@ public final class Conference {
 					"The conference end date cannot be null");
 		}
 		
-		if (the_start.compareTo(the_end) > 0) {
+		if (the_start.before(new Date())) {
 			throw new IllegalArgumentException(
-					"The conference start date must be before the end date");
+					"The conference start date must be in the future");
+		}
+		
+		if (the_end.before(the_start)) {
+			throw new IllegalArgumentException(
+					"The conference start date cannot be after the end date");
 		}
 		
 		my_name = the_name;
