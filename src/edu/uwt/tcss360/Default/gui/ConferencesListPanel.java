@@ -92,13 +92,23 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 				getCurrentState().getConferencesManager().getAllConferences();
 		for (Conference c : conferences)
 		{
-			//This button panel was used to make the buttons only stretch
-			//horizontally and not vertically.
-			JButton button = new JButton(c.getname());
+			StringBuilder sb = new StringBuilder();
+			//I used html for this string since /n wont work for
+			//a new line but <br> will.
+			sb.append("<html>Conference Name: ");
+			sb.append(c.getname());
+			sb.append("<br>Program Chair: ");
+			String id = c.getUserIds(Role.PROGRAM_CHAIR).get(0);
+			String name = getCurrentState().getConferencesManager().getUser(id).getName();
+			sb.append(name);
+			sb.append("</html>");
+			JButton button = new JButton(sb.toString());
+			button.setHorizontalAlignment(SwingConstants.LEFT);
 			button.addActionListener(new ConferenceSelectAction(c));
 			center_panel.add(button);
 		}
-		
+		//This button panel was used to make the buttons only stretch
+		//horizontally and not vertically.
 		JPanel center_outer_panel = new JPanel(new BorderLayout());
 		//fixes the vertical stretching problem with the conference buttons
 		//since panels in BorderLayout.NORTH only stretch horizontally.

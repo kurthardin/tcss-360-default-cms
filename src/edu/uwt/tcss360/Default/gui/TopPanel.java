@@ -62,16 +62,20 @@ public class TopPanel extends AbstractConferencesPanel
 		box.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
 				ConferencesFrame.TOP_HEIGHT));
 		User user = getCurrentState().getCurrentUser();
-		StringBuilder sb = new StringBuilder("Name: ");
+		//used html for this string to use <br> (line break)
+		StringBuilder sb = new StringBuilder("<html>");
 		if (user != null)
 		{
+			sb.append("Name: ");
 			sb.append(user.getName());
+			sb.append("<br>");//line break
 			if (my_role_display_state)
 			{
-				sb.append("     Role: ");
+				sb.append("Role: ");
 				sb.append(getCurrentState().getCurrentRole());
 			}
 		}
+		sb.append("</html>");
 		my_label.setText(sb.toString());
 		box.add(my_back_button);
 		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH - 
