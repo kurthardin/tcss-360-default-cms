@@ -12,4 +12,16 @@
 	<user my_id='test@test.com'
           my_email='test@test.com'
           my_name='John Doe'/>
+    <user my_id='author@sample.com'
+    	  my_email='author@sample.com'
+    	  my_name='Author Guy'/>
+    <user my_id='spc@sample.com'
+    	  my_email='spc@sample.com'
+    	  my_name='SubprogramChair Man'/>
+	<user my_id='diff_reviewer@sample.com'
+		  my_email='diff_reviewer@sample.com'
+		  my_name='Diff Reviewer'/>
+	<user my_id='reviewer@sample.com'
+		  my_email='reviewer@sample.com'
+		  my_name='First Reviewer'/>
 </users>
