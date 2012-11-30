@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
     
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
@@ -198,7 +199,12 @@ public class PaperPanel extends AbstractConferencesPanel
 		JPanel center_panel = new JPanel(new BorderLayout());
 		Set<Review> reviews = my_paper.getReviews();
 
+		
 		JPanel revs = new JPanel(new GridLayout(5,2));
+		//JScrollPane revs = new JScrollPane();
+		//revs.setLayout(new GridLayout(0,2));
+		
+		
 		revs.add(new JLabel("Reviewer Name"));
 		revs.add(new JLabel("")); // this col contains buttons to open reviews
 		
@@ -289,7 +295,11 @@ public class PaperPanel extends AbstractConferencesPanel
     			revs.add(b);
     		}
 		}
-		center_panel.add(revs, BorderLayout.CENTER);
+		JPanel cop = new JPanel(new BorderLayout());
+		cop.add(revs, BorderLayout.NORTH);
+		JScrollPane scroll = new JScrollPane(cop);
+		center_panel.add(scroll,BorderLayout.CENTER);
+		//center_panel.add(revs, BorderLayout.CENTER);
 		return center_panel;
 	}
 	
@@ -544,7 +554,8 @@ public class PaperPanel extends AbstractConferencesPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			JFileChooser fc = new JFileChooser();
-			fc.setSelectedFile(new File(FileHelper.getLeafString(my_file)));
+			//fc.setSelectedFile(new File(FileHelper.getLeafString(my_file)));
+			fc.setSelectedFile(new File(my_file.getName()));
 			
 			int result = fc.showSaveDialog(null);
 			
@@ -595,7 +606,7 @@ public class PaperPanel extends AbstractConferencesPanel
 						my_paper.getManuscript().delete();
 						File newfile = FileHelper.createFile(
 								my_paper.getDirectory(),
-								FileHelper.getLeafString(up));
+								up.getName());
 						
 						FileHelper.copyFile(up, my_paper.getDirectory());
 						my_paper.setManuscript(newfile);
@@ -622,8 +633,9 @@ public class PaperPanel extends AbstractConferencesPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			JFileChooser fc = new JFileChooser();
-			fc.setSelectedFile(new File(FileHelper.getLeafString
-					(my_review.getReviewDoc())));
+//			fc.setSelectedFile(new File(FileHelper.getLeafString
+//					(my_review.getReviewDoc())));
+			fc.setSelectedFile(new File(my_review.getReviewDoc().getName()));
 			
 			int result = fc.showOpenDialog(null);
 			
@@ -646,9 +658,11 @@ public class PaperPanel extends AbstractConferencesPanel
 					{
 						my_review.getReviewDoc().delete();
 						
+//						File newfile = FileHelper.createFile(
+//								my_review.getDirectory(), 
+//								FileHelper.getLeafString(up));
 						File newfile = FileHelper.createFile(
-								my_review.getDirectory(), 
-								FileHelper.getLeafString(up));
+								my_review.getDirectory(), up.getName());
 						
 						FileHelper.copyFile(up, my_review.getDirectory());
 
