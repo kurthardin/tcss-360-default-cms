@@ -23,20 +23,19 @@ import edu.uwt.tcss360.Default.util.FileHelper;
 /**
  * 
  * @author Brett Cate
+ * @editor Kurt Hardin
  * @version 1.0
  */
 public class ConferencesManagerTest
 {
-	
 	/**
 	 * @author Kurt Hardin
 	 */
 	@Test
-	public void writeUsersTest() {
+	public void writeUsersDataFileTest() {
 		try {
 			FileUtils.deleteDirectory(new File("./data"));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		ConferencesManager confMan = new ConferencesManager();
@@ -59,7 +58,6 @@ public class ConferencesManagerTest
 		try {
 			usersFileString = usersReader.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -75,7 +73,7 @@ public class ConferencesManagerTest
 	 * @author Kurt Hardin
 	 */
 	@Test
-	public void readUsersTest() {
+	public void readUsersDataFileTest() {
 		ConferencesManager confMan = new ConferencesManager();
 		User u = confMan.getUser("test@testing.com");
 		assertNotNull("user@testing.com not found", u);

@@ -562,60 +562,6 @@ public class Paper
 		return false;
 	}
 	
-	/**
-	 * This method will save the Paper (and any changes) to disk.
-	 * @return <code>true</code> if successfully saved.
-	 */
-	public boolean savePaper() 
-	{	
-		// TODO Implement save to XML
-		
-		return false;
-// TODO Remove old code
-//		File info = new File(my_directory.getAbsolutePath() + "/" +
-//				FileHelper.DATA_FILE_NAME);
-//		
-//		if(info.exists())
-//			info.delete();
-//		
-//		try 
-//		{
-//			info.createNewFile();
-//			BufferedWriter bw = FileHelper.getFileWriter(info);
-//			if(bw == null)
-//				return false;
-//			
-//			//author id
-//			bw.write(my_author_id + '\n');
-//			//paper title
-//			bw.write(my_manuscript_title + '\n');
-//			//subprogram chair id
-//			bw.write(my_subprogram_chair_id + '\n');
-//			//recommendation folder
-//			if(my_recommendation != null)
-//				bw.write(FileHelper.getLeafString(
-//						my_recommendation.getDirectory()));
-//			else
-//				bw.write(NOT_AVAILIBLE + '\n');
-//			//review folders
-//			if(my_reviews.size() > 0) 
-//			{
-//				for(Review r : my_reviews)
-//					bw.write(FileHelper.getLeafString(r.getDirectory()));
-//			} 
-//			bw.write(NOT_AVAILIBLE);
-//			bw.close();	
-//		} 
-//		catch (IOException e) 
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return false;
-//		}
-//		
-//		return true;
-	}
-	
 	private void copyPaperDoc(final File the_paper_directory,
 			final File the_manuscript_doc) 
 	{
