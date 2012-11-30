@@ -238,43 +238,6 @@ public class Review
 	}
 	
 	/**
-	 * Saves data about the review by deleting and creating a new data file
-	 * @return <code>true</code> if the operation succeeded.
-	 */
-	public boolean saveReview() 
-	{
-		// TODO Implement save to XML
-		
-		return false;
-		
-// TODO Remove old code
-//		File info = new File(my_directory.getAbsolutePath() + "/" + 
-//				FileHelper.DATA_FILE_NAME);
-//		
-//		if(info.exists())
-//			info.delete();
-//		
-//		try 
-//		{
-//			info.createNewFile();
-//			BufferedWriter bw = FileHelper.getFileWriter(info);
-//			if(bw == null)
-//				return false;
-//			bw.write(my_reviewer_id + '\n');
-//			bw.write(String.valueOf(my_summary_rating) + '\n');
-//			bw.write(FileHelper.getLeafString(my_review_doc) + '\n');
-//			bw.close();
-//		} 
-//		catch (IOException e) 
-//		{
-//			// Auto-generated catch block
-//			e.printStackTrace();
-//			return false;
-//		}
-//		return true;
-	}
-	
-	/**
 	 * Copies the given document into the given directory.
 	 * @param the_review_directory The directory to copy the file into.
 	 * @param the_review_doc The document to copy.
