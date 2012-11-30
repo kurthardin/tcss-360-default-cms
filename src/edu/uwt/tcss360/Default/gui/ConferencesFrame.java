@@ -9,8 +9,6 @@ package edu.uwt.tcss360.Default.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
@@ -119,14 +117,13 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	 */
 	private void setupClosingOperation()
 	{
-		addWindowListener(new WindowAdapter()
-		{
-		    public void windowClosing(WindowEvent e)
-		    {
-		        my_current_state.getConferencesManager().writeData();
-		    	System.out.println("program closed");
-		    }
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				my_current_state.getConferencesManager().writeData();
+				System.out.println("program closed");
+			}
 		});
+		
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	
