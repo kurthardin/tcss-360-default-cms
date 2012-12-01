@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<users>
+	<user my_id='bhart@gmail.com' 
+	  	  my_email='bhart@gmail.com' 
+	      my_name='Bill Hart'/>
+	<user my_id='dsmith@gmail.com' 
+	  	  my_email='dsmith@gmail.com' 
+	      my_name='Daniel Smith'/>
+	<user my_id='jrogers@gmail.com' 
+	  	  my_email='jrogers@gmail.com' 
+	      my_name='Jason Rogers'/>
+	<user my_id='jcampbell@gmail.com' 
+	  	  my_email='jcampbell@gmail.com' 
+	      my_name='Jim Campbell'/>
+	<user my_id='rfox@gmail.com' 
+	  	  my_email='rfox@gmail.com' 
+	      my_name='Robert Fox'/>
+	<user my_id='pjohnson@gmail.com' 
+	  	  my_email='pjohnson@gmail.com' 
+	      my_name='Paul Johnson'/>
+	<user my_id='jcollins@gmail.com' 
+	  	  my_email='jcollins@gmail.com' 
+	      my_name='Joe Collins'/>
+</users>
