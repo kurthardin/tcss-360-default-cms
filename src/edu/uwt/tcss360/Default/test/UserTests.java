@@ -1,6 +1,9 @@
-/**
- * 
+/*
+ * UserTests.java
+ * 11-16-2012
+ * Kurt Hardin
  */
+
 package edu.uwt.tcss360.Default.test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,8 +15,8 @@ import org.junit.Test;
 import edu.uwt.tcss360.Default.model.User;
 
 /**
- * @author churlbong
- *
+ * @author Kurt Hardin
+ * @version 1.0
  */
 public class UserTests {
 

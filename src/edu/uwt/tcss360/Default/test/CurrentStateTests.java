@@ -1,7 +1,7 @@
-/**
+/*
  * CurrentStateTests.java
  * Kurt Hardin
- * 11/16/2012
+ * 11-16-2012
  */
 
 package edu.uwt.tcss360.Default.test;

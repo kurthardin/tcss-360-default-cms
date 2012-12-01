@@ -28,17 +28,6 @@ public abstract class CMSDDocument
 {
 	private File my_output_file;
 	protected Document my_document;
-//	private Element my_root_element;
-//	
-//	public static int getIntAttribute(String the_attr_value) {
-//		// TODO 
-//		return -1;
-//	}
-//	
-//	public static Date getDateAttribute(String the_attr_value) {
-//		// TODO
-//		return null;
-//	}
 	
 	public CMSDDocument(File the_output_file) 
 	{
@@ -72,21 +61,6 @@ public abstract class CMSDDocument
 		DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
 		my_document = doc_builder.newDocument();
 	}
-	
-//	protected final Element addRootElement(final String the_element_name) {
-//		my_root_element = my_document.createElement(the_element_name);
-//		my_document.appendChild(my_root_element);
-//		return my_root_element;
-//	}
-//	
-//	/**
-//	 * 
-//	 * @param the_element_name
-//	 * @return
-//	 */
-//	public final Element createElement(final String the_element_name) {
-//		return my_document.createElement(the_element_name);
-//	}
 	
 	/**
 	 * 
