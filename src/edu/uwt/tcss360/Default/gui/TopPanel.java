@@ -78,8 +78,8 @@ public class TopPanel extends AbstractConferencesPanel
 		sb.append("</html>");
 		my_label.setText(sb.toString());
 		box.add(my_back_button);
-		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH - 
-				my_label.getPreferredSize().getWidth() - 
+		box.add(Box.createRigidArea(new Dimension((int) (ConferencesFrame.WIDTH
+				- my_label.getPreferredSize().getWidth() - 
 				my_back_button.getPreferredSize().getWidth()),0)));
 		box.add(my_label);
 		add(box);

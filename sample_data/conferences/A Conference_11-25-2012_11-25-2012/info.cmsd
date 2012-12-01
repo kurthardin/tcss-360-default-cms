@@ -16,6 +16,9 @@
 			<role name='REVIEWER'/>
 			<role name='PROGRAM_CHAIR'/>
 		</user>
+		<user id='spc@sample.com'>
+			<role name='SUBPROGRAM_CHAIR'/>
+		</user>
 		<user id='test@test.com'>
 			<role name='REVIEWER'/>
 		</user>

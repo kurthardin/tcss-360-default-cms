@@ -29,7 +29,8 @@ public class Review
 	
 	// XML attribute names
 	public static final String XML_ATTR_MY_REVIEWER_ID = "my_reviewer_id";
-	public static final String XML_ATTR_MY_SUMMARY_RATING = "my_summary_rating";
+	public static final String XML_ATTR_MY_SUMMARY_RATING 
+		= "my_summary_rating";
 	public static final String XML_ATTR_MY_REVIEW_DOC = "my_review_doc";
 	
 	/** If the review has not been assigned a summary rating yet. */

@@ -437,6 +437,8 @@ public class Paper
 		else
 		{
 			my_reviewer_ids.add(an_id);
+			//TODO: create some kind of blank/empty directory for the reviewer
+			// to put stuff into.
 			return true;
 		}
 	}

@@ -40,7 +40,8 @@ public abstract class AbstractConferencesPanel extends JPanel
 	/**
 	 * Constructor for AbstractConferencesPanel.
 	 * @param the_state the CurrentState passed to it by the frame.
-	 * @param the_panel_mgr the panel manager object that is creating this panel.
+	 * @param the_panel_mgr the panel manager object that is creating 
+	 * this panel.
 	 */
 	public AbstractConferencesPanel(final CurrentState the_state, 
 			final PanelManager the_panel_mgr)

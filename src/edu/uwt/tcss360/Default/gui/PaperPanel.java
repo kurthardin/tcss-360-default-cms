@@ -12,14 +12,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
     
-import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
@@ -39,7 +37,7 @@ import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
  * @author Travis Lewis
- * @version 25 Nov 2012
+ * @version 30 Nov 2012
  * Creates a PaperPanel, which displays information relevant to the
  * current Paper object.
  */
@@ -97,9 +95,13 @@ public class PaperPanel extends AbstractConferencesPanel
 	{
 		// TODO Auto-generated method stub
 	    // set visible false
+		this.setVisible(false);
 	    // remove all components
+		this.removeAll();
 	    // call setup panel
+		setupPanel(false);
 	    // set visible true
+		this.setVisible(true);
 	    
 	    //if there are components that have actionlisteners stored as a field
 	    //for the class, make sure the listener is assigned in the constructor
@@ -109,15 +111,8 @@ public class PaperPanel extends AbstractConferencesPanel
 
 	private void setupPanel(final boolean is_test)
 	{
-	    //TODO: BR18: author can only access reviews after PC makes a decision
 	    //TODO: BR8/BR10: an author cannot review their own paper
 	    //TODO: BR9: a user cannot be SPC on a paper they authored
-	    //TODO: US2: allow PC to make a yes/no acceptence decision on a paper
-	    //TODO: need to be able to assign multiple reviewers, but no maximum
-	    // amount of reviewers.
-	    //TODO: RECOMMENDATION!!!
-
-		//new GridLayout(rows, cols);
 		setLayout(new BorderLayout());
 
 		add(createNorthPanel(is_test), BorderLayout.NORTH);
@@ -133,7 +128,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		// download manuscript button (done)
 		// upload manuscript button for author (done)
 		// unsubmit manuscript button for author (done?)
-		
 		
 		JPanel north_panel = new JPanel(new GridLayout(0,1));
 		
@@ -208,12 +202,8 @@ public class PaperPanel extends AbstractConferencesPanel
 		
 		JPanel center_panel = new JPanel(new BorderLayout());
 		Set<Review> reviews = my_paper.getReviews();
-
 		
 		JPanel revs = new JPanel(new GridLayout(5,2));
-		//JScrollPane revs = new JScrollPane();
-		//revs.setLayout(new GridLayout(0,2));
-		
 		
 		revs.add(new JLabel("Reviewer Name"));
 		revs.add(new JLabel("")); // this col contains buttons to open reviews
@@ -309,7 +299,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		cop.add(revs, BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(cop);
 		center_panel.add(scroll,BorderLayout.CENTER);
-		//center_panel.add(revs, BorderLayout.CENTER);
 		return center_panel;
 	}
 	
@@ -317,32 +306,23 @@ public class PaperPanel extends AbstractConferencesPanel
 	{
 		//South panel requirements:
 		// show SPC and email (done)
-		// show acceptance status for PC 
-		// allow PC to set acceptance status
-		// open recommendation button
-		// add recommendation button 
-		// assign SPC button, used by PC (done)
+		// show acceptance status for PC (done)
+		// allow PC to set acceptance status (done)
+		// open recommendation button (done)
+		// add recommendation button  (done)
+		// assign SPC button, used by PC 
 		// assign reviewer button, used by SPC (done)
 		
 		JPanel south_panel = new JPanel(new GridLayout(0,1));
-		StringBuilder sb = new StringBuilder();
-		sb.append("Subprogram Chair: ");
-		if(!is_test)
-		    sb.append(getCurrentState().getConferencesManager().getUser(my_paper.getSubprogramChairID()).getName());
-		else
-		    sb.append("Some Name");
-		sb.append(" [");
-		sb.append(my_paper.getSubprogramChairID());
-		sb.append("]");
-		south_panel.add(new JLabel(sb.toString()));
-		
-		sb = new StringBuilder();
-		
-		JButton get_rec_button = new JButton("Open Recommendation");
+
+		JButton get_rec_button = new JButton("Download Recommendation");
 		JButton add_rec_button = new JButton("Upload Recommendation");
 		JButton assign_spc_button = new JButton("Assign Subprogram Chair");
 		JButton assign_rev_button = new JButton("Assign Reviewer");
-		JPanel southbuttons = new JPanel(new GridLayout(0,2));
+		
+		Role role = getCurrentState().getCurrentRole();
+		int cols = (role == Role.SUBPROGRAM_CHAIR) ? 3 : 2;
+		JPanel southbuttons = new JPanel(new GridLayout(0,cols));
 		
 	    JPanel accept = new JPanel(new GridLayout(0,4));
 	    
@@ -378,11 +358,13 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	@Override
 		    	public void actionPerformed(ActionEvent e)
 		    	{
-		    		String id = getPopupChoice(getCurrentState().
-				    		getCurrentConference().getUserIds
-				    		(Role.SUBPROGRAM_CHAIR),
-				    		"Choose Subprogram Chair");
+		    		List<String> formatted = formatUserIDs(getCurrentState()
+		    				.getCurrentConference()
+		    				.getUserIds(Role.SUBPROGRAM_CHAIR));
 		    		
+		    		String id = getPopupChoice(formatted, "Choose Subprogram" +
+		    				" Chair");
+
 		    		if(id != null && id != "")
 		    		{
 		    			List<Paper> papers = getCurrentState()
@@ -414,9 +396,11 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	@Override
 		    	public void actionPerformed(ActionEvent e)
 		    	{
-		    		String id = getPopupChoice(getCurrentState().
-				    		getCurrentConference().getUserIds(
-				    				Role.REVIEWER), "Choose Reviewer");
+		    		List<String> formatted = formatUserIDs(getCurrentState()
+		    				.getCurrentConference()
+		    				.getUserIds(Role.REVIEWER));
+		    		
+		    		String id = getPopupChoice(formatted, "Choose Reviewer");
 		    		
 		    		if(id != null && id != "")
 		    		{
@@ -437,6 +421,8 @@ public class PaperPanel extends AbstractConferencesPanel
 			    			if(papers.size() < 4)
 			    			{
 			    				my_paper.addReviewer(id);
+			    				//TODO: add the buttons and stuff to the window
+			    				//and refresh it
 			    			}
 			    			else
 			    			{
@@ -492,10 +478,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    }
 		    
 		    if(current_role == Role.PROGRAM_CHAIR)
-		    {
 		    	southbuttons.add(assign_spc_button);
-		    	//south_panel.add(accept); //acceptance radio buttons
-		    }
 		    else if(current_role == Role.SUBPROGRAM_CHAIR)
 		    {
 		    	southbuttons.add(add_rec_button);
@@ -514,12 +497,16 @@ public class PaperPanel extends AbstractConferencesPanel
 		return south_panel;
 	}
 	
+	/**
+	 * Prompts the user to select a file, used for uploading.
+	 * @return The chosen file.
+	 */
 	private File chooseFile()
 	{
 		JFileChooser fc = new JFileChooser();
 		int result = fc.showOpenDialog(null);
 		
-		if(result != JFileChooser.CANCEL_OPTION)
+		if(result == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 
@@ -538,13 +525,44 @@ public class PaperPanel extends AbstractConferencesPanel
 		return null;
 	}
 	
+	/**
+	 * Turns a given list of user IDs and formats them into "Real name [email]"
+	 *  format.
+	 * @param the_ids The IDs (emails) to format.
+	 * @return The formatted IDs.
+	 */
+	private List<String> formatUserIDs(final List<String> the_ids)
+	{
+		ArrayList<String> formatted = new ArrayList<String>(the_ids.size());
+		StringBuilder sb;
+		for(String s : the_ids)
+		{
+			sb = new StringBuilder();
+			sb.append(getCurrentState().getConferencesManager()
+					.getUser(s).getName());
+			sb.append(" [");
+			sb.append(s);
+			sb.append("]");
+			formatted.add(sb.toString());
+		}
+		return formatted;
+	}
+	
+	/**
+	 * Uses a popup to prompt the user to pick from a list of choices.
+	 * @param the_choices The choices the user can pick from
+	 * @param the_message The message to prompt the user with.
+	 * @return The chosen option.
+	 */
 	private String getPopupChoice(final List<String> the_choices, final
 			String the_message)
 	{
-		String[] choices = new String[the_choices.size() + 1];
-		int i = 1;
+		String[] choices = new String[the_choices.size()];
+		
+		int i = 0;
 		for(String s : the_choices)
 			choices[i++] = s;
+			
 		String result = (String) JOptionPane.showInputDialog(null, the_message,
 				"Select",JOptionPane.PLAIN_MESSAGE, null, choices,choices[0]);
 		
@@ -568,23 +586,12 @@ public class PaperPanel extends AbstractConferencesPanel
 			fc.setSelectedFile(new File(my_file.getName()));
 			
 			int result = fc.showSaveDialog(null);
-			
-			if(result != JFileChooser.CANCEL_OPTION 
+						
+			if(result == JFileChooser.APPROVE_OPTION 
 					&& fc.getSelectedFile() != null)
 			{
-				//TODO: delete this printline stuff
-				System.out.println("my_file: ");
-				printFileStats(my_file);
-				System.out.println("\nselected file before copy: ");
-				printFileStats(fc.getSelectedFile());
-				
-				FileHelper.copyFile(my_file, fc.getSelectedFile());
-				
-				System.out.println("\nselected file after copy: ");
-				printFileStats(fc.getSelectedFile());
+				FileHelper.copyFile(my_file, fc.getSelectedFile());;
 			}
-			else
-				System.out.println("cancel hit or file was null");
 		}
 	}
 	
@@ -596,7 +603,7 @@ public class PaperPanel extends AbstractConferencesPanel
 			JFileChooser fc = new JFileChooser();
 			int result = fc.showOpenDialog(null);
 			
-			if(result != JFileChooser.CANCEL_OPTION)
+			if(result == JFileChooser.APPROVE_OPTION)
 			{
 				File up = fc.getSelectedFile();
 				
@@ -649,7 +656,7 @@ public class PaperPanel extends AbstractConferencesPanel
 			
 			int result = fc.showOpenDialog(null);
 			
-			if(result != JFileChooser.CANCEL_OPTION)
+			if(result == JFileChooser.APPROVE_OPTION)
 			{
 				File up = fc.getSelectedFile();
 
@@ -735,18 +742,18 @@ public class PaperPanel extends AbstractConferencesPanel
 	}
 	
 	//TODO: delete this when done testing
-	private void printFileStats(final File the_file)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("path: ");
-		sb.append(the_file.getAbsolutePath());
-		sb.append("\nexists: ");
-		sb.append(the_file.exists());
-		sb.append("\nis directory: ");
-		sb.append(the_file.isDirectory());
-		sb.append("\nis file: ");
-		sb.append(the_file.isFile());
-		System.out.println(sb.toString());
-	}
+//	private void printFileStats(final File the_file)
+//	{
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("path: ");
+//		sb.append(the_file.getAbsolutePath());
+//		sb.append("\nexists: ");
+//		sb.append(the_file.exists());
+//		sb.append("\nis directory: ");
+//		sb.append(the_file.isDirectory());
+//		sb.append("\nis file: ");
+//		sb.append(the_file.isFile());
+//		System.out.println(sb.toString());
+//	}
 	
 }

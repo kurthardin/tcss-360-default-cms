@@ -9,8 +9,8 @@ package edu.uwt.tcss360.Default.gui;
 import javax.swing.JPanel;
 
 /**
- * This interface allows the panels to communicate up to the frame with only the
- * methods defined in this interface.
+ * This interface allows the panels to communicate up to the frame with only
+ * the methods defined in this interface.
  * @author Scott Sanderson
  * @version 1.0
  */

@@ -81,7 +81,8 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		//TODO: add listener to new conf button.
 		my_new_conf_button.setVerticalAlignment(SwingConstants.BOTTOM);
 		upper_box.add(title_label);
-		upper_box.add(Box.createRigidArea(new Dimension(ConferencesFrame.WIDTH / 2,0)));
+		upper_box.add(Box.createRigidArea(new 
+				Dimension(ConferencesFrame.WIDTH / 2,0)));
 		upper_box.add(my_new_conf_button);
 		upper_box.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		setBorder(BorderFactory.createEmptyBorder(0, 50, 30, 50));
@@ -99,7 +100,8 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			sb.append(c.getname());
 			sb.append("<br>Program Chair: ");
 			String id = c.getUserIds(Role.PROGRAM_CHAIR).get(0);
-			String name = getCurrentState().getConferencesManager().getUser(id).getName();
+			String name = getCurrentState()
+					.getConferencesManager().getUser(id).getName();
 			sb.append(name);
 			sb.append("</html>");
 			JButton button = new JButton(sb.toString());
@@ -142,9 +144,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 				roles_array[i] = role;
 				i++;
 			}
-			Role role = (Role) JOptionPane.showInputDialog(null, "Select a role.", 
-					"Role", JOptionPane.PLAIN_MESSAGE, null, roles_array, 
-					roles_array[0]);
+			Role role = (Role) JOptionPane.showInputDialog(null, 
+					"Select a role.", "Role", JOptionPane.PLAIN_MESSAGE, null, 
+					roles_array, roles_array[0]);
 			if (role != null)
 			{
 				getCurrentState().setCurrentRole(role);
@@ -171,8 +173,10 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			creation_panel.add(name_panel);
 			//the panels that will hold the date fields.
 			JPanel[] date_panels = new JPanel[DATE_TITLES.length];
-			//holds the date fields for the start date, end date, and submission deadline.
-			JTextField[][] date_fields = new JTextField[date_panels.length][DATE_FIELD_NUM];
+			//holds the date fields for the start date, end date, and 
+			// submission deadline.
+			JTextField[][] date_fields = 
+					new JTextField[date_panels.length][DATE_FIELD_NUM];
 			//creates the date JPanels and inserts them into the panel
 			//that will be inserted into the dialog window.
 			for (int i = 0; i < date_panels.length; i++)
@@ -186,7 +190,8 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 						field_format = "****";//year format
 					try
 					{
-						date_fields[i][j] = new JFormattedTextField(new MaskFormatter(field_format));
+						date_fields[i][j] = new JFormattedTextField(new 
+								MaskFormatter(field_format));
 					} catch (ParseException e1) {e1.printStackTrace();}
 					switch (j)
 					{
@@ -217,7 +222,8 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 				{
 					//empty conference name
 					if (name_field.getText().trim().length() < 1)
-						throw new IllegalArgumentException("Conference Name Empty");
+						throw new IllegalArgumentException("Conference " +
+								"Name Empty");
 					String name = name_field.getText().trim();
 					//gathers data from the fields to create a conference object.
 					StringBuilder date_str = new StringBuilder(10);
@@ -232,7 +238,8 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 							.append(date_fields[1][2].getText());
 					end_date = Conference.CONFERENCE_DATE_FORMAT.parse(
 							date_str.toString());
-					Conference conf = new Conference(getCurrentState().getCurrentUser().getID(), 
+					Conference conf = new Conference(getCurrentState()
+							.getCurrentUser().getID(), 
 							name, start_date, end_date);
 					//sets the submission deadline for the conference.
 					date_str.setLength(0);
@@ -242,8 +249,10 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 					sub_deadline = Conference.CONFERENCE_DATE_FORMAT.parse(
 							date_str.toString());
 					conf.setSubmissionDeadline(sub_deadline);
-					//adds the conference to the manager and updates the conference list panel.
-					getCurrentState().getConferencesManager().addConference(conf);
+					//adds the conference to the manager and updates the 
+					// conference list panel.
+					getCurrentState().getConferencesManager()
+						.addConference(conf);
 					updatePanel();
 				}
 				catch(ParseException error)

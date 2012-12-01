@@ -105,7 +105,8 @@ public class LoginPanel extends AbstractConferencesPanel
 			String text = my_text_field.getText().trim();
 			if (text.trim().length() > 0)
 			{
-				ConferencesManager cf = getCurrentState().getConferencesManager();
+				ConferencesManager cf = getCurrentState()
+						.getConferencesManager();
 				if (cf.getUser(text) != null)
 				{
 					getCurrentState().setCurrentUser(text);
@@ -115,8 +116,8 @@ public class LoginPanel extends AbstractConferencesPanel
 				else
 				{
 					String message = text + " is not a valid username";
-					JOptionPane.showMessageDialog(new JFrame(), message, "Error",
-					        JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), message, 
+							"Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}

@@ -123,8 +123,9 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * Removes the conference with the associated conference ID and returns true if 
-	 * the conference exists in this ConferencesManager, false otherwise.
+	 * Removes the conference with the associated conference ID and returns
+	 * <code>true</code> if the conference exists in this ConferencesManager, 
+	 * <code>false</code> otherwise.
 	 * 
 	 * @param the_conference_id The ID of the conference to be removed.
 	 * 
@@ -167,9 +168,11 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * Returns an unmodifiable Set of the conferences in this ConferencesManager.
+	 * Returns an unmodifiable Set of the conferences in this 
+	 * ConferencesManager.
 	 * 
-	 * @return An unmodifiable Set of the conferences in this ConferencesManager.
+	 * @return An unmodifiable Set of the conferences in this 
+	 * ConferencesManager.
 	 */
 	public Set<Conference> getAllConferences() 
 	{
@@ -189,8 +192,9 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * Removes the user with the corresponding user ID given and returns true. If the User is not
-	 * found, returns false instead.
+	 * Removes the user with the corresponding user ID given and returns 
+	 * <code>true</code>. If the User is not found, returns <code>false</code> 
+	 * instead.
 	 * 
 	 * @param the_user_id The ID of the user to be removed.
 	 * 
@@ -211,9 +215,10 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * Returns the User with the corresponding User ID given, or null if the user was not found.
+	 * Returns the User with the corresponding User ID given, or 
+	 * <code>null</code> if the user was not found.
 	 * 
-	 * @param the_user_id The User ID for the sough User.
+	 * @param the_user_id The User ID for the sought User.
 	 * 
 	 * @return The User sought, or null if the User was not found.
 	 */

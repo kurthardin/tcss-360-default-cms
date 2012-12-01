@@ -41,7 +41,8 @@ public class ConferencePanel extends AbstractConferencesPanel
 	 * @param the_conference The Conference whose information is displayed by
 	 * this panel.
 	 */
-	public ConferencePanel(final CurrentState the_current_state, final PanelManager the_manager,
+	public ConferencePanel(final CurrentState the_current_state, 
+			final PanelManager the_manager,
 			final Conference the_conference) 
 	{
 		super(the_current_state, the_manager);
@@ -152,11 +153,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 		JPanel holder = new JPanel(new BorderLayout());
 		holder.add(buttonspanel,BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(holder);
-		//scroll.add(holder);
 		the_panel.add(scroll);
-		//TODO: figure out why adding the scrollpane doesn't work.
-		
-		
 		
 		//old code
 //		List<Paper> papers = my_conference.
