@@ -225,8 +225,15 @@ public class PaperPanel extends AbstractConferencesPanel
     		    if(r != null)
     		    {
     		        JButton dl_rev = new JButton("Download Review");
-    		        dl_rev.addActionListener(new DownloadFileAction(
-    		        		r.getReviewDoc()));
+    		        if (r.getReviewDoc() == null) 
+    		        {
+    		        	dl_rev.setEnabled(false);
+    		        } 
+    		        else
+    		        {
+    		        	dl_rev.addActionListener(new DownloadFileAction(
+    		        			r.getReviewDoc()));
+    		        }
     		        revbuttons.add(dl_rev);
     		    }
 
@@ -260,8 +267,15 @@ public class PaperPanel extends AbstractConferencesPanel
     		        revs.add(new JLabel(cm.getUser
     		                (r.getReviewerID()).getName()));
     		        JButton b = new JButton("Download Review");
-    		        b.addActionListener(new DownloadFileAction(
-    		        		r.getReviewDoc()));
+    		        if (r.getReviewDoc() == null) 
+    		        {
+    		        	b.setEnabled(false);
+    		        } 
+    		        else
+    		        {
+    		        	b.addActionListener(new DownloadFileAction(
+    		        			r.getReviewDoc()));
+    		        }
     		        revs.add(b);
     		    }
     		}
@@ -276,8 +290,15 @@ public class PaperPanel extends AbstractConferencesPanel
 	                    revs.add(new JLabel(cm.getUser
 	                            (r.getReviewerID()).getName()));
 	                    JButton b = new JButton("Download Review");
-	                    b.addActionListener(new DownloadFileAction(
-	                    		r.getReviewDoc()));
+	    		        if (r.getReviewDoc() == null) 
+	    		        {
+	    		        	b.setEnabled(false);
+	    		        } 
+	    		        else
+	    		        {
+	    		        	b.addActionListener(new DownloadFileAction(
+	    		        			r.getReviewDoc()));
+	    		        }
 	                    revs.add(b);
 	                }
     		    }
@@ -291,7 +312,15 @@ public class PaperPanel extends AbstractConferencesPanel
     
     			//open review button.
     			JButton b = new JButton("Download Review");
-    			b.addActionListener(new DownloadFileAction(r.getReviewDoc()));
+		        if (r.getReviewDoc() == null) 
+		        {
+		        	b.setEnabled(false);
+		        } 
+		        else
+		        {
+		        	b.addActionListener(
+		        			new DownloadFileAction(r.getReviewDoc()));
+		        }
     			revs.add(b);
     		}
 		}
@@ -344,9 +373,16 @@ public class PaperPanel extends AbstractConferencesPanel
 			Role current_role = getCurrentState().getCurrentRole();
 		    
 		    // add action to open recommendation button
-		    get_rec_button.addActionListener(
-		    		new DownloadFileAction(my_paper.getRecommendation()
-		    				.getReviewDoc()));
+	        if (my_paper.getRecommendation() == null) 
+	        {
+	        	get_rec_button.setEnabled(false);
+	        } 
+	        else
+	        {
+	        	get_rec_button.addActionListener(
+	        			new DownloadFileAction(my_paper.getRecommendation()
+	        					.getReviewDoc()));
+	        }
 		    
 		    // add action to upload recommendation button
 		    add_rec_button.addActionListener(
