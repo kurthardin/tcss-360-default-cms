@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -70,45 +71,24 @@ public class ConferencePanel extends AbstractConferencesPanel
 		addPapersButtons(papers_panel);
 		add(papers_panel, BorderLayout.CENTER);
 		
-//		JPanel role_buttons_panel = new JPanel();
-//		role_buttons_panel.setLayout(new FlowLayout());
-//		
-//		JButton program_chair_button = new JButton("Program Chair");
-//		JButton subprogram_chair_button = new JButton("Subprogram Chair");
-//		JButton reviewer_button = new JButton("Reviewer");
-//		JButton author_button = new JButton("Author");
-//		
-//		addProgramChairListener(program_chair_button);
-//		addSubprogramChairListener(subprogram_chair_button);
-//		addReviewerListener(reviewer_button);
-//		addAuthorListener(author_button);
-//		
-//		Set<Role> current_user_roles =
-//				my_conference.getRoles(super.getCurrentState().
-//						getCurrentUser().getID());
-//		role_buttons_panel.add(new JLabel("Please select a role: "));
-//		role_buttons_panel.add(program_chair_button);
-//		if (!current_user_roles.contains(Role.PROGRAM_CHAIR)) 
-//		{
-//			program_chair_button.setEnabled(false);
-//		}
-//		role_buttons_panel.add(subprogram_chair_button);
-//		if (!current_user_roles.contains(Role.SUBPROGRAM_CHAIR)) 
-//		{
-//			subprogram_chair_button.setEnabled(false);
-//		}
-//		role_buttons_panel.add(reviewer_button);
-//		if (!current_user_roles.contains(Role.REVIEWER)) 
-//		{
-//			reviewer_button.setEnabled(false);
-//		}
-//		role_buttons_panel.add(author_button);
-//		if (!current_user_roles.contains(Role.AUTHOR)) 
-//		{
-//			author_button.setEnabled(false);
-//		}
-//		add(role_buttons_panel, BorderLayout.WEST);
+		JPanel paper_submission_panel = new JPanel();
+		addPaperSubmissionButton(paper_submission_panel);
+		add(paper_submission_panel, BorderLayout.SOUTH);
+		
 	}
+	
+	/**
+	 * Adds the button for submitting a paper to the given panel.
+	 * @param the_panel	The panel to which the button is added.
+	 */
+	private void addPaperSubmissionButton(final JPanel the_panel)
+	{
+		final JButton paper_submission_button = new JButton("Submit a Paper");
+		paper_submission_button.addActionListener(new PaperSubmissionAction());
+		
+	}
+	
+	
 	
 	/**
 	 * Adds the buttons for the papers to the given panel.
@@ -165,26 +145,6 @@ public class ConferencePanel extends AbstractConferencesPanel
 //		}
 	}
 	
-//	private void addProgramChairListener(final JButton the_button) 
-//	{
-//		
-//	}
-//	
-//	private void addSubprogramChairListener(final JButton the_button)
-//	{
-//		
-//	}
-//	
-//	private void addReviewerListener(final JButton the_button)
-//	{
-//		
-//	}
-//	
-//	private void addAuthorListener(final JButton the_button)
-//	{
-//		
-//	}
-	
 	/**
 	 * Returns a string containing all of the conference information.
 	 * @return
@@ -203,6 +163,11 @@ public class ConferencePanel extends AbstractConferencesPanel
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Submission Deadline: 		");
 		sb.append(my_conference.getSubmissionDeadline());
+		
+// 		Commented code can be reinserted to add Review Deadline, Recommendation
+//		Deadline, and/or Final Revision Deadline to the information displayed
+//		about the conference in the ConferencePanel.
+		
 //		sb.append(System.getProperty("line.separator"));
 //		sb.append("Review Deadline: 		");
 //		sb.append(my_conference.getReviewDeadline());
@@ -219,7 +184,6 @@ public class ConferencePanel extends AbstractConferencesPanel
 	@Override
 	public void updatePanel() 
 	{
-		// TODO Auto-generated method stub
 		setVisible(false);
 		removeAll();
 		setupPanel();
@@ -240,13 +204,31 @@ public class ConferencePanel extends AbstractConferencesPanel
 			my_paper = the_paper;
 		}
 		@Override
-		public void actionPerformed(ActionEvent arg0) 
+		public void actionPerformed(final ActionEvent arg0) 
 		{
 			getCurrentState().setCurrentPaper(my_paper);
 			getPanelManager().pushPanel(new PaperPanel(getCurrentState(),
 					getPanelManager(), my_paper));
 		}
 		
+	}
+	
+	private class PaperSubmissionAction extends AbstractAction
+	{
+		
+		final JPanel my_parent_panel;
+		
+		public PaperSubmissionAction(final JPanel the_parent_panel)
+		{
+			my_parent_panel = the_parent_panel;
+		}
+		
+		@Override
+		public void actionPerformed(final ActionEvent arg0)
+		{
+			JFileChooser chooser = new JFileChooser();
+			chooser.showSaveDialog(my_parent_panel);
+		}
 	}
 	
 //	public static void main(final String[] the_arguments)
