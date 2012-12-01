@@ -1,3 +1,9 @@
+/*
+ * InfoHandler.java
+ * 11-30-2012
+ * Kurt Hardin
+ */
+
 package edu.uwt.tcss360.Default.util.xml.parsers;
 
 import org.xml.sax.Attributes;

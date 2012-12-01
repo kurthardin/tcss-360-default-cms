@@ -1,6 +1,9 @@
-/**
- * 
+/*
+ * InfoDocument.java
+ * 11-30-2012
+ * Kurt Hardin
  */
+
 package edu.uwt.tcss360.Default.util.xml;
 
 import java.io.File;
@@ -12,8 +15,8 @@ import org.w3c.dom.Element;
 import edu.uwt.tcss360.Default.model.Conference;
 
 /**
- * @author churlbong
- *
+ * @author Kurt Hardin
+ * @version 1.0
  */
 public class InfoDocument extends CMSDDocument 
 {
