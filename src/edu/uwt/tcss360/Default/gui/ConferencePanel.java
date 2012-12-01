@@ -134,15 +134,6 @@ public class ConferencePanel extends AbstractConferencesPanel
 		holder.add(buttonspanel,BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(holder);
 		the_panel.add(scroll);
-		
-		//old code
-//		List<Paper> papers = my_conference.
-//				getPapers(super.getCurrentState().getCurrentUser().getID(),
-//				super.getCurrentState().getCurrentRole());
-//		for (Paper a_paper : papers)
-//		{
-//			the_panel.add(new JButton(a_paper.getTitle()));
-//		}
 	}
 	
 	/**
@@ -162,22 +153,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 		sb.append(my_conference.getEndDate());
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Submission Deadline: 		");
-		sb.append(my_conference.getSubmissionDeadline());
-		
-// 		Commented code can be reinserted to add Review Deadline, Recommendation
-//		Deadline, and/or Final Revision Deadline to the information displayed
-//		about the conference in the ConferencePanel.
-		
-//		sb.append(System.getProperty("line.separator"));
-//		sb.append("Review Deadline: 		");
-//		sb.append(my_conference.getReviewDeadline());
-//		sb.append(System.getProperty("line.separator"));
-//		sb.append("Recommendation Deadline: 	");
-//		sb.append(my_conference.getRecommendationDeadline());
-//		sb.append(System.getProperty("line.separator"));
-//		sb.append("Final Revision Deadline: 		");
-//		sb.append(my_conference.getFinalRevisionDeadline());
-//		sb.append(System.getProperty("line.separator"));
+		sb.append(my_conference.getSubmissionDeadline());		
 		return sb.toString();
 	}
 	
