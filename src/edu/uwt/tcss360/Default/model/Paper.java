@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 import edu.uwt.tcss360.Default.model.User.Role;
+import edu.uwt.tcss360.Default.test.xml.PaperDocument;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
@@ -45,6 +47,9 @@ public class Paper
 			"my_subprogram_chair_id";
 	public static final String XML_ATTR_MY_MANUSCRIPT_TITLE = 
 			"my_manuscript_title";
+	public static final String XML_ELEMENT_MY_REVIEWER_IDS = 
+			"my_reviewer_ids";
+	public static final String XML_ATTR_ID = "id";
 	
     //values for Program Chair's acceptance choices
 	public static final int REJECTED = -1;
@@ -83,7 +88,7 @@ public class Paper
 	/** The recommendation of the subprogram chair. */
 	private Review my_recommendation;
 	
-	private Set<String> my_reviewer_ids;
+	private Set<String> my_reviewer_ids = new HashSet<String>();
 	
 	private String my_manuscript_title;
 	
@@ -109,12 +114,14 @@ public class Paper
 		initFields();
 		
 		File input_file = new File(my_directory, FileHelper.DATA_FILE_NAME);
-		InfoHandler handler = new PaperInfoHandler();
+		PaperInfoHandler handler = new PaperInfoHandler();
 		new CMSDParser(input_file, handler).parse();
 		
-		my_recommendation = new Review(
-				FileHelper.getRecommendationDirectory(
-						my_directory));
+		File recommendation_dir = new File(my_directory, "recommendation");
+		if (recommendation_dir.exists()) 
+		{
+			my_recommendation = new Review(recommendation_dir);
+		}
 		
 		String[] review_dir_names = my_directory.list(
 				new FilenameFilter() 
@@ -128,7 +135,6 @@ public class Paper
 					}
 				});
 		
-		my_reviewer_ids = new HashSet<String>(review_dir_names.length);
 		
 		for (String review_dir_name : review_dir_names) 
 		{
@@ -201,7 +207,8 @@ public class Paper
 	{
 		File output_file = new File(my_directory, 
 					FileHelper.DATA_FILE_NAME);
-		new InfoDocument(output_file)
+		new PaperDocument(output_file)
+		.addMyReviewerIds(my_reviewer_ids)
 		.setField(XML_ATTR_MY_MANUSCRIPT_TITLE, my_manuscript_title)
 		.setField(XML_ATTR_MY_MANUSCRIPT_DOC, my_manuscript_doc)
 		.setField(XML_ATTR_MY_ACCEPTANCE_STATUS, my_acceptance_status)
@@ -510,6 +517,8 @@ public class Paper
 	
 	private class PaperInfoHandler extends InfoHandler
 	{
+		private boolean my_inside_reviewer_ids;
+		
 		@Override
 		public void handleFieldsAttributes(Attributes attr) 
 		{
@@ -527,6 +536,35 @@ public class Paper
 			String doc_name = attr.getValue(
 					XML_ATTR_MY_MANUSCRIPT_DOC);
 			my_manuscript_doc = new File(my_directory, doc_name);
+		}
+		
+		@Override
+		public void startUnknownFieldsElement(String uri, 
+				String localName, String qName, Attributes attr)
+		{
+			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_REVIEWER_IDS)) 
+			{
+				//Started "my_reviewer_ids" element
+				my_inside_reviewer_ids = true;
+			}
+			else if (my_inside_reviewer_ids) 
+			{
+				if (qName.equalsIgnoreCase(User.XML_ELEMENT_USER)) 
+				{
+					// Started new "user" element within "my_reviewer_ids"
+					my_reviewer_ids.add(attr.getValue(XML_ATTR_ID));
+				} 
+			}
+		}
+		
+		@Override
+		public final void endUnknownFieldsElement(String uri, String localName,
+				String qName) throws SAXException 
+		{
+			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_REVIEWER_IDS)) 
+			{
+				my_inside_reviewer_ids = false;
+			}
 		}
 	}
 }
