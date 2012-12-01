@@ -28,13 +28,21 @@ public class UsersDocument extends CMSDDocument
 		my_document.appendChild(my_users_element);
 	}
 	
-	public void addUser(final User the_user) 
+	public UsersDocument addUser(final User the_user) 
 	{
-		Element user_element = my_document.createElement(User.XML_ELEMENT_USER);
-		user_element.setAttribute(User.XML_ATTR_MY_ID, the_user.getID());
-		user_element.setAttribute(User.XML_ATTR_MY_EMAIL, the_user.getEmail());
-		user_element.setAttribute(User.XML_ATTR_MY_NAME, the_user.getName());
-		my_users_element.appendChild(user_element);
+		if (the_user != null) 
+		{
+			Element user_element = my_document.createElement(
+					User.XML_ELEMENT_USER);
+			user_element.setAttribute(
+					User.XML_ATTR_MY_ID, the_user.getID());
+			user_element.setAttribute(
+					User.XML_ATTR_MY_EMAIL, the_user.getEmail());
+			user_element.setAttribute(
+					User.XML_ATTR_MY_NAME, the_user.getName());
+			my_users_element.appendChild(user_element);
+		}
+		return this;
 	}
 	
 }

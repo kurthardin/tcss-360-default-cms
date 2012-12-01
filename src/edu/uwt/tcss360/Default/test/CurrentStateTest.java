@@ -1,5 +1,5 @@
 /*
- * CurrentStateTests.java
+ * CurrentStateTest.java
  * Kurt Hardin
  * 11-16-2012
  */
@@ -29,7 +29,7 @@ import edu.uwt.tcss360.Default.util.FileHelper;
  * Unit tests for CurrentState methods.
  * @author Kurt Hardin
  */
-public class CurrentStateTests 
+public class CurrentStateTest 
 {
 	
 	private final ConferencesManager my_confs_mgr = new ConferencesManager();

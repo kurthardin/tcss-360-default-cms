@@ -43,23 +43,14 @@ public abstract class CMSDDocument
 		
 		my_output_file = the_output_file;
 		try {
-			createXmlDocument();
+			// Create the XML document
+			DocumentBuilderFactory doc_factory = 
+					DocumentBuilderFactory.newInstance();
+			DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
+			my_document = doc_builder.newDocument();
 		} catch (ParserConfigurationException e) {
 			throw new RuntimeException("Could not create CMSDDocument", e);
 		}
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * @throws ParserConfigurationException
-	 */
-	private final void createXmlDocument() throws ParserConfigurationException 
-	{
-		DocumentBuilderFactory doc_factory = 
-				DocumentBuilderFactory.newInstance();
-		DocumentBuilder doc_builder = doc_factory.newDocumentBuilder();
-		my_document = doc_builder.newDocument();
 	}
 	
 	/**
@@ -70,12 +61,6 @@ public abstract class CMSDDocument
 	 */
 	public final void write() 
 	{
-		// TODO Check if necessary
-//		if (my_output_file.exists()) {
-//			my_output_file.delete();
-//		}
-//		my_output_file = FileHelper.createFile(my_output_file.getParentFile(), 
-//				my_output_file.getName());
 		StreamResult result = new StreamResult(my_output_file);
 
 		TransformerFactory transformerFactory = 

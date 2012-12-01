@@ -1,5 +1,5 @@
 /*
- * UserTests.java
+ * UserTest.java
  * 11-16-2012
  * Kurt Hardin
  */
@@ -18,7 +18,7 @@ import edu.uwt.tcss360.Default.model.User;
  * @author Kurt Hardin
  * @version 1.0
  */
-public class UserTests {
+public class UserTest {
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.io.File)}.
