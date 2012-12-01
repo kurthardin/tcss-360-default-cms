@@ -439,6 +439,8 @@ public class Paper
 			my_reviewer_ids.add(an_id);
 			//TODO: create some kind of blank/empty directory for the reviewer
 			// to put stuff into.
+			// A review directory gets created when instantiating a new
+			// Review object. -Kurt
 			return true;
 		}
 	}
