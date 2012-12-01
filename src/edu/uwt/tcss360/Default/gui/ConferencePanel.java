@@ -84,8 +84,8 @@ public class ConferencePanel extends AbstractConferencesPanel
 	private void addPaperSubmissionButton(final JPanel the_panel)
 	{
 		final JButton paper_submission_button = new JButton("Submit a Paper");
-		paper_submission_button.addActionListener(new PaperSubmissionAction());
-		
+		paper_submission_button.addActionListener(new PaperSubmissionAction(the_panel));
+		the_panel.add(paper_submission_button);
 	}
 	
 	
