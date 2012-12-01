@@ -430,6 +430,13 @@ public class Paper
 		return null;
 	}
 	
+	/**
+	 * Adds the given user ID to the list of reviewers for this paper.
+	 * @param an_id The user ID to add.
+	 * @return <code>true</code> if the user was added, <code>false</code>
+	 * if the user was not added because they were already in the list of 
+	 * reviewers.
+	 */
 	public boolean addReviewer(final String an_id)
 	{
 		if(my_reviewer_ids.contains(an_id))
@@ -460,30 +467,24 @@ public class Paper
 	    my_subprogram_chair_id = the_user_id;
 	}
 	
-	/**
-	 * Adds the given user ID to the list of reviewers for this paper.
-	 * @param userid The user ID to add.
-	 * @return <code>true</code> if the user was added, <code>false</code>
-	 * if they weren't added for some reason (ex: if the given user is the 
-	 * author, or they're already a reviewer).
-	 */
-	public boolean assignReviewer(final String a_user_id) 
-	{
-	    if(a_user_id == null)
-	        throw new IllegalArgumentException("Reviewer user ID cannot " +
-	        		"be null");
-	    
-		Role r = getRole(a_user_id);
-		
-		//business rules 8 and 10 (they're pretty much the same thing...)
-		// should be handled by the GUI, (but it isn't required by the official
-		// requirements...
-		
-		if(r != Role.AUTHOR && r != Role.REVIEWER) 
-			return my_reviewer_ids.add(a_user_id);
-		
-		return false;
-	}
+	// TODO Remove duplicate method.
+//	public boolean assignReviewer(final String a_user_id) 
+//	{
+//	    if(a_user_id == null)
+//	        throw new IllegalArgumentException("Reviewer user ID cannot " +
+//	        		"be null");
+//	    
+//		Role r = getRole(a_user_id);
+//		
+//		//business rules 8 and 10 (they're pretty much the same thing...)
+//		// should be handled by the GUI, (but it isn't required by the official
+//		// requirements...
+//		
+//		if(r != Role.AUTHOR && r != Role.REVIEWER) 
+//			return my_reviewer_ids.add(a_user_id);
+//		
+//		return false;
+//	}
 	
 	private void copyPaperDoc(final File the_paper_directory,
 			final File the_manuscript_doc) 

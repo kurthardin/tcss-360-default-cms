@@ -68,7 +68,7 @@ public class PaperTest
 		File doc = new File("\\");
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
-		p.assignReviewer("testReviewer@test.com");
+		p.addReviewer("testReviewer@test.com");
 		p.assignSubprogramChair("testSubprogramChair@test.com");
 		
 		assertEquals("Author doesnt match ID", 
@@ -112,9 +112,9 @@ public class PaperTest
 		File doc = new File("\\");
 		String s = "test@test.com";
 		Paper p = new Paper(s, "testtitle", doc, dir);
-		p.assignReviewer("test2@test.com");
-		p.assignReviewer("test3@test.com");
-		p.assignReviewer("test4@test.com");
+		p.addReviewer("test2@test.com");
+		p.addReviewer("test3@test.com");
+		p.addReviewer("test4@test.com");
 		List<String> list = p.getUserIDs(Role.REVIEWER);
 		assertTrue("Reviewer doesn't match ID", list.contains("test2@test.com"));
 		assertTrue("Reviewer doesn't match ID", list.contains("test3@test.com"));
