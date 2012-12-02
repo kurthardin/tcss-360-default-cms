@@ -398,10 +398,11 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		//BR9
 		    		reviewer_ids.remove(my_paper.getAuthorID());
 		    		
-		    		for (String reviewer_id : reviewer_ids) {
+		    		for (int i = 0; i < reviewer_ids.size(); i++) {
+		    			String reviewer_id = reviewer_ids.get(i);
 		    			if (my_paper.getUserIDs(
 		    					Role.SUBPROGRAM_CHAIR).contains(reviewer_id)) {
-		    				reviewer_ids.remove(reviewer_id);
+		    				reviewer_ids.remove(i);
 		    			}
 		    		}
 		    		
@@ -451,10 +452,11 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		//BR8 and BR10
 		    		reviewer_ids.remove(my_paper.getAuthorID());
 		    		
-		    		for (String reviewer_id : reviewer_ids) {
+		    		for (int i = 0; i < reviewer_ids.size(); i++) {
+		    			String reviewer_id = reviewer_ids.get(i);
 		    			if (my_paper.getUserIDs(
 		    					Role.REVIEWER).contains(reviewer_id)) {
-		    				reviewer_ids.remove(reviewer_id);
+		    				reviewer_ids.remove(i);
 		    			}
 		    		}
 		    		
