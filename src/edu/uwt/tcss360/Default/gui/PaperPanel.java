@@ -7,7 +7,6 @@
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,13 +19,12 @@ import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-    
+
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
@@ -394,26 +392,25 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	@Override
 		    	public void actionPerformed(ActionEvent e)
 		    	{
-		    		List<String> formatted = formatUserIDs(getCurrentState()
+		    		List<String> reviewer_ids = getCurrentState()
 		    				.getCurrentConference()
-		    				.getUserIds(Role.SUBPROGRAM_CHAIR));
+		    				.getUserIds(Role.REVIEWER);
+		    		//BR9
+		    		reviewer_ids.remove(my_paper.getAuthorID());
+		    		List<String> formatted = formatUserIDs(reviewer_ids);
 		    		
 		    		String id = getPopupChoice(formatted, "Choose Subprogram" +
 		    				" Chair");
 
 		    		if(id != null && id != "")
 		    		{
+		    			int start = id.indexOf('[') + 1;
+		    			int end = id.length() - 1;
+		    			id = (String) id.subSequence(start, end);
 		    			List<Paper> papers = getCurrentState()
 		    					.getCurrentConference().getPapers(id, 
 		    					Role.SUBPROGRAM_CHAIR);
-		    			//BR9
-		    			if(id == my_paper.getAuthorID())
-		    			{
-		    				JOptionPane.showMessageDialog(null, 
-		    						"Subprogram chair cannot be author", 
-		    						"Error",JOptionPane.ERROR_MESSAGE);
-		    			}
-		    			else if (papers.size() >= 4)
+		    			if (papers.size() >= 4)
 		    			{ // BR17
 		    				JOptionPane.showMessageDialog(null, 
 		    						"Subprogram chair cannot be assigned more" 
@@ -432,6 +429,11 @@ public class PaperPanel extends AbstractConferencesPanel
 		    	@Override
 		    	public void actionPerformed(ActionEvent e)
 		    	{
+		    		List<String> reviewer_ids = getCurrentState()
+		    				.getCurrentConference()
+		    				.getUserIds(Role.REVIEWER);
+		    		//BR8 and BR10
+		    		reviewer_ids.remove(my_paper.getAuthorID());
 		    		List<String> formatted = formatUserIDs(getCurrentState()
 		    				.getCurrentConference()
 		    				.getUserIds(Role.REVIEWER));
@@ -440,32 +442,22 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		
 		    		if(id != null && id != "")
 		    		{
-		    			//BR8 and BR10
-		    			if(id == my_paper.getAuthorID())
+		    			List<Paper> papers = getCurrentState().
+		    					getCurrentConference().
+		    					getPapers(id, Role.REVIEWER);
+
+		    			//BR16
+		    			if(papers.size() < 4)
 		    			{
-		    				JOptionPane.showMessageDialog(null, 
-		    						"Authors cannot review their own papers", 
-		    						"Error",JOptionPane.ERROR_MESSAGE);
+		    				my_paper.addReviewer(id);
+		    				//TODO: add the buttons and stuff to the window
+		    				//and refresh it
 		    			}
 		    			else
-			    			{
-			    			List<Paper> papers = getCurrentState().
-			    					getCurrentConference().
-			    					getPapers(id, Role.REVIEWER);
-			    			
-			    			//BR16
-			    			if(papers.size() < 4)
-			    			{
-			    				my_paper.addReviewer(id);
-			    				//TODO: add the buttons and stuff to the window
-			    				//and refresh it
-			    			}
-			    			else
-			    			{
-			    				JOptionPane.showMessageDialog(null, id + 
-			    						" is already workong on 4 papers.", 
-			    						"Error",JOptionPane.ERROR_MESSAGE);
-			    			}
+		    			{
+		    				JOptionPane.showMessageDialog(null, id + 
+		    						" is already workong on 4 papers.", 
+		    						"Error",JOptionPane.ERROR_MESSAGE);
 		    			}
 		    		}
 		    	}
@@ -731,51 +723,51 @@ public class PaperPanel extends AbstractConferencesPanel
 		}
 	}
 	
-	//test main
-	public static void main(String[] args) 
-	{
-		JFrame frame = new JFrame("Paper Panel");
-		frame.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
-				ConferencesFrame.HEIGHT));
-		
-		
-		testPanel(frame);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		
-//		JOptionPane.showMessageDialog(null, "File must exist", "Error",
-//				JOptionPane.ERROR_MESSAGE);
-	}
-	
-	
-	private static void testPanel(JFrame frame)
-	{
-		//setup a paper object
-		File doc = new File("README.txt");
-		File papers_dir = new File(".");
-		Paper paper = new Paper("somebody@www.com", "A Manuscript Title",
-				doc, papers_dir);
-		
-		//add some reviews
-		Review r1 = new Review(papers_dir, "revid1@www.com", doc, 3);
-		Review r2 = new Review(papers_dir, "revid2@www.com", doc);
-		Review r3 = new Review(papers_dir, "revid3@www.com", doc, 1);
-		Review r4 = new Review(papers_dir, "revid4@wmw.com", doc, 4);
-		
-		paper.addReview(r1);
-		paper.addReview(r2);
-		paper.addReview(r3);
-		paper.addReview(r4);
-		
-		paper.assignSubprogramChair("spc@blah.com");
-		Review rec = new Review(papers_dir, "recid@www.com",doc);
-		paper.setRecommendation(rec);
-		
-		frame.add(new PaperPanel(paper,null,null));
-	}
+//	//test main
+//	public static void main(String[] args) 
+//	{
+//		JFrame frame = new JFrame("Paper Panel");
+//		frame.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
+//				ConferencesFrame.HEIGHT));
+//		
+//		
+//		testPanel(frame);
+//		frame.pack();
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setResizable(false);
+//		frame.setLocationRelativeTo(null);
+//		frame.setVisible(true);
+//		
+////		JOptionPane.showMessageDialog(null, "File must exist", "Error",
+////				JOptionPane.ERROR_MESSAGE);
+//	}
+//	
+//	
+//	private static void testPanel(JFrame frame)
+//	{
+//		//setup a paper object
+//		File doc = new File("README.txt");
+//		File papers_dir = new File(".");
+//		Paper paper = new Paper("somebody@www.com", "A Manuscript Title",
+//				doc, papers_dir);
+//		
+//		//add some reviews
+//		Review r1 = new Review(papers_dir, "revid1@www.com", doc, 3);
+//		Review r2 = new Review(papers_dir, "revid2@www.com", doc);
+//		Review r3 = new Review(papers_dir, "revid3@www.com", doc, 1);
+//		Review r4 = new Review(papers_dir, "revid4@wmw.com", doc, 4);
+//		
+//		paper.addReview(r1);
+//		paper.addReview(r2);
+//		paper.addReview(r3);
+//		paper.addReview(r4);
+//		
+//		paper.assignSubprogramChair("spc@blah.com");
+//		Review rec = new Review(papers_dir, "recid@www.com",doc);
+//		paper.setRecommendation(rec);
+//		
+//		frame.add(new PaperPanel(paper,null,null));
+//	}
 	
 	//TODO: delete this when done testing
 //	private void printFileStats(final File the_file)
