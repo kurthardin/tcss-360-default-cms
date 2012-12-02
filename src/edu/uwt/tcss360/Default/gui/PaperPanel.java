@@ -426,7 +426,15 @@ public class PaperPanel extends AbstractConferencesPanel
 		    						JOptionPane.ERROR_MESSAGE);
 		    			}
 		    			else
+		    			{
+		    				Set<Role> roles = getCurrentState().getCurrentConference().getRoles(id);
+		    				if (!roles.contains(Role.SUBPROGRAM_CHAIR))
+		    				{
+		    					getCurrentState().getCurrentConference().authorizeUser(id, 
+		    							Role.SUBPROGRAM_CHAIR);
+		    				}
 		    				my_paper.setSubprogramChairID(id);
+		    			}
 		    		}
 		    	}
 		    });
