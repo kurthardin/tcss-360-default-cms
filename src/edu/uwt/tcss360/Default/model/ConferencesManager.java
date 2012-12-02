@@ -2,9 +2,9 @@ package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.UsersDocument;
@@ -17,12 +17,11 @@ import edu.uwt.tcss360.Default.util.xml.parsers.UsersHandler;
  */
 public class ConferencesManager 
 {
-
 	/** A set of all the conferences. */
 	private Set<Conference> my_conferences;
 	
 	/** A set of all the users. */
-	private final Set<User> my_users = new HashSet<User>();
+	private final Set<User> my_users = new TreeSet<User>();
 	
 	/**
 	 * Constructs a ConferencesManager object.
@@ -32,7 +31,6 @@ public class ConferencesManager
 	{	
 		initUsers();
 		initConfs();
-		// TODO Write unit tests for ConferencesManager()
 	}
 	
 	/**
@@ -58,14 +56,15 @@ public class ConferencesManager
 		{
 			List<String> conf_dir_names = 
 					FileHelper.getSubdirectoryNames(confs_dir);
-			my_conferences = new HashSet<Conference>(conf_dir_names.size());
+			my_conferences = new TreeSet<Conference>();//conf_dir_names.size());
 
 			for (String conf_dir_name : conf_dir_names) 
 			{
 				File conf_dir = new File(confs_dir, conf_dir_name);
 				
 				Conference conference = new Conference(conf_dir);
-				my_conferences.add(conference);
+				boolean added = my_conferences.add(conference);
+				System.out.println(added);
 			}
 		}
 	}

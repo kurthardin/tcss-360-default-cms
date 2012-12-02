@@ -9,9 +9,10 @@ package edu.uwt.tcss360.Default.model;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -30,7 +31,7 @@ import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
  * @editor Kurt Hardin
  * @version 8 Nov 2012
  */
-public class Paper 
+public class Paper implements Comparable<Paper>
 {
 	/////////////
 	// CONSTANTS
@@ -88,7 +89,7 @@ public class Paper
 	/** The recommendation of the subprogram chair. */
 	private Review my_recommendation;
 	
-	private Set<String> my_reviewer_ids = new HashSet<String>();
+	private Set<String> my_reviewer_ids = new TreeSet<String>();
 	
 	private String my_manuscript_title;
 	
@@ -225,6 +226,16 @@ public class Paper
 		{
 			review.writeData();
 		}
+	}
+
+	@Override
+	public int compareTo(Paper another_paper) {
+		int result = my_manuscript_title.compareTo(
+				another_paper.my_manuscript_title);
+		if (result == 0) {
+			result = my_author_id.compareTo(another_paper.my_author_id);
+		}
+		return result;
 	}
 	
 	public File getDirectory() 
@@ -419,7 +430,7 @@ public class Paper
 	
 	public Set<Review> getReviews()
 	{
-		return new HashSet<Review>(my_reviews);
+		return Collections.unmodifiableSet(my_reviews);
 	}
 	
 	/**
@@ -475,25 +486,6 @@ public class Paper
 	    my_subprogram_chair_id = the_user_id;
 	}
 	
-	// TODO Remove duplicate method.
-//	public boolean assignReviewer(final String a_user_id) 
-//	{
-//	    if(a_user_id == null)
-//	        throw new IllegalArgumentException("Reviewer user ID cannot " +
-//	        		"be null");
-//	    
-//		Role r = getRole(a_user_id);
-//		
-//		//business rules 8 and 10 (they're pretty much the same thing...)
-//		// should be handled by the GUI, (but it isn't required by the official
-//		// requirements...
-//		
-//		if(r != Role.AUTHOR && r != Role.REVIEWER) 
-//			return my_reviewer_ids.add(a_user_id);
-//		
-//		return false;
-//	}
-	
 	private void copyPaperDoc(final File the_paper_directory,
 			final File the_manuscript_doc) 
 	{
@@ -510,9 +502,9 @@ public class Paper
 		my_acceptance_status = UNDECIDED;
 		my_author_id = NOT_AVAILIBLE;
 		my_subprogram_chair_id = NOT_AVAILIBLE;
-		my_reviews = new HashSet<Review>();
+		my_reviews = new TreeSet<Review>();
 		my_recommendation = null;
-		my_reviewer_ids = new HashSet<String>();
+		my_reviewer_ids = new TreeSet<String>();
 		my_manuscript_title = NOT_AVAILIBLE;
 	}
 	

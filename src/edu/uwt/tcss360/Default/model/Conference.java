@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.Attributes;
@@ -37,7 +37,7 @@ import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
  * @author Kurt Hardin
  * @version 1.0
  */
-public final class Conference {
+public final class Conference implements Comparable<Conference> {
 
 	// XML element names
 	public static final String XML_ELEMENT_MY_USERS_ROLES = "my_users_roles";
@@ -108,7 +108,7 @@ public final class Conference {
 	/**
 	 * The Papers submitted to this conference.
 	 */
-	private final Set<Paper> my_papers = new HashSet<Paper>();
+	private final Set<Paper> my_papers = new TreeSet<Paper>();
 	
 	private final File my_directory;
 	
@@ -242,6 +242,18 @@ public final class Conference {
 		for (Paper paper : my_papers) {
 			paper.writeData();
 		}
+	}
+
+	@Override
+	public int compareTo(Conference another_conference) {
+		int result = my_name.compareTo(another_conference.my_name);
+		if (result == 0) {
+			result = my_start_date.compareTo(another_conference.my_start_date);
+		}
+		if (result == 0) {
+			result = my_end_date.compareTo(another_conference.my_end_date);
+		}
+		return result;
 	}
 	
 	/**
@@ -414,7 +426,7 @@ public final class Conference {
 		Set<Role> user_roles = my_users_roles.get(the_user_id);
 		if (user_roles == null) 
 		{
-			user_roles = new HashSet<Role>();
+			user_roles = new TreeSet<Role>();
 			my_users_roles.put(the_user_id, user_roles);
 		}
 		
@@ -676,7 +688,7 @@ public final class Conference {
 							my_users_roles.get(my_current_user_id);
 					if (user_roles == null) {
 						// Create Role Set if it doesn't exist
-						user_roles = new HashSet<Role>(5);
+						user_roles = new TreeSet<Role>();
 						my_users_roles.put(my_current_user_id, user_roles);
 					}
 

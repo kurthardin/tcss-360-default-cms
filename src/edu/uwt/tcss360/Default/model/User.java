@@ -13,7 +13,7 @@ import java.io.File;
  * @editor Kurt Hardin
  * @version 1.0
  */
-public class User 
+public class User implements Comparable<User>
 {
 
 	/////////////
@@ -44,7 +44,7 @@ public class User
 	 * @author Travis Lewis
 	 * @version 1.0
 	 */
-	public enum Role
+	public enum Role implements Comparable<Role>
 	{
 		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER;
 
@@ -103,6 +103,11 @@ public class User
 		my_name = the_name;
 		
 		my_id = my_email; //weren't we going to make that the case?
+	}
+
+	@Override
+	public int compareTo(User another_user) {
+		return my_name.compareTo(another_user.my_name);
 	}
 	
 	/////////////

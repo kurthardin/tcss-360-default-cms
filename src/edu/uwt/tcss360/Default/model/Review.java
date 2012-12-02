@@ -21,7 +21,7 @@ import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
  * @editor Kurt Hardin
  * @version 1.0
  */
-public class Review 
+public class Review implements Comparable<Review>
 {	
 	//////////////
 	// CONSTANTS
@@ -160,6 +160,11 @@ public class Review
 		.setField("my_summary_rating", my_summary_rating)
 		.setField("my_review_doc", my_review_doc)
 		.write();
+	}
+
+	@Override
+	public int compareTo(Review antoher_review) {
+		return my_reviewer_id.compareTo(antoher_review.my_reviewer_id);
 	}
 	
 	public File getDirectory() 
