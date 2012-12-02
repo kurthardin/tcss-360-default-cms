@@ -244,6 +244,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 			{
 			    JOptionPane.showMessageDialog(null, "You've already " +
 			    		"submitted the maximum number of papers");
+
 			}
 		}
 	}
