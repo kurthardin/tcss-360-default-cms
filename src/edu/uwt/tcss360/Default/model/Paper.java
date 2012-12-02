@@ -256,7 +256,8 @@ public class Paper
 		if(a_user_id.equals(my_author_id))
 			return Role.AUTHOR;
 		
-		if(my_subprogram_chair_id.equals(a_user_id))
+		if(my_subprogram_chair_id != null && 
+				my_subprogram_chair_id.equals(a_user_id))
 			return Role.SUBPROGRAM_CHAIR;
 		
 		for(String s : my_reviewer_ids) 
