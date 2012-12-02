@@ -3,6 +3,8 @@ package edu.uwt.tcss360.Default.gui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -10,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -84,6 +87,12 @@ public class ConferencePanel extends AbstractConferencesPanel
 	private void addPaperSubmissionButton(final JPanel the_panel)
 	{
 		final JButton paper_submission_button = new JButton("Submit a Paper");
+		if (getCurrentState().getCurrentConference().
+				getSubmissionDeadline().compareTo(new Date()) < 0)
+		{
+			paper_submission_button.setEnabled(false);
+			paper_submission_button.setText("The submission deadline has passed.");
+		}
 		paper_submission_button.addActionListener(new PaperSubmissionAction(the_panel));
 		the_panel.add(paper_submission_button);
 	}
@@ -147,13 +156,16 @@ public class ConferencePanel extends AbstractConferencesPanel
 		sb.append(my_conference.getname());
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Start Date: 			");
-		sb.append(my_conference.getStartDate());
+		sb.append(Conference.CONFERENCE_DATE_FORMAT.
+				format(my_conference.getStartDate()));
 		sb.append(System.getProperty("line.separator"));
 		sb.append("End Date: 			");
-		sb.append(my_conference.getEndDate());
+		sb.append(Conference.CONFERENCE_DATE_FORMAT.
+				format(my_conference.getEndDate()));
 		sb.append(System.getProperty("line.separator"));
 		sb.append("Submission Deadline: 		");
-		sb.append(my_conference.getSubmissionDeadline());		
+		sb.append(Conference.CONFERENCE_DATE_FORMAT.
+				format(my_conference.getSubmissionDeadline()));		
 		return sb.toString();
 	}
 	
@@ -192,8 +204,8 @@ public class ConferencePanel extends AbstractConferencesPanel
 	private class PaperSubmissionAction extends AbstractAction
 	{
 		
-		final JPanel my_parent_panel;
-		
+		private final JPanel my_parent_panel;
+				
 		public PaperSubmissionAction(final JPanel the_parent_panel)
 		{
 			my_parent_panel = the_parent_panel;
@@ -203,7 +215,21 @@ public class ConferencePanel extends AbstractConferencesPanel
 		public void actionPerformed(final ActionEvent arg0)
 		{
 			JFileChooser chooser = new JFileChooser();
-			chooser.showSaveDialog(my_parent_panel);
+			if (chooser.showSaveDialog(my_parent_panel) == 
+					JFileChooser.APPROVE_OPTION) 
+			{
+				String title = (String) JOptionPane.
+						showInputDialog(null, "Please enter the paper title");
+				CurrentState cs = getCurrentState();
+				cs.getCurrentConference().addPaper(cs.getCurrentUser().getID(),
+						new Paper(cs.getCurrentUser().getID(), title,
+						chooser.getSelectedFile(),
+						cs.getCurrentConference().getDirectory()));
+				updatePanel();
+				JOptionPane.showMessageDialog(null, "Your paper has been " +
+						"submitted. If it is not displayed, please go back and" +
+						" select Author as your role.");
+			}
 		}
 	}
 	
