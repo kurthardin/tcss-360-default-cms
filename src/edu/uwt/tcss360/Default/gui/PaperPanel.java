@@ -397,6 +397,14 @@ public class PaperPanel extends AbstractConferencesPanel
 		    				.getUserIds(Role.REVIEWER);
 		    		//BR9
 		    		reviewer_ids.remove(my_paper.getAuthorID());
+		    		
+		    		for (String reviewer_id : reviewer_ids) {
+		    			if (my_paper.getUserIDs(
+		    					Role.SUBPROGRAM_CHAIR).contains(reviewer_id)) {
+		    				reviewer_ids.remove(reviewer_id);
+		    			}
+		    		}
+		    		
 		    		List<String> formatted = formatUserIDs(reviewer_ids);
 		    		
 		    		String id = getPopupChoice(formatted, "Choose Subprogram" +
@@ -413,8 +421,8 @@ public class PaperPanel extends AbstractConferencesPanel
 		    			if (papers.size() >= 4)
 		    			{ // BR17
 		    				JOptionPane.showMessageDialog(null, 
-		    						"Subprogram chair cannot be assigned more" 
-		    						+ "than 4 papers", "Error", 
+		    						"Subprogram chair cannot be assigned" +
+		    						" more than 4 papers", "Error", 
 		    						JOptionPane.ERROR_MESSAGE);
 		    			}
 		    			else
@@ -434,6 +442,14 @@ public class PaperPanel extends AbstractConferencesPanel
 		    				.getUserIds(Role.REVIEWER);
 		    		//BR8 and BR10
 		    		reviewer_ids.remove(my_paper.getAuthorID());
+		    		
+		    		for (String reviewer_id : reviewer_ids) {
+		    			if (my_paper.getUserIDs(
+		    					Role.REVIEWER).contains(reviewer_id)) {
+		    				reviewer_ids.remove(reviewer_id);
+		    			}
+		    		}
+		    		
 		    		List<String> formatted = formatUserIDs(getCurrentState()
 		    				.getCurrentConference()
 		    				.getUserIds(Role.REVIEWER));
@@ -456,7 +472,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    			else
 		    			{
 		    				JOptionPane.showMessageDialog(null, id + 
-		    						" is already workong on 4 papers.", 
+		    						" is already working on 4 papers.", 
 		    						"Error",JOptionPane.ERROR_MESSAGE);
 		    			}
 		    		}
