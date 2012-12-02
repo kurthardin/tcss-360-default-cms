@@ -467,6 +467,9 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		
 		    		if(id != null && id != "")
 		    		{
+		    			int start = id.indexOf('[') + 1;
+		    			int end = id.length() - 1;
+		    			id = (String) id.subSequence(start, end);
 		    			List<Paper> papers = getCurrentState().
 		    					getCurrentConference().
 		    					getPapers(id, Role.REVIEWER);
@@ -704,8 +707,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		{
 			
 				JFileChooser fc = new JFileChooser();
-//			fc.setSelectedFile(new File(FileHelper.getLeafString
-//					(my_review.getReviewDoc())));
 				if (my_review != null) {
 					fc.setSelectedFile(
 							new File(my_review.getReviewDoc().getName()));
