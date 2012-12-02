@@ -224,7 +224,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 				cs.getCurrentConference().addPaper(cs.getCurrentUser().getID(),
 						new Paper(cs.getCurrentUser().getID(), title,
 						chooser.getSelectedFile(),
-						cs.getCurrentConference().getDirectory()));
+						cs.getCurrentConference().getPapersDirectory()));
 				updatePanel();
 				JOptionPane.showMessageDialog(null, "Your paper has been " +
 						"submitted. If it is not displayed, please go back and" +
