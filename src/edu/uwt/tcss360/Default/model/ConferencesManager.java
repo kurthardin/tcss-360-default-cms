@@ -64,7 +64,6 @@ public class ConferencesManager
 				
 				Conference conference = new Conference(conf_dir);
 				boolean added = my_conferences.add(conference);
-				System.out.println(added);
 			}
 		}
 	}

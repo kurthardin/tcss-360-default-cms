@@ -133,8 +133,7 @@ public class Review implements Comparable<Review>
 		my_review_doc = null;
 		my_summary_rating = the_summary_rating;
 		
-		String directory_name = FileHelper.formatFilename(
-				FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id);
+		String directory_name = FileHelper.formatFilename(getDirectoryName());
 		my_directory = FileHelper.getDirectory(the_paper_directory, 
 				directory_name);
 		
@@ -145,6 +144,10 @@ public class Review implements Comparable<Review>
 	//////////////
 	// METHODS
 	//////////////
+	
+	public String getDirectoryName() {
+		return FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id;
+	}
 	
 	/**
 	 * 

@@ -38,6 +38,8 @@ public class FileHelper {
 	public static final String DATA_FILE_NAME = "info.cmsd";
 	public static final String USERS_DATA_FILE_NAME = "users.cmsd";
 	public static final String REVIEW_DIRECTORY_PREFIX = "review_";
+	public static final String RECOMMENDATION_DIRECTORY_NAME = 
+			"recommendation";
 	
 	/**
 	 * 

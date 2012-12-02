@@ -28,6 +28,7 @@ import javax.swing.JScrollPane;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
+import edu.uwt.tcss360.Default.model.Recommendation;
 import edu.uwt.tcss360.Default.model.Review;
 import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
@@ -701,49 +702,57 @@ public class PaperPanel extends AbstractConferencesPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			JFileChooser fc = new JFileChooser();
+			
+				JFileChooser fc = new JFileChooser();
 //			fc.setSelectedFile(new File(FileHelper.getLeafString
 //					(my_review.getReviewDoc())));
-			fc.setSelectedFile(new File(my_review.getReviewDoc().getName()));
-			
-			int result = fc.showOpenDialog(null);
-			
-			if(result == JFileChooser.APPROVE_OPTION)
-			{
-				File up = fc.getSelectedFile();
-
-				if(up == null)
-					JOptionPane.showMessageDialog(null, "File cannot be null",
-							"Error",JOptionPane.ERROR_MESSAGE);
-				else if(!up.exists())
-					JOptionPane.showMessageDialog(null, "File must exist",
-							"Error",JOptionPane.ERROR_MESSAGE);
-				else if(up.isDirectory())
-					JOptionPane.showMessageDialog(null, "File cannot be a " +
-							"directory", "Error",JOptionPane.ERROR_MESSAGE);
-				else
-				{
-					try
-					{
-						my_review.getReviewDoc().delete();
-						
-//						File newfile = FileHelper.createFile(
-//								my_review.getDirectory(), 
-//								FileHelper.getLeafString(up));
-						File newfile = FileHelper.createFile(
-								my_review.getDirectory(), up.getName());
-						
-						FileHelper.copyFile(up, my_review.getDirectory());
-
-						FileHelper.copyFile(up, newfile);
-					}
-					catch(SecurityException e2)
-					{
-						JOptionPane.showMessageDialog(null, e2.getMessage());
-					}
-					
+				if (my_review != null) {
+					fc.setSelectedFile(
+							new File(my_review.getReviewDoc().getName()));
 				}
-			}
+				
+				if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					File selected_file = fc.getSelectedFile();
+	
+					if(selected_file == null)
+						JOptionPane.showMessageDialog(null, "File cannot be null",
+								"Error",JOptionPane.ERROR_MESSAGE);
+					else if(!selected_file.exists())
+						JOptionPane.showMessageDialog(null, "File must exist",
+								"Error",JOptionPane.ERROR_MESSAGE);
+					else if(selected_file.isDirectory())
+						JOptionPane.showMessageDialog(null, "File cannot be a " +
+								"directory", "Error",JOptionPane.ERROR_MESSAGE);
+					else
+					{
+						if (my_review == null) 
+						{
+							
+							if (getCurrentState().getCurrentRole().equals(
+									Role.REVIEWER)) {
+								Review new_review = new Review(
+										my_paper.getDirectory(),
+										getCurrentState().getCurrentUser().getID(),
+										selected_file);
+								my_paper.addReview(new_review);
+							} else {
+								Review new_review = new Recommendation(
+										my_paper.getDirectory(),
+										getCurrentState().getCurrentUser().getID(),
+										selected_file);
+								my_paper.setRecommendation(new_review);
+							}
+							
+						}else 
+						{
+							my_review.setReviewDoc(selected_file);
+						}
+						updatePanel();
+					}
+				}
+			
+			
 		}
 	}
 	
