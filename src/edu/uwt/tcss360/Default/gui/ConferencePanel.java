@@ -20,6 +20,7 @@ import javax.swing.JTextPane;
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.CurrentState;
 import edu.uwt.tcss360.Default.model.Paper;
+import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 /**
@@ -102,6 +103,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 	/**
 	 * Adds the buttons for the papers to the given panel.
 	 * @param the_panel The panel the buttons are added to.
+	 * edited by Scott Sanderson to add SPC display for program chair.
 	 */
 	private void addPapersButtons(final JPanel the_panel)
 	{
@@ -115,11 +117,18 @@ public class ConferencePanel extends AbstractConferencesPanel
 		
 
 		Role role = getCurrentState().getCurrentRole();
-		int cols = (role == Role.PROGRAM_CHAIR || role == Role.AUTHOR) ? 3 : 2;
+		int cols = 2;
+		if (role == Role.AUTHOR)
+			cols = 3;
+		if (role == Role.PROGRAM_CHAIR)
+			cols = 4;
+//		int cols = (role == Role.PROGRAM_CHAIR || role == Role.AUTHOR) ? 3 : 2;
 		JPanel buttonspanel = new JPanel(new GridLayout(0,cols));
 		buttonspanel.add(new JLabel("Paper Title"));
 		if(role == Role.PROGRAM_CHAIR || role == Role.AUTHOR)
-		    buttonspanel.add(new JLabel("Accepted"));
+		    buttonspanel.add(new JLabel("Acceptance Status"));
+		if(role == Role.PROGRAM_CHAIR)
+			buttonspanel.add(new JLabel("Subprogram Chair"));
 		buttonspanel.add(new JLabel(""));
 		for(Paper p : papers)
 		{
@@ -128,11 +137,18 @@ public class ConferencePanel extends AbstractConferencesPanel
 			if(role == Role.PROGRAM_CHAIR || role == Role.AUTHOR)
 			{
     			if(p.getAcceptanceStatus() == Paper.ACCEPTED)
-    				buttonspanel.add(new JLabel("Yes"));
+    				buttonspanel.add(new JLabel("   Yes"));
     			else if(p.getAcceptanceStatus() == Paper.REJECTED)
-    				buttonspanel.add(new JLabel("No"));
+    				buttonspanel.add(new JLabel("   No"));
     			else
-    				buttonspanel.add(new JLabel("Undecided"));
+    				buttonspanel.add(new JLabel("   Undecided"));
+			}
+			if(role == Role.PROGRAM_CHAIR)
+			{
+				User spc = getCurrentState().getConferencesManager().
+						getUser(p.getSubprogramChairID());
+				String name = (spc == null) ? "None" : spc.getName();
+				buttonspanel.add(new JLabel(name));
 			}
 			JButton b = new JButton("Open Paper");
 			b.addActionListener(new OpenPaperAction(p));

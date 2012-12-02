@@ -554,7 +554,8 @@ public final class Conference {
 		List<Paper> users_papers = new ArrayList<Paper>(my_papers.size());
 		for (Paper current_paper : my_papers) 
 		{
-			if (a_role.equals(current_paper.getRole(the_user_id))) 
+			if (a_role.equals(current_paper.getRole(the_user_id)) && 
+					!a_role.equals(Role.USER)) 
 			{
 				users_papers.add(current_paper);
 			}
