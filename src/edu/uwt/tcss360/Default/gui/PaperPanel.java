@@ -460,9 +460,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    			}
 		    		}
 		    		
-		    		List<String> formatted = formatUserIDs(getCurrentState()
-		    				.getCurrentConference()
-		    				.getUserIds(Role.REVIEWER));
+		    		List<String> formatted = formatUserIDs(reviewer_ids);
 		    		
 		    		String id = getPopupChoice(formatted, "Choose Reviewer");
 		    		
