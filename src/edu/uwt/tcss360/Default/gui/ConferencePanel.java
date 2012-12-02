@@ -214,21 +214,36 @@ public class ConferencePanel extends AbstractConferencesPanel
 		@Override
 		public void actionPerformed(final ActionEvent arg0)
 		{
-			JFileChooser chooser = new JFileChooser();
-			if (chooser.showSaveDialog(my_parent_panel) == 
-					JFileChooser.APPROVE_OPTION) 
+		    //check for 4 papers
+		    List<Paper> papers = getCurrentState().getCurrentConference()
+		    .getPapers(getCurrentState().getCurrentUser().getID(), 
+		            Role.AUTHOR);
+		    
+			
+			if(papers.size() < 4)
 			{
-				String title = (String) JOptionPane.
-						showInputDialog(null, "Please enter the paper title");
-				CurrentState cs = getCurrentState();
-				cs.getCurrentConference().addPaper(cs.getCurrentUser().getID(),
-						new Paper(cs.getCurrentUser().getID(), title,
-						chooser.getSelectedFile(),
-						cs.getCurrentConference().getDirectory()));
-				updatePanel();
-				JOptionPane.showMessageDialog(null, "Your paper has been " +
-						"submitted. If it is not displayed, please go back and" +
-						" select Author as your role.");
+			    JFileChooser chooser = new JFileChooser();
+    			if (chooser.showOpenDialog(my_parent_panel) == 
+    					JFileChooser.APPROVE_OPTION) 
+    			{
+    				String title = (String) JOptionPane.
+    						showInputDialog(null, "Please enter the paper title");
+    				CurrentState cs = getCurrentState();
+    				//TODO: fix where the paper is saved
+    				cs.getCurrentConference().addPaper(cs.getCurrentUser().getID(),
+    						new Paper(cs.getCurrentUser().getID(), title,
+    						chooser.getSelectedFile(),
+    						cs.getCurrentConference().getDirectory()));
+    				updatePanel();
+    				JOptionPane.showMessageDialog(null, "Your paper has been " +
+    						"submitted. If it is not displayed, please go back and" +
+    						" select Author as your role.");
+    			}
+			}
+			else
+			{
+			    JOptionPane.showMessageDialog(null, "You've already " +
+			    		"submitted the maximum number of papers");
 			}
 		}
 	}
