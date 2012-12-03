@@ -8,7 +8,7 @@ package edu.uwt.tcss360.Default.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -18,15 +18,8 @@ import edu.uwt.tcss360.Default.model.User;
  * @author Kurt Hardin
  * @version 1.0
  */
-public class UserTest {
-
-	/**
-	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.io.File)}.
-	 */
-	@Test
-	public final void testUserFile() {
-		fail("Not yet implemented"); // TODO Add tests for User(File)
-	}
+public class UserTest 
+{
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.lang.String)}.
@@ -60,34 +53,53 @@ public class UserTest {
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.lang.String, java.lang.String)}.
+	 * @editor Travis Lewis
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@SuppressWarnings("unused")
+    @Test
 	public final void testUserStringStringForNullEmail() {
 		String testName = "Test User";
-		new User(null, testName);
+		User testUser = null;
+		boolean result = false;
+		try {
+		    testUser = new User(null, testName);
+		} catch (IllegalArgumentException e) {
+		    result = true;
+		}
+		assertTrue("null email exception", result);
 	}
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.lang.String, java.lang.String)}.
+	 * @editor Travis Lewis
 	 */
-	@Test
+	@SuppressWarnings("unused")
+    @Test
 	public final void testUserStringStringForNullName() {
 		String testEmail = "test_user@testing.com";
-		User testUser = new User(testEmail, null);
-		assertEquals("User email not correctly initialized",
-				testEmail, testUser.getEmail());
-		assertEquals("User ID not correctly initialized",
-				testEmail, testUser.getID());
-		assertNull("User name should be null", 
-				testUser.getName());
+		boolean result = false;
+		User testUser = null;
+		try{
+		    testUser = new User(testEmail, null);
+		} catch(IllegalArgumentException e) {
+		    result = true;
+		}
+		assertTrue("null name exception", result);
 	}
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.User#User(java.lang.String, java.lang.String)}.
+	 * @editor Travis Lewis
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public final void testUserStringStringForNullEmailAndName() {
-		new User(null, null);
+	    boolean result = false;
+	    try {
+	        new User(null, null);
+	    } catch (IllegalArgumentException e) {
+	        result = true;
+	    }
+	    assertTrue("null email and name", result);
 	}
 
 	/**
@@ -123,5 +135,4 @@ public class UserTest {
 		assertEquals("getName() returned invalid name", 
 				testName, testUser.getName());
 	}
-
 }
