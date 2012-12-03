@@ -6,19 +6,20 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.User;
-import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
  * 
@@ -28,59 +29,34 @@ import edu.uwt.tcss360.Default.util.FileHelper;
  */
 public class ConferencesManagerTest
 {
-	/**
-	 * @author Kurt Hardin
-	 */
-	@Test
-	public void writeUsersDataFileTest() {
-		try {
-			FileUtils.deleteDirectory(new File("./data"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
+	private File data_dir = null;
+	private File data_dir_backup = null;
+	
+	@Before
+	public void setup() {
+		data_dir = new File("data");
+		if (data_dir.isDirectory()) {
+			data_dir_backup = new File("data_bak");
+			try {
+				FileUtils.moveDirectory(data_dir, data_dir_backup);
+			} catch (IOException e) {
+				// Do nothing...
+			}
 		}
-		ConferencesManager confMan = new ConferencesManager();
-		User u = new User("test@testing.com", "Test User");
-		confMan.addUser(u);
-		u = new User("test1@testing.com", "Test One User");
-		confMan.addUser(u);
-		confMan.writeData();
-		BufferedReader usersReader = 
-				FileHelper.getFileReader(new File("./data/users.cmsd"));
-		String usersFileString = null;
-		String expectedPrefix = "<?xml version=\"1.0\" " +
-				"encoding=\"UTF-8\" standalone=\"no\"?>";
-		String expectedUserNode1 = "<user " +
-				"my_email=\"test@testing.com\" my_id=\"test@testing.com" +
-				"\" my_name=\"Test User\"/>";
-		String expectedUserNode2 = "<user my_email=\"test1@" +
-				"testing.com\" my_id=\"test1@testing.com\" my_name=" +
-				"\"Test One User\"/>";
-		try {
-			usersFileString = usersReader.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		assertTrue("XML header missing", 
-				usersFileString.startsWith(expectedPrefix));
-		assertTrue("Missing \"Test User\"", 
-				usersFileString.contains(expectedUserNode1));
-		assertTrue("Missing \"Test One User\"", 
-				usersFileString.contains(expectedUserNode2));
 	}
 	
-	/**
-	 * @author Kurt Hardin
-	 */
-	@Test
-	public void readUsersDataFileTest() {
-		ConferencesManager confMan = new ConferencesManager();
-		User u = confMan.getUser("test@testing.com");
-		assertNotNull("user@testing.com not found", u);
-		u = confMan.getUser("test1@testing.com");
-		assertNotNull("user1@testing.com not found", u);
+	@After
+	public void tearDown() {
+		if (data_dir_backup != null) {
+			try {
+				FileUtils.deleteDirectory(data_dir);
+				FileUtils.moveDirectory(data_dir_backup, data_dir);
+			} catch (IOException e) {
+				// Do nothing...
+			}
+		}
 	}
-    
+	
     @Test
     public void emptySetTest()
     {
@@ -93,9 +69,11 @@ public class ConferencesManagerTest
     public void nonEmptySetTest()
     {
         ConferencesManager man = new ConferencesManager();
-        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
         Conference c = new Conference("userid", "some conference",
-                date);
+                cal.getTime());
         man.addConference(c);
         Set<Conference> set = man.getAllConferences();
         assertFalse("nonEmptySet", set.isEmpty());
@@ -129,9 +107,11 @@ public class ConferencesManagerTest
     public void getConferenceTest()
     {
         ConferencesManager man = new ConferencesManager();
-        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
         Conference c = new Conference("userid", "some conference",
-                date);
+                cal.getTime());
         man.addConference(c);
         
         Conference got = man.getConference(c.getID());
@@ -142,7 +122,8 @@ public class ConferencesManagerTest
         assertEquals("getConference: id", got.getID(),
                 c.getID());
         
-        Conference cc = new Conference("someid", "conferenceblah", date);
+        Conference cc = new Conference("someid", "conferenceblah", 
+        		cal.getTime());
         
         assertNull("getConference: doesn't exist", 
                 man.getConference(cc.getID()));
@@ -152,10 +133,13 @@ public class ConferencesManagerTest
     public void removeConferenceTest()
     {
         ConferencesManager man = new ConferencesManager();
-        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
         Conference c = new Conference("userid", "some conference",
-                date);
-        Conference cc = new Conference("someid", "conferenceblah", date);
+                cal.getTime());
+        Conference cc = new Conference("someid", "conferenceblah", 
+        		cal.getTime());
         man.addConference(c);
         
         //try to remove a conference that doesn't exist
@@ -172,11 +156,13 @@ public class ConferencesManagerTest
     public void getAllConferencesTest()
     {
         ConferencesManager man = new ConferencesManager();
-        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        cal.add(Calendar.DATE, 1);
         
-        Conference c1 = new Conference("user1","conference1", date);
-        Conference c2 = new Conference("user2","conference2", date);
-        Conference c3 = new Conference("user3","conference3", date);
+        Conference c1 = new Conference("user1","conference1", cal.getTime());
+        Conference c2 = new Conference("user2","conference2", cal.getTime());
+        Conference c3 = new Conference("user3","conference3", cal.getTime());
         
         man.addConference(c1);
         man.addConference(c2);
@@ -194,7 +180,7 @@ public class ConferencesManagerTest
         assertTrue("getAllConferences: contains 3rd", set.contains(c3));
         
         // make sure a conference that isn't supposed to be in there isn't.
-        Conference c4 = new Conference("user4","conference4", date);
+        Conference c4 = new Conference("user4","conference4", cal.getTime());
         assertFalse("getAllConferences: contains 4th", set.contains(c4));
     }
             
