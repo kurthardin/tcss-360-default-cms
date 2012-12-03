@@ -274,8 +274,9 @@ public class PaperPanel extends AbstractConferencesPanel
     		    {
     		    	for(Review r : reviews)
 	                {
-	                    revs.add(new JLabel(cm.getUser
-	                            (r.getReviewerID()).getName()));
+//	                    revs.add(new JLabel(cm.getUser
+//	                            (r.getReviewerID()).getName()));
+    		    	    revs.add(new JLabel("[Reviewer name hidden]"));
 	                    JButton b = new JButton("Download Review");
 	    		        if (r.getReviewDoc() == null) 
 	    		        {
@@ -662,20 +663,21 @@ public class PaperPanel extends AbstractConferencesPanel
 							"directory", "Error",JOptionPane.ERROR_MESSAGE);
 				else
 				{
-					try
-					{
-						my_paper.getManuscript().delete();
-						File newfile = FileHelper.createFile(
-								my_paper.getDirectory(),
-								up.getName());
+//					try
+//					{
+						//my_paper.getManuscript().delete();
+//						File newfile = FileHelper.createFile(
+//								my_paper.getDirectory(),
+//								up.getName());
 						
-						FileHelper.copyFile(up, my_paper.getDirectory());
-						my_paper.setManuscript(newfile);
-					}
-					catch(SecurityException e2)
-					{
-						JOptionPane.showMessageDialog(null, e2.getMessage());
-					}
+						//FileHelper.copyFile(up, my_paper.getDirectory());
+						my_paper.setManuscript(up);
+						updatePanel(); //TODO: verify this works
+//					}
+//					catch(SecurityException e2)
+//					{
+//						JOptionPane.showMessageDialog(null, e2.getMessage());
+//					}
 				}
 			}
 		}
