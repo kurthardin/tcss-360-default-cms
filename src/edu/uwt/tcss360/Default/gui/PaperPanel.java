@@ -235,11 +235,13 @@ public class PaperPanel extends AbstractConferencesPanel
     		        }
     		        revbuttons.add(dl_rev);
     		    }
-
-    		    //upload review button
-		        JButton ul_rev = new JButton("Add Review");
-		        ul_rev.addActionListener(new UploadReviewAction(r));
-		        revbuttons.add(ul_rev);
+    		    else
+    		    {
+        		    //upload review button
+    		        JButton ul_rev = new JButton("Add Review");
+    		        ul_rev.addActionListener(new UploadReviewAction(r));
+    		        revbuttons.add(ul_rev);
+    		    }
 		        revs.add(revbuttons);
     		}
     		else if( (current_role.equals(Role.SUBPROGRAM_CHAIR) && 
@@ -397,7 +399,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		    		}
 		    		
 		    		List<String> formatted = formatUserIDs(reviewer_ids);
-		    		
 		    		String id = getPopupChoice(formatted, "Choose Subprogram" +
 		    				" Chair");
 
@@ -627,7 +628,6 @@ public class PaperPanel extends AbstractConferencesPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			JFileChooser fc = new JFileChooser();
-			//fc.setSelectedFile(new File(FileHelper.getLeafString(my_file)));
 			fc.setSelectedFile(new File(my_file.getName()));
 			
 			int result = fc.showSaveDialog(null);
@@ -663,21 +663,8 @@ public class PaperPanel extends AbstractConferencesPanel
 							"directory", "Error",JOptionPane.ERROR_MESSAGE);
 				else
 				{
-//					try
-//					{
-						//my_paper.getManuscript().delete();
-//						File newfile = FileHelper.createFile(
-//								my_paper.getDirectory(),
-//								up.getName());
-						
-						//FileHelper.copyFile(up, my_paper.getDirectory());
 						my_paper.setManuscript(up);
 						updatePanel(); //TODO: verify this works
-//					}
-//					catch(SecurityException e2)
-//					{
-//						JOptionPane.showMessageDialog(null, e2.getMessage());
-//					}
 				}
 			}
 		}
@@ -695,59 +682,54 @@ public class PaperPanel extends AbstractConferencesPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			JFileChooser fc = new JFileChooser();
+			if (my_review != null) {
+				fc.setSelectedFile(
+						new File(my_review.getReviewDoc().getName()));
+			}
 			
-				JFileChooser fc = new JFileChooser();
-				if (my_review != null) {
-					fc.setSelectedFile(
-							new File(my_review.getReviewDoc().getName()));
-				}
-				
-				if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+			{
+				File selected_file = fc.getSelectedFile();
+
+				if(selected_file == null)
+					JOptionPane.showMessageDialog(null, "File cannot be null",
+							"Error",JOptionPane.ERROR_MESSAGE);
+				else if(!selected_file.exists())
+					JOptionPane.showMessageDialog(null, "File must exist",
+							"Error",JOptionPane.ERROR_MESSAGE);
+				else if(selected_file.isDirectory())
+					JOptionPane.showMessageDialog(null, "File cannot be a " +
+							"directory", "Error",JOptionPane.ERROR_MESSAGE);
+				else
 				{
-					File selected_file = fc.getSelectedFile();
-	
-					if(selected_file == null)
-						JOptionPane.showMessageDialog(null, "File cannot be null",
-								"Error",JOptionPane.ERROR_MESSAGE);
-					else if(!selected_file.exists())
-						JOptionPane.showMessageDialog(null, "File must exist",
-								"Error",JOptionPane.ERROR_MESSAGE);
-					else if(selected_file.isDirectory())
-						JOptionPane.showMessageDialog(null, "File cannot be a " +
-								"directory", "Error",JOptionPane.ERROR_MESSAGE);
-					else
+					if (my_review == null) 
 					{
-						if (my_review == null) 
+						
+						if (getCurrentState().getCurrentRole().equals(
+								Role.REVIEWER)) 
 						{
-							
-							if (getCurrentState().getCurrentRole().equals(
-									Role.REVIEWER)) 
-							{
-								Review new_review = new Review(
-										my_paper.getDirectory(),
-										getCurrentState().getCurrentUser().getID(),
-										selected_file);
-								my_paper.addReview(new_review);
-							} 
-							else if (getCurrentState().getCurrentRole().equals(
-									Role.SUBPROGRAM_CHAIR)) 
-							{
-								Review new_review = new Recommendation(
-										my_paper.getDirectory(),
-										getCurrentState().getCurrentUser().getID(),
-										selected_file);
-								my_paper.setRecommendation(new_review);
-							}
-							
-						}else 
+							Review new_review = new Review(
+									my_paper.getDirectory(),
+									getCurrentState().getCurrentUser().getID(),
+									selected_file);
+							my_paper.addReview(new_review);
+						} 
+						else if (getCurrentState().getCurrentRole().equals(
+								Role.SUBPROGRAM_CHAIR)) 
 						{
-							my_review.setReviewDoc(selected_file);
-						}
-						updatePanel();
+							Review new_review = new Recommendation(
+									my_paper.getDirectory(),
+									getCurrentState().getCurrentUser().getID(),
+									selected_file);
+							my_paper.setRecommendation(new_review);
+						}	
 					}
+					else 
+						my_review.setReviewDoc(selected_file);	
 				}
-			
-			
+				updatePanel();
+			}	
 		}
 	}
 	
