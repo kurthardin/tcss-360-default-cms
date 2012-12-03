@@ -6,12 +6,13 @@
 
 package edu.uwt.tcss360.Default.util.xml.parsers;
 
+import java.util.logging.Logger;
+
 import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import edu.uwt.tcss360.Default.util.log.CMSLoggerFactory;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 
 /**
@@ -21,14 +22,17 @@ import edu.uwt.tcss360.Default.util.xml.InfoDocument;
  */
 public abstract class InfoHandler extends DefaultHandler 
 {
-	private Locator my_sax_locator;
+	private static final Logger LOG = CMSLoggerFactory.getLogger(
+			InfoHandler.class);
+	
+//	private Locator my_sax_locator;
 	private boolean my_fields_elem = false;
 	
-	@Override
-	public void setDocumentLocator(Locator locator) 
-	{
-		my_sax_locator = locator;
-	}
+//	@Override
+//	public void setDocumentLocator(Locator locator) 
+//	{
+//		my_sax_locator = locator;
+//	}
  
 	public final void startElement(String uri, String localName, String qName, 
                 Attributes attributes) throws SAXException 
@@ -42,7 +46,7 @@ public abstract class InfoHandler extends DefaultHandler
 		} 
 		else if (my_fields_elem) 
 		{
-			unexpected_element = startUnknownFieldsElement(
+			unexpected_element = !startUnknownFieldsElement(
 					uri, localName, qName, attributes);
 		} 
 		else 
@@ -51,9 +55,7 @@ public abstract class InfoHandler extends DefaultHandler
 		}
 		
 		if (unexpected_element) {
-			throw new SAXParseException(
-					"Encountered unexpected element: " + qName, 
-					my_sax_locator);
+			LOG.warning("Encountered unexpected element: " + qName);
 		}
  
 	}

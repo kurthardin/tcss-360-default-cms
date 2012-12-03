@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.Attributes;
@@ -24,6 +25,7 @@ import org.xml.sax.SAXException;
 
 import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
+import edu.uwt.tcss360.Default.util.log.CMSLoggerFactory;
 import edu.uwt.tcss360.Default.util.xml.ConferenceDocument;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
@@ -38,6 +40,9 @@ import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
  * @version 1.0
  */
 public final class Conference implements Comparable<Conference> {
+	
+	private static final Logger LOG = CMSLoggerFactory.getLogger(
+			Conference.class);
 
 	// XML element names
 	public static final String XML_ELEMENT_MY_USERS_ROLES = "my_users_roles";
@@ -624,7 +629,7 @@ public final class Conference implements Comparable<Conference> {
 			try {
 				FileUtils.deleteDirectory(paper_dir);
 			} catch (IOException e) {
-				System.out.println("'" + paper_dir.getName() + 
+				LOG.warning("'" + paper_dir.getName() + 
 						"' directory could not be deleted.");
 			}
 		}
@@ -698,7 +703,7 @@ public final class Conference implements Comparable<Conference> {
 						Role role = Role.valueOf(attr.getValue(XML_ATTR_NAME));
 						user_roles.add(role);
 					} catch (final IllegalArgumentException e) {
-						System.out.println("Encountered invalid Role name: '" +
+						LOG.warning("Encountered invalid Role name: '" +
 								attr.getValue(XML_ATTR_NAME) + "'");
 					}
 				}

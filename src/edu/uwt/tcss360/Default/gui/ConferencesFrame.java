@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import javax.swing.WindowConstants;
 
 import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.CurrentState;
+import edu.uwt.tcss360.Default.util.log.CMSLoggerFactory;
 
 /**
  * The main frame to be used. It will hold all of the panels it needs
@@ -30,6 +32,10 @@ import edu.uwt.tcss360.Default.model.CurrentState;
 @SuppressWarnings("serial")
 public class ConferencesFrame extends JFrame implements PanelManager, Observer
 {
+	
+	private static final Logger LOG = CMSLoggerFactory.getLogger(
+			ConferencesFrame.class);
+	
 	/*
 	 * fields
 	 */
@@ -120,7 +126,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				my_current_state.getConferencesManager().writeData();
-				System.out.println("program closed");
+				LOG.info("program closed");
 			}
 		});
 		

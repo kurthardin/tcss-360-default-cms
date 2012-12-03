@@ -133,7 +133,6 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
-			System.out.println(my_conference);
 			Set<Role> roles = my_conference.getRoles(
 					getCurrentState().getCurrentUser().getID());
 			Role[] roles_array = new Role[roles.size() + 1];

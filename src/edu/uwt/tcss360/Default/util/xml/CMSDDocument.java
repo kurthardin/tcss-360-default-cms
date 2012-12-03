@@ -7,6 +7,7 @@
 package edu.uwt.tcss360.Default.util.xml;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,12 +21,17 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
+import edu.uwt.tcss360.Default.util.log.CMSLoggerFactory;
+
 /**
  * @author Kurt Hardin
  * @version 1.0
  */
 public abstract class CMSDDocument 
 {
+	private static final Logger LOG = CMSLoggerFactory.getLogger(
+			CMSDDocument.class);
+	
 	private File my_output_file;
 	protected Document my_document;
 	
@@ -65,16 +71,21 @@ public abstract class CMSDDocument
 
 		TransformerFactory transformerFactory = 
 				TransformerFactory.newInstance();
-		try {
+		try 
+		{
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(my_document);
 			transformer.transform(source, result);
-		} catch (TransformerConfigurationException e) {
-			System.out.println("Failed to write xml to file");
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			System.out.println("Failed to write xml to file");
-			e.printStackTrace();
+		} 
+		catch (TransformerConfigurationException e) 
+		{
+			LOG.severe("Failed to write xml to file: " + 
+					my_output_file.getName());
+		} 
+		catch (TransformerException e) 
+		{
+			LOG.severe("Failed to write xml to file: " + 
+					my_output_file.getName());
 		}
 	}
 	

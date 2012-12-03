@@ -157,7 +157,6 @@ public class ConferenceTest {
 		Paper test_paper = new Paper(new File("Test"));
 		TEST_CONFERENCE.authorizeUser(daniel.getID(), Role.AUTHOR);
 		TEST_CONFERENCE.addPaper(test_paper.getAuthorID(), test_paper);
-		System.out.println(test_paper.getAuthorID());
 		assertTrue("The Paper List returned does not contain the correct paper.",
 				TEST_CONFERENCE.getPapers(test_paper.getAuthorID(),
 				Role.AUTHOR).contains(test_paper));
