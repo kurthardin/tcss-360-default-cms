@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public final class CMSLoggerFactory 
 {
 	
-	private static Level LOG_LEVEL = Level.SEVERE;
+	private static Level LOG_LEVEL = Level.OFF;
 	
 	public static final void setLevel(Level the_level)
 	{
