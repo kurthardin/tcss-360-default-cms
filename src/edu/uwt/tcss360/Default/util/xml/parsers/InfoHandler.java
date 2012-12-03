@@ -33,6 +33,8 @@ public abstract class InfoHandler extends DefaultHandler
 	public final void startElement(String uri, String localName, String qName, 
                 Attributes attributes) throws SAXException 
     {
+		boolean unexpected_element = false;
+		
 		if (qName.equalsIgnoreCase(InfoDocument.XML_ELEMENT_FIELDS)) 
 		{
 			my_fields_elem = true;
@@ -40,10 +42,15 @@ public abstract class InfoHandler extends DefaultHandler
 		} 
 		else if (my_fields_elem) 
 		{
-			startUnknownFieldsElement(uri, localName, qName, attributes);
+			unexpected_element = startUnknownFieldsElement(
+					uri, localName, qName, attributes);
 		} 
 		else 
 		{
+			unexpected_element = true;
+		}
+		
+		if (unexpected_element) {
 			throw new SAXParseException(
 					"Encountered unexpected element: " + qName, 
 					my_sax_locator);
@@ -53,10 +60,11 @@ public abstract class InfoHandler extends DefaultHandler
 	
 	public abstract void handleFieldsAttributes(Attributes attr);
 	
-	public void startUnknownFieldsElement(String uri, String localName,
+	public boolean startUnknownFieldsElement(String uri, String localName,
 			String qName, Attributes attr) 
 	{
 		// Do nothing...
+		return false;
 	}
  
 	public final void endElement(String uri, String localName,

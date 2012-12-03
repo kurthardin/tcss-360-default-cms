@@ -532,7 +532,7 @@ public class Paper implements Comparable<Paper>
 		}
 		
 		@Override
-		public void startUnknownFieldsElement(String uri, 
+		public boolean startUnknownFieldsElement(String uri, 
 				String localName, String qName, Attributes attr)
 		{
 			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_REVIEWER_IDS)) 
@@ -547,7 +547,13 @@ public class Paper implements Comparable<Paper>
 					// Started new "user" element within "my_reviewer_ids"
 					my_reviewer_ids.add(attr.getValue(XML_ATTR_ID));
 				} 
+			} 
+			else 
+			{
+				return false;
 			}
+			
+			return true;
 		}
 		
 		@Override

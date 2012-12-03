@@ -56,14 +56,13 @@ public class ConferencesManager
 		{
 			List<String> conf_dir_names = 
 					FileHelper.getSubdirectoryNames(confs_dir);
-			my_conferences = new TreeSet<Conference>();//conf_dir_names.size());
+			my_conferences = new TreeSet<Conference>();
 
 			for (String conf_dir_name : conf_dir_names) 
 			{
 				File conf_dir = new File(confs_dir, conf_dir_name);
-				
 				Conference conference = new Conference(conf_dir);
-				boolean added = my_conferences.add(conference);
+				my_conferences.add(conference);
 			}
 		}
 	}

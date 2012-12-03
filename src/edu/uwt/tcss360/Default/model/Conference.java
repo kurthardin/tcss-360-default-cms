@@ -665,7 +665,7 @@ public final class Conference implements Comparable<Conference> {
 		}
 		
 		@Override
-		public void startUnknownFieldsElement(String uri, 
+		public boolean startUnknownFieldsElement(String uri, 
 				String localName, String qName, Attributes attr) 
 		{
 			if (qName.equalsIgnoreCase(XML_ELEMENT_MY_USERS_ROLES)) 
@@ -702,7 +702,13 @@ public final class Conference implements Comparable<Conference> {
 								attr.getValue(XML_ATTR_NAME) + "'");
 					}
 				}
+			} 
+			else 
+			{
+				return false;
 			}
+			
+			return true;
 		}
 		
 		@Override
