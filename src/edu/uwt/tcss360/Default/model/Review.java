@@ -146,7 +146,8 @@ public class Review implements Comparable<Review>
 	//////////////
 	
 	public String getDirectoryName() {
-		return FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id;
+		return FileHelper.formatFilename(
+				FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id);
 	}
 	
 	/**
@@ -238,12 +239,6 @@ public class Review implements Comparable<Review>
 		
 		//copy new doc over
 		copyReviewDoc(my_directory,the_doc);
-	}
-	
-	public Review getCopy()
-	{
-		return new Review(my_directory, my_reviewer_id, my_review_doc,
-				my_summary_rating);
 	}
 	
 	/**

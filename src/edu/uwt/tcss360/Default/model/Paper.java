@@ -444,7 +444,7 @@ public class Paper implements Comparable<Paper>
 		for(Review r : my_reviews)
 		{
 			if(r.getReviewerID().equals(an_id))
-				return r.getCopy();
+				return r;
 		}
 		return null;
 	}

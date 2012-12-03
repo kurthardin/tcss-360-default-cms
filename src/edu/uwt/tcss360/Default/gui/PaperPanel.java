@@ -215,7 +215,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    
     		if(current_role == Role.REVIEWER)
     		{ // BR12
-    		    Review r = my_paper.getReviewByID(getCurrentState().
+    		    final Review r = my_paper.getReviewByID(getCurrentState().
     		            getCurrentUser().getID());
     		    
     		    revs.add(new JLabel(current_user.getName()));
@@ -238,22 +238,7 @@ public class PaperPanel extends AbstractConferencesPanel
 
     		    //upload review button
 		        JButton ul_rev = new JButton("Add Review");
-		        ul_rev.addActionListener(new ActionListener()
-		        {
-		        	@Override
-		        	public void actionPerformed(ActionEvent e)
-		        	{
-		        		File up = chooseFile();
-		        		if(up != null)
-		        		{
-		        			User user = getCurrentState().getCurrentUser();
-		        			Review rev = new Review(my_paper.
-		        					getDirectory(), user.getID(), up);
-		        			my_paper.addReview(rev);
-		        			updatePanel();
-		        		}
-		        	}
-		        });
+		        ul_rev.addActionListener(new UploadReviewAction(r));
 		        revbuttons.add(ul_rev);
 		        revs.add(revbuttons);
     		}
@@ -731,13 +716,17 @@ public class PaperPanel extends AbstractConferencesPanel
 						{
 							
 							if (getCurrentState().getCurrentRole().equals(
-									Role.REVIEWER)) {
+									Role.REVIEWER)) 
+							{
 								Review new_review = new Review(
 										my_paper.getDirectory(),
 										getCurrentState().getCurrentUser().getID(),
 										selected_file);
 								my_paper.addReview(new_review);
-							} else {
+							} 
+							else if (getCurrentState().getCurrentRole().equals(
+									Role.SUBPROGRAM_CHAIR)) 
+							{
 								Review new_review = new Recommendation(
 										my_paper.getDirectory(),
 										getCurrentState().getCurrentUser().getID(),
