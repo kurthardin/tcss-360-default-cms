@@ -485,6 +485,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    				my_paper.addReviewer(id);
 		    				//TODO: add the buttons and stuff to the window
 		    				//and refresh it
+		    				updatePanel();
 		    			}
 		    			else
 		    			{
