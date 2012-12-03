@@ -1,6 +1,7 @@
-/**
+/*
  * ConferencesListPanel.java
  * Scott Sanderson
+ * 11-21-2012
  */
 
 package edu.uwt.tcss360.Default.gui;
@@ -72,6 +73,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 		setupPanel();
 	}
 	
+	/**
+	 * @editor Brett Cate
+	 */
 	public void setupPanel()
 	{
 		setLayout(new BorderLayout());
@@ -130,6 +134,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 			my_conference = the_conference;
 		}
 		
+		/**
+		 * @editor Brett Cate
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0)
 		{
@@ -160,6 +167,9 @@ public class ConferencesListPanel extends AbstractConferencesPanel
 	
 	private class NewConferenceAction extends AbstractAction
 	{		
+		/**
+		 * @editor Kurt Hardin
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{

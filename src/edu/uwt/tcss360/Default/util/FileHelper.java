@@ -1,7 +1,7 @@
-/**
+/*
  * FileHelper.java
- * Author: Travis Lewis
- * Date: 8 November 2012
+ * Travis Lewis
+ * 11-08-2012
  */
 
 package edu.uwt.tcss360.Default.util;
@@ -59,8 +59,8 @@ public class FileHelper {
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
+	 * @editor Brett Cate
 	 * @return
 	 */
 	public static final File getDataDirectory() {

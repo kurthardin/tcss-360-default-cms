@@ -1,6 +1,9 @@
-/**
- * 
+/*
+ * Recommendation.java
+ * Kurt Hardin
+ * 12-03-2012
  */
+
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
@@ -9,7 +12,6 @@ import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
  * @author Kurt Hardin
- *
  */
 public class Recommendation extends Review {
 
@@ -19,7 +21,6 @@ public class Recommendation extends Review {
 	/**
 	 * Constructs a Review object using previously saved information located
 	 * in the data file in the given directory.
-	 * @author Kurt Hardin
 	 * @param the_review_directory The review's directory, which contains the
 	 * data file and the review document file.
 	 */

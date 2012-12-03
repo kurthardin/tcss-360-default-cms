@@ -1,14 +1,14 @@
-/**
+/*
  * User.java
- * Author: Travis Lewis
- * Date: 8 November 2012
+ * Travis Lewis
+ * 11-08-2012
  */
+
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
 
 /**
- * 
  * @author Travis Lewis
  * @editor Kurt Hardin
  * @version 1.0
@@ -40,7 +40,6 @@ public class User implements Comparable<User>
 	private String my_email;
 	
 	/**
-	 * 
 	 * @author Travis Lewis
 	 * @version 1.0
 	 */
@@ -49,7 +48,6 @@ public class User implements Comparable<User>
 		PROGRAM_CHAIR, SUBPROGRAM_CHAIR, REVIEWER, AUTHOR, USER;
 
 		/**
-		 * 
 		 * @author Kurt Hardin
 		 */
 		@Override
@@ -105,6 +103,9 @@ public class User implements Comparable<User>
 		my_id = my_email; //weren't we going to make that the case?
 	}
 
+	/**
+	 * @author Kurt Hardin
+	 */
 	@Override
 	public int compareTo(User another_user) {
 		return my_name.compareTo(another_user.my_name);

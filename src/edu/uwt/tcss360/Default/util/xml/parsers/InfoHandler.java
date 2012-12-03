@@ -1,7 +1,7 @@
 /*
  * InfoHandler.java
- * 11-30-2012
  * Kurt Hardin
+ * 11-30-2012
  */
 
 package edu.uwt.tcss360.Default.util.xml.parsers;
@@ -16,7 +16,6 @@ import edu.uwt.tcss360.Default.util.log.CMSLoggerFactory;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 
 /**
- * 
  * @author Kurt Hardin
  * @version 1.0
  */

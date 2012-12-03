@@ -1,6 +1,9 @@
-/**
- * 
+/*
+ * CMSLoggerFactory.java
+ * Kurt Hardin
+ * 12-02-2012
  */
+
 package edu.uwt.tcss360.Default.util.log;
 
 import java.util.logging.ConsoleHandler;

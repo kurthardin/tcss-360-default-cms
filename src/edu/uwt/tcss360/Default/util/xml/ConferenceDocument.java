@@ -1,7 +1,7 @@
 /*
  * ConferenceDocument.java
- * 11-30-2012
  * Kurt Hardin
+ * 11-30-2012
  */
 
 package edu.uwt.tcss360.Default.util.xml;

@@ -1,7 +1,7 @@
-/**
+/*
  * Review.java
- * Author: Travis Lewis
- * Date: 8 November 2012
+ * Travis Lewis
+ * 11-08-2012
  */
 
 package edu.uwt.tcss360.Default.model;
@@ -16,7 +16,6 @@ import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
 /**
- * 
  * @author Travis Lewis
  * @editor Kurt Hardin
  * @version 1.0
@@ -102,6 +101,7 @@ public class Review implements Comparable<Review>
 	/**
 	 * Constructs a new Review object in the location given, with the
 	 * information given.
+	 * @editor Kurt Hardin
 	 * @param the_paper_directory The review's directory, which will contain
 	 * the data file and the review document file. The directory should
 	 * already exist before passed to this method.
@@ -145,7 +145,12 @@ public class Review implements Comparable<Review>
 	// METHODS
 	//////////////
 	
-	public String getDirectoryName() {
+	/**
+	 * @author Kurt Hardin
+	 * @return the name of the directory for this Review
+	 */
+	public String getDirectoryName() 
+	{
 		return FileHelper.formatFilename(
 				FileHelper.REVIEW_DIRECTORY_PREFIX + my_reviewer_id);
 	}
@@ -166,8 +171,12 @@ public class Review implements Comparable<Review>
 		.write();
 	}
 
+	/**
+	 * @author Kurt Hardin
+	 */
 	@Override
-	public int compareTo(Review antoher_review) {
+	public int compareTo(Review antoher_review) 
+	{
 		return my_reviewer_id.compareTo(antoher_review.my_reviewer_id);
 	}
 	
@@ -243,6 +252,7 @@ public class Review implements Comparable<Review>
 	
 	/**
 	 * Copies the given document into the given directory.
+	 * @editor Kurt Hardin
 	 * @param the_review_directory The directory to copy the file into.
 	 * @param the_review_doc The document to copy.
 	 */

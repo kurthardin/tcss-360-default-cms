@@ -1,3 +1,9 @@
+/*
+ * ConferencesManagerTest.java
+ * Travis Lewis
+ * 11-15-2012
+ */
+
 package edu.uwt.tcss360.Default.test;
 
 import static org.junit.Assert.assertEquals;
@@ -22,8 +28,7 @@ import edu.uwt.tcss360.Default.model.ConferencesManager;
 import edu.uwt.tcss360.Default.model.User;
 
 /**
- * 
- * @author Brett Cate
+ * @author Travis Lewis
  * @editor Kurt Hardin
  * @version 1.0
  */

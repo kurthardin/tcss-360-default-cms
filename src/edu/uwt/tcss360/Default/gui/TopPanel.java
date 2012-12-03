@@ -1,6 +1,7 @@
-/**
+/*
  * TopPanel.java
  * Scott Sanderson
+ * 11-21-2012
  */
 
 package edu.uwt.tcss360.Default.gui;

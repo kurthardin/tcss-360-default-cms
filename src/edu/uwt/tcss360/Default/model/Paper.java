@@ -1,7 +1,7 @@
-/**
+/*
  * Paper.java
- * Author: Travis Lewis
- * Date: 8 Nov 2012
+ * Travis Lewis
+ * 11-08-2012
  */
 
 package edu.uwt.tcss360.Default.model;
@@ -149,6 +149,7 @@ public class Paper implements Comparable<Paper>
 	
 	/**
 	 * Constructs a new Paper object from the given information.
+	 * @editor Kurt Hardin
 	 * @param the_author_id The user ID of the author.
 	 * @param the_manuscript_doc The document file (.pdf, .docx, etc) of the
 	 * manuscript.
@@ -160,24 +161,35 @@ public class Paper implements Comparable<Paper>
 			final File the_manuscript_doc,
 			final File the_papers_directory) 
 	{
-	    if(the_author_id == null) {
+	    if(the_author_id == null) 
+	    {
 	        throw new IllegalArgumentException("Author ID cannot be null");
 	    }
-	    if (the_title == null) {
+	    
+	    if (the_title == null) 
+	    {
 	    	throw new IllegalArgumentException("Title cannot be null");
 	    }
-	    if(the_manuscript_doc == null) {
+	    
+	    if(the_manuscript_doc == null) 
+	    {
 	        throw new IllegalArgumentException("Manuscript doc cannot " +
 	        		"be null");
 	    }
-	    if(!the_manuscript_doc.exists()) {
+	    
+	    if(!the_manuscript_doc.exists()) 
+	    {
 	        throw new IllegalArgumentException("Manuscript doc must exist");
 	    }
-	    if(the_papers_directory == null) {
+	    
+	    if(the_papers_directory == null) 
+	    {
 	        throw new IllegalArgumentException("The Paper directory cannot " +
 	        		"be null");
 	    }
-	    if(!the_papers_directory.exists()) {
+	    
+	    if(!the_papers_directory.exists()) 
+	    {
 	        throw new IllegalArgumentException("The Paper directory " +
 	        		"must exist");
 	    }
@@ -201,7 +213,6 @@ public class Paper implements Comparable<Paper>
 	/////////////
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	public void writeData() 
@@ -228,6 +239,9 @@ public class Paper implements Comparable<Paper>
 		}
 	}
 
+	/**
+	 * @author Kurt Hardin
+	 */
 	@Override
 	public int compareTo(Paper another_paper) {
 		int result = my_manuscript_title.compareTo(
@@ -238,6 +252,10 @@ public class Paper implements Comparable<Paper>
 		return result;
 	}
 	
+	/**
+	 * @author Kurt Hardin
+	 * @return the directory for this Paper
+	 */
 	public File getDirectory() 
 	{
 		return my_directory.getAbsoluteFile();
@@ -256,6 +274,8 @@ public class Paper implements Comparable<Paper>
 	
 	/**
 	 * Gets the role that the given user id has with this paper.
+	 * @editor Kurt Hardin
+	 * @editor Scott Sanderson
 	 * @param a_user_id The user to find the role of.
 	 * @return Role.USER if the given user isn't involved with the paper.
 	 */
@@ -486,6 +506,11 @@ public class Paper implements Comparable<Paper>
 	    my_subprogram_chair_id = the_user_id;
 	}
 	
+	/**
+	 * @editor Kurt Hardin
+	 * @param the_paper_directory the directory to copy the manuscript into
+	 * @param the_manuscript_doc the manuscript document to copy
+	 */
 	private void copyPaperDoc(final File the_paper_directory,
 			final File the_manuscript_doc) 
 	{
@@ -508,6 +533,9 @@ public class Paper implements Comparable<Paper>
 		my_manuscript_title = NOT_AVAILIBLE;
 	}
 	
+	/**
+	 * @author Kurt Hardin
+	 */
 	private class PaperInfoHandler extends InfoHandler
 	{
 		private boolean my_inside_reviewer_ids;

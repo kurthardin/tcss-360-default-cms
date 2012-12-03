@@ -1,7 +1,7 @@
-/**
+/*
  * PaperTest.java
  * Scott Sanderson
- * 11/18/2012
+ * 11-18-2012
  */
 
 package edu.uwt.tcss360.Default.test;
@@ -16,8 +16,8 @@ import org.junit.Test;
 import edu.uwt.tcss360.Default.model.Review;
 
 /**
- * 
  * @author Scott Sanderson
+ * @editor Brett Cate
  * @version 1.0
  */
 public class ReviewTest 

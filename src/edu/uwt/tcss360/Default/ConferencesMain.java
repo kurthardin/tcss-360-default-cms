@@ -1,9 +1,14 @@
+/*
+ * ConferencesMain.java
+ * Scott Sanderson
+ * 11-15-2012
+ */
+
 package edu.uwt.tcss360.Default;
 import edu.uwt.tcss360.Default.gui.ConferencesFrame;
 
 /**
- * main class
- * 
+ * Main class for the Conference Management System.
  * @author Scott Sanderson
  */
 public class ConferencesMain {

@@ -1,3 +1,9 @@
+/*
+ * ConferencesManager.java
+ * Brett Cate
+ * 11-12-2012
+ */
+
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
@@ -12,7 +18,6 @@ import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.UsersHandler;
 
 /**
- * 
  * @author Brett Cate
  */
 public class ConferencesManager 
@@ -34,7 +39,6 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	private void initUsers() 
@@ -48,7 +52,6 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	private void initConfs() 
@@ -70,7 +73,6 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	public void writeData() 
@@ -80,7 +82,6 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	private void writeUsers() 
@@ -96,7 +97,6 @@ public class ConferencesManager
 	}
 	
 	/**
-	 * 
 	 * @author Kurt Hardin
 	 */
 	private void writeConferences() 
@@ -125,6 +125,7 @@ public class ConferencesManager
 	 * Removes the conference with the associated conference ID and returns
 	 * <code>true</code> if the conference exists in this ConferencesManager, 
 	 * <code>false</code> otherwise.
+	 * @editor Scott Sanderson
 	 * 
 	 * @param the_conference_id The ID of the conference to be removed.
 	 * 
@@ -147,6 +148,7 @@ public class ConferencesManager
 	
 	/**
 	 * Returns the Conference with the given ID, or null if it is not found.
+	 * @editor Scott Sanderson
 	 * 
 	 * @param the_conference_id The ID of the conference sought.
 	 * 
@@ -169,6 +171,7 @@ public class ConferencesManager
 	/**
 	 * Returns an unmodifiable Set of the conferences in this 
 	 * ConferencesManager.
+	 * @editor Scott Sanderson
 	 * 
 	 * @return An unmodifiable Set of the conferences in this 
 	 * ConferencesManager.
@@ -194,6 +197,7 @@ public class ConferencesManager
 	 * Removes the user with the corresponding user ID given and returns 
 	 * <code>true</code>. If the User is not found, returns <code>false</code> 
 	 * instead.
+	 * @editor Scott Sanderson
 	 * 
 	 * @param the_user_id The ID of the user to be removed.
 	 * 
@@ -216,6 +220,7 @@ public class ConferencesManager
 	/**
 	 * Returns the User with the corresponding User ID given, or 
 	 * <code>null</code> if the user was not found.
+	 * @editor Scott Sanderson
 	 * 
 	 * @param the_user_id The User ID for the sought User.
 	 * 

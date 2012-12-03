@@ -1,6 +1,9 @@
-/**
- * 
+/*
+ * CMSDDocumentTest.java
+ * Kurt Hardin
+ * 12-01-2012
  */
+
 package edu.uwt.tcss360.Default.test.xml;
 
 import static org.junit.Assert.assertEquals;

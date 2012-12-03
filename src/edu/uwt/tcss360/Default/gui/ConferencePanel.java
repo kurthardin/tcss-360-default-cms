@@ -1,3 +1,9 @@
+/*
+ * ConferencePanel.java
+ * Brett Cate
+ * 11-27-2012
+ */
+
 package edu.uwt.tcss360.Default.gui;
 
 import java.awt.BorderLayout;
@@ -25,7 +31,6 @@ import edu.uwt.tcss360.Default.model.User.Role;
 /**
  * Panel to be shown when a conference has been selected.
  * @author Brett Cate
- *
  */
 @SuppressWarnings("serial")
 public class ConferencePanel extends AbstractConferencesPanel 
@@ -101,8 +106,9 @@ public class ConferencePanel extends AbstractConferencesPanel
 	
 	/**
 	 * Adds the buttons for the papers to the given panel.
+	 * @author Travis Lewis
+	 * @editor Scott Sanderson
 	 * @param the_panel The panel the buttons are added to.
-	 * edited by Scott Sanderson to add SPC display for program chair.
 	 */
 	private void addPapersButtons(final JPanel the_panel)
 	{
@@ -226,6 +232,10 @@ public class ConferencePanel extends AbstractConferencesPanel
 			my_parent_panel = the_parent_panel;
 		}
 		
+		/**
+		 * @editor Kurt Hardin
+		 * @editor Travis Lewis
+		 */
 		@Override
 		public void actionPerformed(final ActionEvent arg0)
 		{
@@ -244,7 +254,6 @@ public class ConferencePanel extends AbstractConferencesPanel
     				String title = (String) JOptionPane.
     						showInputDialog(null, "Please enter the paper title");
     				CurrentState cs = getCurrentState();
-    				//TODO: fix where the paper is saved
     				cs.getCurrentConference().addPaper(cs.getCurrentUser().getID(),
     						new Paper(cs.getCurrentUser().getID(), title,
     						chooser.getSelectedFile(),
@@ -264,6 +273,7 @@ public class ConferencePanel extends AbstractConferencesPanel
 		}
 	}
 	
+	// Main method for testing
 //	public static void main(final String[] the_arguments)
 //	{
 //		JFrame frame = new JFrame("Conference");

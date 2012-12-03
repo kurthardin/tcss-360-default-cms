@@ -1,3 +1,9 @@
+/*
+ * ConferenceTest.java
+ * Brett Cate
+ * 11-21-2012
+ */
+
 package edu.uwt.tcss360.Default.test;
 
 import static org.junit.Assert.assertEquals;
@@ -16,9 +22,7 @@ import edu.uwt.tcss360.Default.model.User;
 import edu.uwt.tcss360.Default.model.User.Role;
 
 /**
- * 
  * @author Brett Cate
- *
  */
 public class ConferenceTest {
 	

@@ -39,6 +39,7 @@ public class CurrentStateTest
 	private Paper my_test_paper;
 	
 	/**
+	 * @editor Scott Sanderson
 	 * @throws java.lang.Exception
 	 */
 	@Before
@@ -119,6 +120,7 @@ public class CurrentStateTest
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.CurrentState#getCurrentConference()}.
+	 * @editor Scott Sanderson
 	 */
 	@Test
 	public final void testGetCurrentConference() 
@@ -185,6 +187,7 @@ public class CurrentStateTest
 
 	/**
 	 * Test method for {@link edu.uwt.tcss360.Default.model.CurrentState#setCurrentConference(java.lang.String)}.
+	 * @editor Scott Sanderson
 	 */
 	@Test
 	public final void testSetCurrentConference() 

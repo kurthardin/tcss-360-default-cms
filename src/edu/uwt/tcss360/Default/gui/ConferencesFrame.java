@@ -1,7 +1,7 @@
-/**
+/*
  * ConferencesFrame.java
  * Scott Sanderson
- * 11/15/2012
+ * 11-15-2012
  */
 
 package edu.uwt.tcss360.Default.gui;
@@ -120,6 +120,7 @@ public class ConferencesFrame extends JFrame implements PanelManager, Observer
 	
 	/**
 	 * sets up the closing operation for the frame.
+	 * @editor Kurt Hardin
 	 */
 	private void setupClosingOperation()
 	{

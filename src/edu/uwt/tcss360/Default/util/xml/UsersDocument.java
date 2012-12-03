@@ -1,7 +1,7 @@
 /*
  * UsersDocument.java
- * 11-30-2012
  * Kurt Hardin
+ * 11-30-2012
  */
 
 package edu.uwt.tcss360.Default.util.xml;
@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import edu.uwt.tcss360.Default.model.User;
 
 /**
- * 
  * @author Kurt Hardin
  * @version 1.0
  */

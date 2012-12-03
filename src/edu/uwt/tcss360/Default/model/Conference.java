@@ -1,8 +1,9 @@
-/**
+/*
  * Conference.java
  * Kurt Hardin
- * 11/07/2012
+ * 11-07-2012
  */
+
 package edu.uwt.tcss360.Default.model;
 
 import java.io.File;
@@ -548,6 +549,7 @@ public final class Conference implements Comparable<Conference> {
 	/**
 	 * Gets all Papers assigned to the specified User with the specified Role
 	 * for this Conference.
+	 * @editor Scott Sanderson
 	 * @param the_user_id the User for which to retrieve Papers.
 	 * @param a_role the Role of the User for which to retrieve Papers.
 	 * @return the list of Papers assigned to the User with the specified Role.
@@ -635,6 +637,8 @@ public final class Conference implements Comparable<Conference> {
 	
 	/**
 	 * Returns the unique ID associated with the conference.
+	 * @author Scott Sanderson
+	 * @editor Kurt Hardin
 	 * @return the unique ID for this conference.
 	 */
 	public String getID()

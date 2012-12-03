@@ -1,7 +1,7 @@
-/**
+/*
  * PaperPanel.java
- * Author: Travis Lewis
- * Date: 25 Nov 2012
+ * Travis Lewis
+ * 11-25-2012
  */
 
 package edu.uwt.tcss360.Default.gui;
@@ -35,10 +35,10 @@ import edu.uwt.tcss360.Default.model.User.Role;
 import edu.uwt.tcss360.Default.util.FileHelper;
 
 /**
- * @author Travis Lewis
- * @version 30 Nov 2012
  * Creates a PaperPanel, which displays information relevant to the
  * current Paper object.
+ * @author Travis Lewis
+ * @version 30 Nov 2012
  */
 @SuppressWarnings("serial")
 public class PaperPanel extends AbstractConferencesPanel 
@@ -194,6 +194,11 @@ public class PaperPanel extends AbstractConferencesPanel
 		return north_panel;
 	}
 	
+	/**
+	 * @editor Kurt Hardin
+	 * @param is_test whether or not this panel should be created in test mode
+	 * @return the newly created panel
+	 */
 	private JPanel createCenterPanel(final boolean is_test)
 	{
 		//Center panel requirements:
@@ -325,6 +330,12 @@ public class PaperPanel extends AbstractConferencesPanel
 		return center_panel;
 	}
 	
+	/**
+	 * @editor Kurt Hardin
+	 * @editor Scott Sanderson
+	 * @param is_test whether or not this panel should be created in test mode
+	 * @return the newly created panel
+	 */
 	private JPanel createSouthPanel(final boolean is_test)
 	{
 		//South panel requirements:
@@ -682,7 +693,10 @@ public class PaperPanel extends AbstractConferencesPanel
 		{
 			my_review = the_review;
 		}
-				
+			
+		/**
+		 * @editor Kurt Hardin
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{

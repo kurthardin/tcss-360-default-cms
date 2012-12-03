@@ -1,7 +1,7 @@
-/**
+/*
  * PanelManager.java
  * Scott Sanderson
- * 11/15/2012
+ * 11-15-2012
  */
 
 package edu.uwt.tcss360.Default.gui;

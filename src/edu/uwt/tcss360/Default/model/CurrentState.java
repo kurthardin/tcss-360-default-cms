@@ -1,7 +1,7 @@
-/**
+/*
  * CurrentState.java
  * Scott Sanderson
- * 11/09/2012
+ * 11-09-2012
  */
 
 package edu.uwt.tcss360.Default.model;
