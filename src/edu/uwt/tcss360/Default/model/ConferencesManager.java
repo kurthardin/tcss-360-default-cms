@@ -42,7 +42,9 @@ public class ConferencesManager
 		File input_file = new File(FileHelper.getDataDirectory(), 
 				FileHelper.USERS_DATA_FILE_NAME);
 		UsersHandler handler = new UsersHandler(this);
-		new CMSDParser(input_file, handler).parse();
+		if (input_file.exists()) {
+			new CMSDParser(input_file, handler).parse();
+		}
 	}
 	
 	/**
