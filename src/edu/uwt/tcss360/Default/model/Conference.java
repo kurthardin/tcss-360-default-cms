@@ -485,10 +485,8 @@ public final class Conference implements Comparable<Conference> {
 		if (canDeauthorize) 
 		{
 			Set<Role> user_roles = my_users_roles.get(the_user_id);
-			if (user_roles != null) 
-			{
-				user_roles.remove(the_role);
-			}
+			canDeauthorize = ((user_roles == null) ? false :
+				user_roles.remove(the_role));
 		}
 		
 		return canDeauthorize;
