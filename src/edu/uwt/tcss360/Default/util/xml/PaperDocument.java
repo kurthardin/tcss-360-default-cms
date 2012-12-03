@@ -4,7 +4,7 @@
  * Kurt Hardin
  */
 
-package edu.uwt.tcss360.Default.test.xml;
+package edu.uwt.tcss360.Default.util.xml;
 
 import java.io.File;
 import java.util.Set;
@@ -14,7 +14,6 @@ import org.w3c.dom.Element;
 import edu.uwt.tcss360.Default.model.Conference;
 import edu.uwt.tcss360.Default.model.Paper;
 import edu.uwt.tcss360.Default.model.User;
-import edu.uwt.tcss360.Default.util.xml.InfoDocument;
 
 /**
  * @author Kurt Hardin
