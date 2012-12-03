@@ -18,9 +18,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import edu.uwt.tcss360.Default.model.User.Role;
-import edu.uwt.tcss360.Default.test.xml.PaperDocument;
 import edu.uwt.tcss360.Default.util.FileHelper;
 import edu.uwt.tcss360.Default.util.xml.InfoDocument;
+import edu.uwt.tcss360.Default.util.xml.PaperDocument;
 import edu.uwt.tcss360.Default.util.xml.parsers.CMSDParser;
 import edu.uwt.tcss360.Default.util.xml.parsers.InfoHandler;
 
