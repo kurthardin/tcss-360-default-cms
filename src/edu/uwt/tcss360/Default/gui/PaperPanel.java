@@ -202,7 +202,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		JPanel center_panel = new JPanel(new BorderLayout());
 		Set<Review> reviews = my_paper.getReviews();
 		
-		JPanel revs = new JPanel(new GridLayout(5,2));
+		JPanel revs = new JPanel(new GridLayout(0,2));
 		
 		revs.add(new JLabel("Reviewer Name"));
 		revs.add(new JLabel("")); // this col contains buttons to open reviews
@@ -213,7 +213,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		    User current_user = getCurrentState().getCurrentUser();
 		    ConferencesManager cm = getCurrentState().getConferencesManager();
 		    
-    		if(current_role == Role.REVIEWER)
+    		if(current_role.equals(Role.REVIEWER))
     		{ // BR12
     		    final Review r = my_paper.getReviewByID(getCurrentState().
     		            getCurrentUser().getID());
@@ -242,28 +242,31 @@ public class PaperPanel extends AbstractConferencesPanel
 		        revbuttons.add(ul_rev);
 		        revs.add(revbuttons);
     		}
-    		else if( (current_role == Role.SUBPROGRAM_CHAIR && 
-    		        my_paper.getSubprogramChairID() == current_user.getID()) ||
-    		        current_role == Role.PROGRAM_CHAIR)
+    		else if( (current_role.equals(Role.SUBPROGRAM_CHAIR) && 
+    		        my_paper.getSubprogramChairID().equals(
+    		        		current_user.getID())) ||
+    		        current_role.equals(Role.PROGRAM_CHAIR))
     		{// BR20
-    		    for(Review r : reviews)
+    		    for(String reviewer_id : my_paper.getUserIDs(Role.REVIEWER))
     		    {
-    		        revs.add(new JLabel(cm.getUser
-    		                (r.getReviewerID()).getName()));
+    		    	User user = cm.getUser(reviewer_id);
+    		        revs.add(new JLabel(user.getName()));
     		        JButton b = new JButton("Download Review");
-    		        if (r.getReviewDoc() == null) 
+    		        Review review = my_paper.getReviewByID(reviewer_id);
+    		        if (review == null) 
     		        {
+    		        	b.setText("No Review Submitted");
     		        	b.setEnabled(false);
     		        } 
     		        else
     		        {
     		        	b.addActionListener(new DownloadFileAction(
-    		        			r.getReviewDoc()));
+    		        			review.getReviewDoc()));
     		        }
     		        revs.add(b);
     		    }
     		}
-    		else if(current_role == Role.AUTHOR && 
+    		else if(current_role.equals(Role.AUTHOR) && 
     		        my_paper.getAuthorID().equals(current_user.getID()))
     		{ //BR18 (author can only see reviews after PC makes decision)
     		    int stat = my_paper.getAcceptanceStatus();
@@ -334,7 +337,7 @@ public class PaperPanel extends AbstractConferencesPanel
 		JButton assign_rev_button = new JButton("Assign Reviewer");
 		
 		Role role = getCurrentState().getCurrentRole();
-		int cols = (role == Role.SUBPROGRAM_CHAIR) ? 3 : 2;
+		int cols = (role.equals(Role.SUBPROGRAM_CHAIR)) ? 3 : 2;
 		JPanel southbuttons = new JPanel(new GridLayout(0,cols));
 		
 	    JPanel accept = new JPanel(new GridLayout(0,4));
@@ -512,15 +515,15 @@ public class PaperPanel extends AbstractConferencesPanel
 		    });
 
 		    //BR14
-		    if(current_role == Role.SUBPROGRAM_CHAIR 
-		            || current_role == Role.PROGRAM_CHAIR)
+		    if(current_role.equals(Role.SUBPROGRAM_CHAIR) 
+		            || current_role.equals(Role.PROGRAM_CHAIR))
 		    {
 		        southbuttons.add(get_rec_button);
 		    }
 		    
-		    if(current_role == Role.PROGRAM_CHAIR)
+		    if(current_role.equals(Role.PROGRAM_CHAIR))
 		    	southbuttons.add(assign_spc_button);
-		    else if(current_role == Role.SUBPROGRAM_CHAIR)
+		    else if(current_role.equals(Role.SUBPROGRAM_CHAIR))
 		    {
 		    	southbuttons.add(add_rec_button);
 		        southbuttons.add(assign_rev_button);
