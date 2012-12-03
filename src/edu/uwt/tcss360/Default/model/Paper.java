@@ -489,7 +489,7 @@ public class Paper implements Comparable<Paper>
 	private void copyPaperDoc(final File the_paper_directory,
 			final File the_manuscript_doc) 
 	{
-		String docname = FileHelper.getLeafString(the_manuscript_doc);
+		String docname = the_manuscript_doc.getName();
 		File copy = new File(the_paper_directory, docname);
 		
 		FileHelper.copyFile(the_manuscript_doc, copy);

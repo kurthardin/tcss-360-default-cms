@@ -249,7 +249,7 @@ public class Review implements Comparable<Review>
 	private void copyReviewDoc(final File the_review_directory, 
 			final File the_review_doc) 
 	{
-		String docname = FileHelper.getLeafString(the_review_doc);
+		String docname = the_review_doc.getName();
 		File copied_file = new File(the_review_directory, docname);
 		
 		FileHelper.copyFile(the_review_doc, copied_file);

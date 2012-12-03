@@ -246,10 +246,10 @@ public class FileHelper {
 	 * @param the_file The file to extract the leaf from.
 	 * @return The leaf of the file path (whatever comes after the last slash).
 	 */
-	public static String getLeafString(File the_file) {
-		String path = the_file.getAbsolutePath();
-		return path.substring(path.lastIndexOf("/") + 1);
-	}
+//	public static String getLeafString(File the_file) {
+//		String path = the_file.getAbsolutePath();
+//		return path.substring(path.lastIndexOf("/") + 1);
+//	}
 	
 	/**
 	 * Copies the source file to the destination file.
