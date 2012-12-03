@@ -168,16 +168,20 @@ public class PaperPanel extends AbstractConferencesPanel
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
-						//hopefully this is all it takes...
-						getCurrentState().getCurrentConference()
-							.removePaper(my_paper);
-						getPanelManager().popPanel();
+					    final int result = JOptionPane.showConfirmDialog(null, 
+					            "Are you sure you want to unsubmit your manuscript?");
+					    
+					    if(result == JOptionPane.OK_OPTION)
+					    {
+    						getCurrentState().getCurrentConference()
+    							.removePaper(my_paper);
+    						getPanelManager().popPanel();
+					    }
 					}
 				});
 				downup.add(upload);
 				downup.add(unsubmit);
 				
-				//TODO: add actions for author buttons
 			}
 		}
 		else
@@ -543,33 +547,33 @@ public class PaperPanel extends AbstractConferencesPanel
 		return south_panel;
 	}
 	
-	/**
-	 * Prompts the user to select a file, used for uploading.
-	 * @return The chosen file.
-	 */
-	private File chooseFile()
-	{
-		JFileChooser fc = new JFileChooser();
-		int result = fc.showOpenDialog(null);
-		
-		if(result == JFileChooser.APPROVE_OPTION)
-		{
-			File file = fc.getSelectedFile();
-
-			if(file == null)
-				JOptionPane.showMessageDialog(null, "File cannot be null",
-						"Error",JOptionPane.ERROR_MESSAGE);
-			else if(!file.exists())
-				JOptionPane.showMessageDialog(null, "File must exist",
-						"Error",JOptionPane.ERROR_MESSAGE);
-			else if(file.isDirectory())
-				JOptionPane.showMessageDialog(null, "File cannot be a " +
-						"directory", "Error",JOptionPane.ERROR_MESSAGE);
-			else
-				return file;
-		}
-		return null;
-	}
+//	/**
+//	 * Prompts the user to select a file, used for uploading.
+//	 * @return The chosen file.
+//	 */
+//	private File chooseFile()
+//	{
+//		JFileChooser fc = new JFileChooser();
+//		int result = fc.showOpenDialog(null);
+//		
+//		if(result == JFileChooser.APPROVE_OPTION)
+//		{
+//			File file = fc.getSelectedFile();
+//
+//			if(file == null)
+//				JOptionPane.showMessageDialog(null, "File cannot be null",
+//						"Error",JOptionPane.ERROR_MESSAGE);
+//			else if(!file.exists())
+//				JOptionPane.showMessageDialog(null, "File must exist",
+//						"Error",JOptionPane.ERROR_MESSAGE);
+//			else if(file.isDirectory())
+//				JOptionPane.showMessageDialog(null, "File cannot be a " +
+//						"directory", "Error",JOptionPane.ERROR_MESSAGE);
+//			else
+//				return file;
+//		}
+//		return null;
+//	}
 	
 	/**
 	 * Turns a given list of user IDs and formats them into "Real name [email]"
@@ -732,66 +736,4 @@ public class PaperPanel extends AbstractConferencesPanel
 			}	
 		}
 	}
-	
-//	//test main
-//	public static void main(String[] args) 
-//	{
-//		JFrame frame = new JFrame("Paper Panel");
-//		frame.setPreferredSize(new Dimension(ConferencesFrame.WIDTH,
-//				ConferencesFrame.HEIGHT));
-//		
-//		
-//		testPanel(frame);
-//		frame.pack();
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setResizable(false);
-//		frame.setLocationRelativeTo(null);
-//		frame.setVisible(true);
-//		
-////		JOptionPane.showMessageDialog(null, "File must exist", "Error",
-////				JOptionPane.ERROR_MESSAGE);
-//	}
-//	
-//	
-//	private static void testPanel(JFrame frame)
-//	{
-//		//setup a paper object
-//		File doc = new File("README.txt");
-//		File papers_dir = new File(".");
-//		Paper paper = new Paper("somebody@www.com", "A Manuscript Title",
-//				doc, papers_dir);
-//		
-//		//add some reviews
-//		Review r1 = new Review(papers_dir, "revid1@www.com", doc, 3);
-//		Review r2 = new Review(papers_dir, "revid2@www.com", doc);
-//		Review r3 = new Review(papers_dir, "revid3@www.com", doc, 1);
-//		Review r4 = new Review(papers_dir, "revid4@wmw.com", doc, 4);
-//		
-//		paper.addReview(r1);
-//		paper.addReview(r2);
-//		paper.addReview(r3);
-//		paper.addReview(r4);
-//		
-//		paper.assignSubprogramChair("spc@blah.com");
-//		Review rec = new Review(papers_dir, "recid@www.com",doc);
-//		paper.setRecommendation(rec);
-//		
-//		frame.add(new PaperPanel(paper,null,null));
-//	}
-	
-	//TODO: delete this when done testing
-//	private void printFileStats(final File the_file)
-//	{
-//		StringBuilder sb = new StringBuilder();
-//		sb.append("path: ");
-//		sb.append(the_file.getAbsolutePath());
-//		sb.append("\nexists: ");
-//		sb.append(the_file.exists());
-//		sb.append("\nis directory: ");
-//		sb.append(the_file.isDirectory());
-//		sb.append("\nis file: ");
-//		sb.append(the_file.isFile());
-//		System.out.println(sb.toString());
-//	}
-	
 }
