@@ -3,9 +3,7 @@
  */
 package edu.uwt.tcss360.Default.util.log;
 
-import java.io.IOException;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,14 +30,14 @@ public final class CMSLoggerFactory
 		ConsoleHandler console_handler = new ConsoleHandler();
 		logger.addHandler(console_handler);
 		
-		try {
-			FileHandler log_file_handler = new FileHandler("log.txt", true);
-			logger.addHandler(log_file_handler);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			FileHandler log_file_handler = new FileHandler("log.txt", true);
+//			logger.addHandler(log_file_handler);
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		return logger;
 	}
