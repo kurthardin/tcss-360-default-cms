@@ -130,8 +130,8 @@ public class CurrentStateTest
 		// Set current conference ID and check that the same ID is returned
 		my_curr_state.setCurrentConference(my_test_conf.getID());
 		assertEquals("getCurrentConference() returned invalid id", 
-				my_test_conf, 
-				my_curr_state.getCurrentConference());
+				my_test_conf.getID(), 
+				my_curr_state.getCurrentConference().getID());
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class CurrentStateTest
 		// Set current Conference and check that the same Conference is returned
 		my_curr_state.setCurrentConference(my_test_conf.getID());
 		assertEquals("invalid Conference returned after setCurrentConference()", 
-				my_test_conf, my_curr_state.getCurrentConference());
+				my_test_conf.getID(), my_curr_state.getCurrentConference().getID());
 		
 		// Set current Conference with invalid ID and check for null return
 		my_curr_state.setCurrentConference("invalid_conf_id");
