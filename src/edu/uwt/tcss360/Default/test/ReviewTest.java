@@ -9,6 +9,7 @@ package edu.uwt.tcss360.Default.test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -76,7 +77,8 @@ public class ReviewTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		new Review(dir, s, doc, 6);
+		Review r = new Review(dir, s, doc, 1);
+		r.setSummaryRating(7);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -85,7 +87,47 @@ public class ReviewTest
 		File dir = new File("\\");
 		File doc = new File("\\");
 		String s = "test@test.com";
-		new Review(dir, s, doc, 0);
+		Review r = new Review(dir, s, doc, 1);
+		r.setSummaryRating(-1);
 	}
-
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetReviewDocNull()
+	{
+		File dir = new File("\\");
+		File doc = new File("\\");
+		String s = "test@test.com";
+		Review r = new Review(dir, s, doc, 1);
+		r.setReviewDoc(null);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testSetReviewDocNoExists()
+	{
+		File dir = new File("\\");
+		File doc = new File("\\");
+		String s = "test@test.com";
+		Review r = new Review(dir, s, doc, 1);
+		r.setReviewDoc(new File("asdfasdfasdf.txt"));
+	}
+	
+	@Test
+	public void testSetReviewDoc()
+	{
+		File dir = new File("\\");
+		File doc = new File("\\");
+		String s = "test@test.com";
+		Review r = new Review(dir, s, doc, 1);
+		File f = new File("testname.txt");
+		try {
+			f.createNewFile();
+		} catch (IOException e) {/*do nothing.*/}
+		assertEquals("review doc not initialized properly", 
+				r.getReviewDoc(), null);
+		r.setReviewDoc(f);
+		assertEquals("file not set correctly", r.getReviewDoc().
+				getAbsolutePath(), f.getAbsolutePath());
+		f.delete();
+	}
+	
 }
