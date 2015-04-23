@@ -1,0 +1,1 @@
+Conference management software to organize conferences and the review, recommendation and acceptance process for submitted papers.
